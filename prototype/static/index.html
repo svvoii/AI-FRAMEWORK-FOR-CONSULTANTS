@@ -4,57 +4,255 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111111">
-  <meta name="description" content="An interactive evidence-to-knowledge governance prototype for SAP consulting deliverables.">
+  <meta name="description" content="Reusable AI framework prototype for consultants: Main Agent, Specialized Agents, Pluggable Skills, and Project Knowledge.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3Ccircle cx='24' cy='8' r='4' fill='%2386BC25'/%3E%3C/svg%3E">
-  <title>Northstar | Governed delivery engine</title>
+  <title>Deloitte | Reusable AI Framework for Consultants</title>
   <link rel="stylesheet" href="/static/style.css">
   <script src="/static/app.js" defer></script>
 </head>
 <body>
   <header class="masthead">
-    <a class="brand" href="/" aria-label="Northstar home"><span>Northstar</span><b class="brand-dot" aria-hidden="true"></b></a>
-    <span class="brand-divider"></span>
-    <span class="product">Governed delivery engine <span class="muted">/ prototype</span></span>
-    <nav class="header-links" aria-label="Demo navigation"><a href="/presentation/">Presentation</a><button class="text-button" id="audit-top">Audit trail <span aria-hidden="true">↗</span></button></nav>
-  </header>
-  <main>
-    <section class="project-head page-width">
-      <div><div class="eyebrow">S/4HANA SCOPING · 26 WEEKS · 30 WORKSHOPS</div><h1>Evidence in. <span class="green-word">Decisions controlled.</span></h1><p>Northstar · Procure-to-Pay / One governed workflow from workshop statement to approved deliverable.</p></div>
-      <div class="environment"><label class="field-label" for="role-select">DEMONSTRATION ROLE</label><select data-testid="role-select" id="role-select" aria-label="Demonstration role"><option value="consultant">Engagement consultant</option><option value="domain_lead">Domain lead</option><option value="viewer">Read-only reviewer</option></select><div class="simulated">Simulated identity · server-enforced scope</div></div>
-    </section>
-    <div class="status-strip"><div class="page-width strip-inner"><span class="live-dot"></span><span id="phase-label">Loading governed context</span><span class="strip-separator">/</span><span class="muted">Synthetic Internal Demo data</span><div class="strip-right"><label class="provider-label" for="provider">MODEL MODE</label><select id="provider" data-testid="provider-select"><option value="mock">Mock · deterministic</option><option value="live">Live · Mistral API</option></select><span class="provider-note" id="provider-note">No silent fallback</span></div></div></div>
-    <section class="page-width workflow" aria-label="Workflow stages">
-      <button class="step active" data-step="evidence"><span class="step-index">01</span><span><b>Capture evidence</b><small>Preserve the source</small></span></button>
-      <span class="step-connector" aria-hidden="true">→</span>
-      <button class="step" data-step="report" data-testid="step-report"><span class="step-index">02</span><span><b>Review faithfully</b><small>Separate fact approval</small></span></button>
-      <span class="step-connector" aria-hidden="true">→</span>
-      <button class="step" data-step="conflict"><span class="step-index">03</span><span><b>Expose conflict</b><small>Request clarification</small></span></button>
-      <span class="step-connector" aria-hidden="true">→</span>
-      <button class="step" data-step="clarified"><span class="step-index">04</span><span><b>Publish with lineage</b><small>Approve a new version</small></span></button>
-    </section>
-    <div id="banner" class="page-width" aria-live="polite"></div>
-    <section class="page-width workspace-grid">
-      <div class="left-column">
-        <section class="panel" id="evidence-panel"><div class="section-heading"><div><div class="eyebrow">LAYER 01 / EVIDENCE</div><h2>Every statement has a home.</h2></div><div class="layer-meta">SHA-256 tracked<br>Exact-spans returned</div></div><div id="evidence-list" class="evidence-list"></div></section>
-        <section class="panel generation-panel"><div class="section-heading compact"><div><div class="eyebrow">ONE ENGINE / SPECIALIZED SKILLS</div><h2>Generate a governed draft.</h2></div><span class="tiny-meta">Frozen retrieval snapshot</span></div><div class="skill-grid">
-          <button class="skill-button primary-skill" data-skill="workshop_report" data-testid="generate-workshop"><span class="skill-number">01</span><span><b>Workshop report</b><small>Extract without validating</small></span><span class="skill-action">Generate ↗</span></button>
-          <button class="skill-button" data-skill="fit_gap" data-testid="generate-fitgap"><span class="skill-number">02</span><span><b>Fit-gap analysis</b><small>Assess the proposed delta</small></span><span class="skill-action">Generate ↗</span></button>
-          <button class="skill-button" data-skill="steering_deck" data-testid="generate-steering"><span class="skill-number">03</span><span><b>Steering summary</b><small>Escalate, never obscure</small></span><span class="skill-action">Generate ↗</span></button>
-        </div></section>
-        <section class="panel" id="decision-panel"><div class="section-heading compact"><div><div class="eyebrow">DECISION FRAME / ONE COMPARISON</div><h2>The proposal is not the baseline.</h2></div><span class="tiny-meta" id="decision-status-label">REVIEW PENDING</span></div><div id="decision-content"><div class="empty-compact">Generate a report to compare the source assertion with the validated baseline.</div></div></section>
-        <section class="panel draft-panel" id="draft-panel"><div id="draft-content"><div class="empty-state"><span class="empty-kicker">CONSULTANT WORKSPACE</span><h2>From ambiguity to an accountable decision.</h2><p>Generate the WS-04 workshop report, inspect its source spans and approve its accuracy. That alone does not change the validated knowledge base.</p><button class="inline-action" data-generate-report>Generate the workshop report <span>→</span></button></div></div></section>
+    <div class="masthead-left">
+      <a class="brand" href="/" aria-label="Deloitte home"><span>Deloitte</span><b class="brand-dot" aria-hidden="true"></b></a>
+      <span class="brand-divider"></span>
+      <span class="product">Reusable AI Framework for Consultants</span>
+    </div>
+    <div class="masthead-controls">
+      <div class="control-group">
+        <label for="provider">Model</label>
+        <select id="provider" data-testid="provider-select" aria-label="Model operating mode">
+          <option value="mock">Mock · Instant Demo</option>
+          <option value="live">Live · Mistral API</option>
+        </select>
       </div>
+      <div class="control-group">
+        <label for="role-select">Role</label>
+        <select id="role-select" data-testid="role-select" aria-label="Demonstration role">
+          <option value="domain_lead" selected>Domain Lead (Full Access)</option>
+          <option value="consultant">Consultant (Draft &amp; Flag)</option>
+          <option value="viewer">Read-Only Reviewer</option>
+        </select>
+      </div>
+      <button class="header-btn" id="audit-top" type="button">Audit Trail</button>
+      <button class="header-btn reset-btn" id="reset-demo" type="button" title="Reset demo back to Step 1">↺ Reset Demo</button>
+      <a class="header-btn slides-link" href="/presentation/">Slides ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Interactive Architecture Strip: General View -> Click to Zoom In -->
+    <section class="arch-strip-wrap">
+      <div class="page-width">
+        <div class="arch-strip-header">
+          <span class="eyebrow">System Architecture · General View</span>
+          <span class="arch-hint">Click any block to inspect its role &amp; code contract</span>
+        </div>
+        <div class="arch-pipeline" role="region" aria-label="Interactive system architecture">
+          <button class="arch-node" type="button" data-arch="main_agent">
+            <span class="arch-tag">1. Entry Point</span>
+            <strong>Main Agent</strong>
+            <small>Checks scope &amp; routes tasks</small>
+          </button>
+          <span class="arch-arrow" aria-hidden="true">→</span>
+          <button class="arch-node" type="button" data-arch="specialized_agents">
+            <span class="arch-tag">2. Core Engine</span>
+            <strong>Specialized Agents</strong>
+            <small>Deliverable · Steward · Quality</small>
+          </button>
+          <span class="arch-arrow" aria-hidden="true">→</span>
+          <button class="arch-node" type="button" data-arch="skills">
+            <span class="arch-tag">3. Extensible</span>
+            <strong>Pluggable Skills</strong>
+            <small>1 Skill = 1 Deliverable type</small>
+          </button>
+          <span class="arch-arrow" aria-hidden="true">→</span>
+          <button class="arch-node" type="button" data-arch="knowledge_layers">
+            <span class="arch-tag">4. 3-Layer Memory</span>
+            <strong>Project Knowledge</strong>
+            <small>Notes vs. Approved Rules</small>
+          </button>
+          <span class="arch-arrow" aria-hidden="true">→</span>
+          <button class="arch-node" type="button" data-arch="model_gateway">
+            <span class="arch-tag">5. LLM Layer</span>
+            <strong>Model Gateway</strong>
+            <small>Schema-checked &amp; swappable</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Context + 3-Step Guided Story Bar -->
+    <section class="page-width story-header">
+      <div class="story-title-row">
+        <div>
+          <div class="eyebrow">Project: S/4HANA Scoping · Procure-to-Pay (26 Weeks · 30 Workshops)</div>
+          <h1>From workshop notes to <span class="green-word">verified deliverables.</span></h1>
+        </div>
+        <div class="status-pill-box">
+          <span class="live-dot"></span>
+          <span id="phase-label">Step 1 · Ready to draft</span>
+          <span class="pill-sep">·</span>
+          <span id="provider-note" class="muted">Offline deterministic fixtures</span>
+        </div>
+      </div>
+
+      <div class="workflow" aria-label="3-Step Guided Walkthrough">
+        <button class="step active" type="button" data-step="1">
+          <span class="step-index">01</span>
+          <span>
+            <b>Draft Workshop Report</b>
+            <small>Cite WS-04 notes without changing rules</small>
+          </span>
+        </button>
+        <span class="step-connector" aria-hidden="true">→</span>
+        <button class="step" type="button" data-step="2" data-testid="step-report">
+          <span class="step-index">02</span>
+          <span>
+            <b>Catch €50k vs €25k Conflict</b>
+            <small>Flag unclear scope &amp; block silent overwrite</small>
+          </span>
+        </button>
+        <span class="step-connector" aria-hidden="true">→</span>
+        <button class="step" type="button" data-step="3">
+          <span class="step-index">03</span>
+          <span>
+            <b>Clarify &amp; Publish v2</b>
+            <small>Apply WS-05 owner reply &amp; update outputs</small>
+          </span>
+        </button>
+      </div>
+
+      <div id="banner" aria-live="polite"></div>
+    </section>
+
+    <!-- Minimal Two-Column Workspace -->
+    <section class="page-width workspace-grid">
+      <!-- Left Column: Deliverable Studio -->
+      <div class="left-column">
+        <section class="panel studio-panel">
+          <div class="section-heading compact">
+            <div>
+              <div class="eyebrow">One Shared Engine · Pluggable Deliverable Skills</div>
+              <h2>Generate a deliverable</h2>
+            </div>
+            <button class="extension-pill" type="button" data-arch="skills">+ Target Architecture (Skill Extension)</button>
+          </div>
+          <div class="skill-grid">
+            <button class="skill-button primary-skill" type="button" data-skill="workshop_report" data-testid="generate-workshop">
+              <span class="skill-number">01</span>
+              <span class="skill-copy">
+                <b>Workshop Report</b>
+                <small>Summarize notes &amp; extract proposals</small>
+              </span>
+              <span class="skill-action">Generate ↗</span>
+            </button>
+            <button class="skill-button" type="button" data-skill="fit_gap" data-testid="generate-fitgap">
+              <span class="skill-number">02</span>
+              <span class="skill-copy">
+                <b>Fit-Gap Analysis</b>
+                <small>Assess impact against approved baseline</small>
+              </span>
+              <span class="skill-action">Generate ↗</span>
+            </button>
+            <button class="skill-button" type="button" data-skill="steering_deck" data-testid="generate-steering">
+              <span class="skill-number">03</span>
+              <span class="skill-copy">
+                <b>Steering Summary</b>
+                <small>Escalate open decisions to leadership</small>
+              </span>
+              <span class="skill-action">Generate ↗</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel draft-panel" id="draft-panel">
+          <div id="draft-content">
+            <div class="empty-state">
+              <span class="empty-kicker">START HERE · STEP 1</span>
+              <h2>Turn Workshop 4 notes into a cited draft.</h2>
+              <p>Click below to run the <strong>Workshop Report</strong> skill. Every statement will link directly to the exact passage in the source notes—without changing the approved €25,000 baseline.</p>
+              <button class="button" type="button" data-generate-report>1 · Generate WS-04 Workshop Report →</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Knowledge Base + Tabbed Inspector -->
       <aside class="right-column">
-        <section class="panel knowledge-panel"><div class="section-heading compact"><div><div class="eyebrow">LAYER 02 / KNOWLEDGE</div><h2>What is authoritative?</h2></div></div><div id="canonical-content"></div></section>
-        <section class="panel candidate-panel"><div class="eyebrow">CANDIDATE / INDEPENDENT REVIEW</div><div id="candidate-content"></div></section>
-        <section class="panel tasks-panel"><div class="section-heading compact"><div><div class="eyebrow">DEPENDENCIES</div><h2>Impact remains visible.</h2></div></div><div id="tasks-content"><p class="fine-print">Flag the conflict to create target-architecture review and steering inputs.</p></div></section>
+        <section class="panel knowledge-panel">
+          <div class="section-heading compact">
+            <div>
+              <div class="eyebrow">Project Knowledge Base · DEC-P2P-004</div>
+              <h2>Approved Rule vs. Proposal</h2>
+            </div>
+          </div>
+          <div id="knowledge-compare"></div>
+        </section>
+
+        <section class="panel tabs-panel">
+          <div class="tab-bar" role="tablist" aria-label="Project context tabs">
+            <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="evidence">Workshop Notes <span class="tab-count" id="count-evidence">3</span></button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tasks">Impact Alerts <span class="tab-count" id="count-tasks">0</span></button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="publications">Published <span class="tab-count" id="count-pubs">1</span></button>
+          </div>
+          <div class="tab-pane active" id="pane-evidence" role="tabpanel">
+            <p class="tab-intro">Click any note to inspect its original text and verified passages.</p>
+            <div id="evidence-list" class="evidence-list"></div>
+          </div>
+          <div class="tab-pane" id="pane-tasks" role="tabpanel">
+            <p class="tab-intro">When a conflict is flagged, dependent deliverables receive automatic review alerts.</p>
+            <div id="tasks-content"></div>
+          </div>
+          <div class="tab-pane" id="pane-publications" role="tabpanel">
+            <p class="tab-intro">Approved deliverables are locked with their exact source and knowledge versions.</p>
+            <div id="publications-list"></div>
+          </div>
+        </section>
       </aside>
     </section>
-    <section class="page-width bottom-grid"><section class="panel compact-panel"><div class="section-heading compact"><div><div class="eyebrow">LAYER 03 / PUBLICATIONS</div><h2>Approval leaves a trace.</h2></div><span class="tiny-meta" id="publication-count">1 version</span></div><div id="publications-list"></div></section><section class="panel compact-panel"><div class="section-heading compact"><div><div class="eyebrow">DESIGN LIMITS</div><h2>A prototype, not a promise.</h2></div></div><p class="fine-print">Synthetic evidence, simulated roles and explicitly labelled model modes. The fit-gap reference is synthetic; no claim about actual S/4HANA capabilities is made. Target architecture is a requested deliverable, not a fourth implemented skill.</p><a class="inline-action subtle" href="/diagrams/workshop-to-fit-gap.svg" target="_blank" rel="noopener">Open workflow diagram <span>↗</span></a></section></section>
-    <footer class="page-width"><span>Northstar / Governance by design</span><span>Evidence → Knowledge → Deliverables</span></footer>
+
+    <footer class="page-width">
+      <span>Deloitte · Reusable AI Framework for Consultants (FastAPI + SQLite + Mistral / Offline Mock)</span>
+      <span>Synthetic Procure-to-Pay scoping data · Human approval required at every boundary</span>
+    </footer>
   </main>
-  <dialog id="audit-dialog" aria-label="Append-only audit trail"><div class="dialog-heading"><div><div class="eyebrow">APPEND-ONLY / HASH CHAIN</div><h2>What the system did.</h2></div><button class="close-button" data-close-dialog aria-label="Close audit">×</button></div><div id="audit-content" class="audit-content"></div></dialog>
-  <dialog id="evidence-dialog" aria-label="Evidence inspector"><div class="dialog-heading"><div><div class="eyebrow">EXACT SOURCE SPAN</div><h2 id="evidence-title">Evidence inspector</h2></div><button class="close-button" data-close-evidence aria-label="Close evidence">×</button></div><div id="evidence-content"></div></dialog>
+
+  <!-- Zoom-In Modal for Architecture Elements -->
+  <dialog id="arch-dialog" aria-label="Architecture component details">
+    <div class="dialog-heading">
+      <div>
+        <div class="eyebrow" id="arch-eyebrow">ARCHITECTURE ZOOM-IN</div>
+        <h2 id="arch-title">Component</h2>
+      </div>
+      <button class="close-button" type="button" data-close-arch aria-label="Close architecture details">×</button>
+    </div>
+    <div id="arch-content"></div>
+  </dialog>
+
+  <!-- Source Passage & Publication Snapshot Modal -->
+  <dialog id="evidence-dialog" aria-label="Evidence and snapshot inspector">
+    <div class="dialog-heading">
+      <div>
+        <div class="eyebrow" id="evidence-eyebrow">EXACT SOURCE CITATION</div>
+        <h2 id="evidence-title">Source inspector</h2>
+      </div>
+      <button class="close-button" type="button" data-close-evidence aria-label="Close inspector">×</button>
+    </div>
+    <div id="evidence-content"></div>
+  </dialog>
+
+  <!-- Append-only Audit Trail Modal -->
+  <dialog id="audit-dialog" aria-label="System audit trail">
+    <div class="dialog-heading">
+      <div>
+        <div class="eyebrow">APPEND-ONLY AUDIT TRAIL</div>
+        <h2>What the system recorded</h2>
+      </div>
+      <button class="close-button" type="button" data-close-dialog aria-label="Close audit trail">×</button>
+    </div>
+    <div id="audit-content" class="audit-content"></div>
+  </dialog>
+
   <div id="toast" class="toast" role="status"></div>
 </body>
 </html>

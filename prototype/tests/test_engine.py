@@ -264,3 +264,39 @@ def test_api_end_to_end(client):
         assert client.get('/api/publications/' + result.json()['id'], headers=role).status_code == 200
     assert len(client.get('/api/workspace', headers=lead).json()['publications']) == 4
     assert client.get('/api/audit', headers=lead).status_code == 200
+
+
+def test_guided_flow_and_reset(client):
+    arch = client.get('/api/architecture')
+    assert arch.status_code == 200
+    arch_data = arch.json()
+    for key in ['main_agent', 'specialized_agents', 'skills', 'knowledge_layers', 'model_gateway']:
+        assert key in arch_data
+    assert {s['name'] for s in arch_data['skills']} == {'workshop_report', 'fit_gap', 'steering_deck'}
+
+    assert client.post('/api/guided/flag-conflict', headers={'X-Demo-Role': 'viewer'}).status_code == 403
+
+    report = client.post('/api/generate', json={'skill': 'workshop_report', 'provider': 'mock'}, headers={'X-Demo-Role': 'domain_lead'})
+    assert report.status_code == 200
+    flagged = client.post('/api/guided/flag-conflict', json={'draft_id': report.json()['id']})
+    assert flagged.status_code == 200
+    assert flagged.json()['state'] == 'conflict'
+    assert flagged.json()['baseline']['amount'] == 25000
+
+    resolved = client.post('/api/guided/resolve-conflict')
+    assert resolved.status_code == 200
+    assert resolved.json()['state'] == 'clarified'
+    assert resolved.json()['baseline']['amount'] == 50000
+
+    fit_gap = client.post('/api/generate', json={'skill': 'fit_gap', 'provider': 'mock'}, headers={'X-Demo-Role': 'domain_lead'})
+    assert fit_gap.status_code == 200
+    pub = client.post('/api/guided/publish', json={'draft_id': fit_gap.json()['id']})
+    assert pub.status_code == 200
+    assert len(client.get('/api/workspace', headers={'X-Demo-Role': 'domain_lead'}).json()['publications']) == 2
+
+    reset_res = client.post('/api/reset')
+    assert reset_res.status_code == 200
+    reset_data = reset_res.json()
+    assert reset_data['state'] == 'evidence'
+    assert reset_data['baseline']['amount'] == 25000
+    assert len(reset_data['publications']) == 1

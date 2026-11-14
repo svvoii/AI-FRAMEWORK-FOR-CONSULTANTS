@@ -105,6 +105,28 @@ class KnowledgeStore:
         ''')
         self.db.commit()
 
+    def reset(self):
+        with self.db:
+            self.db.executescript('''
+                DROP TRIGGER IF EXISTS publications_no_update;
+                DROP TRIGGER IF EXISTS publications_no_delete;
+                DROP TRIGGER IF EXISTS events_no_update;
+                DROP TRIGGER IF EXISTS events_no_delete;
+                DELETE FROM publications;
+                DELETE FROM events;
+                DELETE FROM review_tasks;
+                DELETE FROM drafts;
+                DELETE FROM snapshots;
+                DELETE FROM candidates;
+                DELETE FROM canonical;
+                DELETE FROM chunks_fts;
+                DELETE FROM chunks;
+                DELETE FROM documents;
+            ''')
+        self._init_schema()
+        self.seed()
+        return self.state()
+
     def seed(self):
         if self.db.execute('SELECT COUNT(*) FROM documents').fetchone()[0]:
             return

@@ -1,4 +1,4 @@
-# Operational Second Brain — governed prototype
+# Deloitte AI Delivery Framework — governed prototype
 
 Synthetic S/4HANA procure-to-pay workshop scenario. No real SAP connection or customer data is used.
 
@@ -18,7 +18,7 @@ uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
 - Presentation: http://127.0.0.1:8000/presentation/
 - OpenAPI: http://127.0.0.1:8000/docs
 
-Run the 13 tests with:
+Run the 14 tests with:
 
 ```sh
 uv run pytest -q
@@ -28,15 +28,15 @@ Update `pyproject.toml` to change dependencies, then run `uv lock` to update `uv
 
 To use a separate local database, set `NORTHSTAR_DB=/path/to/prototype.db`. The default is `data/prototype.db`.
 
-Source documents load on first start. To reset the local demo, stop the server, remove `data/prototype.db`, then restart. Roles are demonstration selectors, not production authentication.
+Source documents load on first start. Click **Reset Demo** in the top header (`POST /api/reset`) at any time to restore the initial Step 1 state without restarting the server. Roles are demonstration selectors, not production authentication.
 
-## Demo sequence
+## Guided 3-step demo flow
 
-1. Generate the workshop report as a consultant. Inspect exact cited spans.
-2. Approve the faithful record, then flag the conflict: report approval does not approve the decision.
-3. Inspect review-only fit-gap and steering drafts. The EUR 50,000 statement remains unresolved and scope-unknown.
-4. As domain lead, accept WS-05, then independently promote its company-code-scoped decision candidate.
-5. Generate clarified outputs, review the supersession, approve and publish. Inspect frozen baseline/current provenance and audit events.
+1. **Step 1 — Draft Workshop Report (`WS-04`):** Generate the Workshop Report, click any source passage pill to verify exact quotes, and click **Approve Report & Catch €50k Conflict**. Notice that the approved `€25,000` baseline stays untouched.
+2. **Step 2 — Expose Conflict & Impact:** Optionally preview the Fit-Gap Analysis or Steering Summary (both surface the unresolved conflict and block final publication), and check **Impact Alerts** for Target Architecture. Then click **Apply WS-05 Clarification & Approve €50k (v2)**.
+3. **Step 3 — Update & Publish (`v2`):** Generate any deliverable (Workshop Report, Fit-Gap, Steering) against approved Knowledge v2 (`€50,000` for `FR01`) and publish a locked version while keeping `v1` in history.
+
+Expand **Show step-by-step governance gates** inside the draft footer or Knowledge panel if you want to walk through the individual lower-level approval gates.
 
 ## Generation providers
 

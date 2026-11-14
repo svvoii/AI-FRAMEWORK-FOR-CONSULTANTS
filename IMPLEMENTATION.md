@@ -1,6 +1,6 @@
-# System Implementation Plan — Consulting Deliverables AI Framework
+# System Implementation Plan — Reusable AI Framework for Consultants
 
-This document defines the staged engineering plan and build steps for the **Reusable AI Framework for Consulting Deliverables** described in [PLAN.md](PLAN.md), including a runnable prototype that demonstrates the core architecture and the end-to-end S/4HANA scoping workflow.
+This document defines the staged engineering plan and build steps for the **Reusable AI Framework for Consultants** described in [PLAN.md](PLAN.md), including a runnable prototype that demonstrates the core architecture and the end-to-end S/4HANA scoping workflow.
 
 `PLAN.md` remains the system contract. This document narrows that architecture into an implementable demonstration vertical slice.
 

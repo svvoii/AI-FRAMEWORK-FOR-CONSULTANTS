@@ -39,7 +39,7 @@ class Orchestrator:
         candidate = self.store.candidate()
         tasks = [dict(row) for row in self.store.db.execute('SELECT * FROM review_tasks ORDER BY id')]
         return {
-            'project': 'Northstar · S/4HANA scoping', 'stream': 'Procure-to-Pay / P2P',
+            'project': 'Project: S/4HANA Scoping · Procure-to-Pay', 'stream': 'Procure-to-Pay / P2P',
             'state': state, 'role': role, 'candidate_status': candidate['status'],
             'baseline': self.store.current_canonical(), 'candidate': candidate,
             'documents': documents, 'canonical_history': self.store.canonical_history(),

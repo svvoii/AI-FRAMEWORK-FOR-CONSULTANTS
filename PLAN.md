@@ -1,4 +1,4 @@
-# Reusable AI Framework for Consulting Deliverables
+# Reusable AI Framework for Consultants
 
 ## 1. Case interpretation
 

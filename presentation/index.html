@@ -1,116 +1,1256 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111111"><title>Northstar | From workshop evidence to governed decisions</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>Deloitte | Reusable AI Framework for Consultants</title>
 <style>
-:root{--green:#86bc25;--ink:#111;--paper:#fff;--muted:#70766f;--line:#e2e6df;--canvas:#f4f6f1;--t:#.18s}*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#242723;display:grid;place-items:center;overflow:hidden}button,a{font:inherit}button{cursor:pointer}a{color:inherit}.deck{width:min(100vw,calc((100vh - 48px)*16/9));height:min(calc(100vw*9/16),calc(100vh - 48px));position:relative;background:var(--paper);overflow:hidden;box-shadow:0 14px 80px #0003}.slide{position:absolute;inset:0;display:none;background:var(--paper);padding:6.8% 7.4%;overflow-y:auto;animation:in .3s}.slide.active{display:block}@keyframes in{from{opacity:.15;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.brand{position:absolute;left:7.4%;top:5%;font:700 clamp(13px,1.5vw,26px) Arial;letter-spacing:-1px}.brand:after{content:'';display:inline-block;width:.23em;height:.23em;background:var(--green);border-radius:50%;margin-left:.07em}.section-label{font-size:clamp(7px,.68vw,12px);letter-spacing:.16em;text-transform:uppercase;font-weight:bold;color:var(--muted);margin-bottom:2%}.slide-number{position:absolute;right:7.4%;top:5.2%;font-size:clamp(8px,.7vw,13px);color:var(--muted);font-variant-numeric:tabular-nums}.corner{position:absolute;right:0;bottom:0;width:8%;height:1%;background:var(--green)}h1,h2,h3,p{margin:0}h1{font-size:clamp(29px,4.5vw,77px);line-height:1.08;letter-spacing:-.055em;font-weight:500;max-width:91%}h2{font-size:clamp(24px,3.13vw,54px);line-height:1.1;letter-spacing:-.05em;font-weight:500;margin-bottom:3%;max-width:90%}h3{font-size:clamp(11px,1.1vw,19px);line-height:1.3;font-weight:600;letter-spacing:-.02em}.green{color:#577819}p{font-size:clamp(10px,1.03vw,18px);line-height:1.55}.lead{font-size:clamp(11px,1.33vw,23px);line-height:1.55;color:#555e52;max-width:80%;margin-top:3%}.support{color:var(--muted);font-size:clamp(8px,.83vw,14px);line-height:1.6}.footer-label{position:absolute;bottom:5%;left:7.4%;font-size:clamp(7px,.66vw,12px);color:var(--muted)}.foot-right{left:auto;right:7.4%}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:2%;height:53%}.card{padding:8%;background:var(--canvas);border-top:2px solid var(--line);display:flex;flex-direction:column}.card.active{border-top-color:var(--green)}.number{font-size:clamp(18px,2.1vw,36px);font-weight:400;color:#758568;margin-bottom:auto;letter-spacing:-.04em}.card h3{margin:12% 0 7%}.card p{font-size:clamp(8px,.82vw,15px);color:#60685b}.principles{margin-top:5%;display:grid;grid-template-columns:1fr 1fr;gap:5% 7%;max-width:92%}.principle{display:border-top:1px solid var(--line);padding:5% 4% 0 0}.principle p{margin-top:2%;color:var(--muted);font-size:clamp(8px,.86vw,15px)}.principle h3:before{content:'/';font-size:1.3em;color:var(--green);font-weight:400;margin-right:.55em}.badge{display:inline-block;background:#edf4e1;padding:.55em .85em;font-size:clamp(7px,.64vw,11px);color:#4d6c16;letter-spacing:.08em;text-transform:uppercase;font-weight:bold}.title-slide{padding-top:19%;background:linear-gradient(110deg,#fff 60%,#f2f6e9)}.title-slide .lead{max-width:67%}.title-mark{position:absolute;right:8%;bottom:14%;width:27%;height:28%;border-left:1px solid #d5dccc}.title-line{position:absolute;left:0;bottom:40%;height:1px;background:#b7c3a6;width:100%}.title-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--green);bottom:calc(40% - 5px);left:36%;box-shadow:0 0 0 10px #edf4dd}.title-mark span{position:absolute;left:44%;top:5%;font-size:clamp(8px,.8vw,14px);color:#657357;line-height:1.7}.large-statement{margin-top:7%;font-size:clamp(16px,2.05vw,35px);line-height:1.35;letter-spacing:-.025em;max-width:76%}.arch{display:grid;grid-template-columns:2.2fr 1fr;gap:4%;align-items:stretch;height:54%;margin-top:3%}.pipeline{display:flex;flex-direction:column;gap:3%}.arch-row{border:1px solid var(--line);display:grid;grid-template-columns:1.2fr 3fr;align-items:center;padding:2.5% 4%;background:#fff}.arch-row .label{font-size:clamp(8px,.85vw,15px);line-height:1.5}.arch-row b{font-size:clamp(7px,.64vw,11px);letter-spacing:.12em;text-transform:uppercase;color:#718562}.arch-row.main{border-left:4px solid var(--green);background:var(--canvas)}.arch-side{background:var(--ink);color:#fff;padding:9%;display:flex;flex-direction:column;justify-content:space-between}.arch-side h3{line-height:1.4}.arch-side p{color:#d3d8cc;font-size:clamp(8px,.78vw,14px);line-height:1.6}.arch-side strong{color:var(--green);font-size:clamp(18px,2vw,34px);font-weight:400}.arch-note{margin-top:2.5%;font-size:clamp(7px,.69vw,12px);color:var(--muted)}.compare{display:grid;grid-template-columns:1fr 1fr;gap:3%;margin-top:3%;height:39%}.decision{padding:5%;background:var(--canvas);border:1px solid var(--line)}.decision.approved{background:#f1f6e6;border-color:#cddcB0}.decision-head{display:flex;justify-content:space-between;align-items:center}.decision .amount{font-size:clamp(29px,4.1vw,70px);font-weight:400;letter-spacing:-.06em;line-height:1.2;margin:8% 0 4%}.decision .amount small{font-size:clamp(10px,1vw,17px);letter-spacing:-.01em}.decision p{font-size:clamp(9px,.83vw,15px);color:#535e49}.decision .history{margin-top:8%;padding-top:5%;border-top:1px solid var(--line);font-size:clamp(7px,.73vw,13px)}.flow{display:flex;align-items:center;justify-content:space-between;margin:5% 0 4%;height:10%}.flow span{font-size:clamp(8px,.82vw,14px);font-weight:500;background:var(--canvas);padding:1.4% 3%}.flow b{font-weight:400;font-size:clamp(12px,1.2vw,22px);color:#80945c}.flow .stop{background:#fff0e9;color:#92442e}.bottom-call{border-left:3px solid var(--green);padding:2% 3%;background:var(--canvas);font-size:clamp(9px,.9vw,16px);line-height:1.65}.diamond{aspect-ratio:1;background:var(--green);width:16%;display:flex;align-items:center;justify-content:center;transform:rotate(45deg);position:absolute;right:14%;bottom:19%}.diamond span{transform:rotate(-45deg);font-weight:bold;font-size:clamp(8px,.9vw,15px)}.governance{display:grid;grid-template-columns:1fr 13fr;gap:3%;margin-top:5%;height:52%}.axis{display:flex;flex-direction:column;justify-content:space-between;align-items:center;color:#6c8160;font-size:clamp(7px,.7vw,13px)}.axis-line{width:1px;flex:1;background:#cdd7c4;position:relative;margin:7% 0}.axis-line:after{content:'›';position:absolute;top:-3%;left:-4px}.govern-row{display:grid;grid-template-columns:1.2fr 3fr;gap:4%;padding:2.5% 0;border-top:1px solid var(--line);align-items:start}.govern-row h3{font-size:clamp(9px,.95vw,17px)}.govern-row p{font-size:clamp(8px,.77vw,14px);color:#5d6955}.govern-row .right{padding-left:4%;border-left:1px solid var(--line)}.output-list{margin-top:4%;display:flex;gap:2%;height:18%}.output{border-top:2px solid var(--green);padding:3%;background:var(--canvas);flex:1}.output h3{margin-bottom:6%}.output p{font-size:clamp(8px,.78vw,14px);color:#637157}.demo-button{display:inline-flex;align-items:center;justify-content:center;background:var(--green);padding:1.1em 1.7em;border:1px solid var(--green);color:#111;text-decoration:none;font-weight:bold;font-size:clamp(9px,.95vw,17px);margin-top:4%}.demo-button:hover{filter:brightness(.9)}.demo-steps{list-style:none;padding:0;margin:4% 0 0;width:66%;counter-reset:step}.demo-steps li{counter-increment:step;display:grid;grid-template-columns:11% 1fr;padding:2% 0;border-top:1px solid var(--line);font-size:clamp(9px,.92vw,16px);line-height:1.5}.demo-steps li:before{content:'0' counter(step);color:#6d902a;font-size:1.15em}.demo-steps li span{color:var(--muted);font-size:.87em;display:block;margin-top:.4%}.checks{display:grid;grid-template-columns:repeat(4,1fr);gap:2%;margin-top:5%}.check{padding:6% 7%;border:1px solid var(--line);background:var(--canvas)}.check strong{display:block;font-size:clamp(16px,2.25vw,38px);color:#55771c;font-weight:400;margin-bottom:12%;letter-spacing:-.05em}.check h3{margin-bottom:6%}.check p{font-size:clamp(7px,.72vw,13px);color:var(--muted)}.demo-note{position:absolute;right:7.4%;bottom:10%;width:27%;font-size:clamp(7px,.78vw,14px);color:var(--muted);line-height:1.65;border-top:1px solid var(--line);padding-top:3%}.table{width:100%;border-collapse:collapse;font-size:clamp(8px,.8vw,14px);line-height:1.5;margin-top:2%}.table th,.table td{text-align:left;border-top:1px solid var(--line);padding:2.7% 1.5%;vertical-align:top}.table th{font-size:.72em;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;border-top:0}.table td:first-child{font-weight:bold;width:23%}.table .key{color:#5c7b26}.next{margin-top:4%;font-size:clamp(9px,.95vw,17px);line-height:1.6;max-width:80%}.controls{height:48px;position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:13px;color:#d8ded1;font-family:Arial,sans-serif;background:#242723}.controls button{border:1px solid #62685d;background:none;color:#fff;width:29px;height:27px;font-size:16px;display:grid;place-items:center}.controls button:hover{border-color:var(--green);color:var(--green)}.controls .wide{width:auto;padding:0 12px;font-size:11px;letter-spacing:.03em}.controls input[type=range]{width:170px;accent-color:var(--green);height:3px}.controls .counter{font-size:11px;min-width:52px;text-align:center;font-variant-numeric:tabular-nums}.controls .divider{width:1px;height:20px;background:#58604f;margin:0 5px}.controls .timer{font-size:11px;min-width:36px;color:#d1d8ca}.progress{height:3px;position:absolute;bottom:0;left:0;background:#dfe6d7;width:100%;z-index:20}.progress span{display:block;height:100%;background:var(--green);width:11.11%;transition:width .2s}.overview{position:absolute;inset:0;background:#f4f6f1;z-index:40;padding:4%;display:none;overflow:auto}.overview.open{display:block}.overview h2{font-size:clamp(20px,3vw,45px);margin-bottom:3%}.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.thumb{background:#fff;border:1px solid var(--line);padding:5%;height:140px;text-align:left;position:relative}.thumb.current{border:2px solid var(--green)}.thumb small{font-size:10px;color:#75816a;display:block;margin-bottom:20%}.thumb strong{font-size:16px;line-height:1.3}.close-overview{position:absolute;right:4%;top:4%;background:none;border:0;font-size:23px}.hint{font-size:9px;color:#929b89;margin-left:8px}.a11y{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}:focus-visible{outline:3px solid #5e801f;outline-offset:5px}.slide img{max-width:100%;max-height:100%;object-fit:contain}.diagram-frame{margin-top:1%;height:67%;display:flex;justify-content:center;align-items:center}.diagram-frame img{width:96%;height:100%}.dark-slide{background:var(--ink);color:#fff}.dark-slide .section-label,.dark-slide .slide-number,.dark-slide .support{color:#a3ac9b}.dark-slide h2{font-size:clamp(25px,3.6vw,62px)}.dark-slide .large-statement{color:#e5eadc;max-width:89%;font-size:clamp(16px,2.2vw,38px)}.dark-slide .footer-label{color:#939d89}.dark-slide .green{color:var(--green)}.dark-slide:before{content:'';position:absolute;right:-10%;top:-45%;border:1px solid #354021;width:52%;aspect-ratio:1;transform:rotate(45deg);pointer-events:none}.dark-slide:after{content:'';position:absolute;right:6%;bottom:16%;width:15%;height:2px;background:var(--green)}.dark-slide .support{margin-top:4%;font-size:clamp(10px,1.2vw,21px);line-height:1.7}.column-list{display:grid;grid-template-columns:1fr 1fr;gap:4%;height:57%;margin-top:5%}.column-list>div{border-top:2px solid var(--green);padding-top:6%}.column-list h3{margin-bottom:7%}.column-list p{font-size:clamp(8px,.89vw,16px);line-height:1.7;color:#58624f}.column-list .quiet{border-top-color:var(--line)}.quote{font-size:clamp(16px,2.45vw,42px);letter-spacing:-.045em;line-height:1.23;max-width:83%;margin-top:5%}.quote:before{content:'“';color:var(--green);font-size:1.4em;line-height:0;vertical-align:-.1em;margin-right:.07em}#print-list{display:none}@media(max-width:700px){.deck{width:100vw;height:calc(100vw*9/16)}.slide{padding-top:10%}.footer-label{bottom:4%}.arch-note{display:none}.controls{font-size:8px}.thumbnail{height:100px}.hint{display:none}.overview-grid{grid-template-columns:repeat(2,1fr)}.thumb{height:100px}.thumb small{margin-bottom:10%}.thumb strong{font-size:12px}}@media(prefers-reduced-motion:reduce){.slide{animation:none}.progress span{transition:none}}@media print{html,body{height:auto;background:#fff;display:block;overflow:visible}.deck{display:none}.controls{display:none}#print-list{display:block}.print-slide{width:1600px;height:900px;position:relative;page-break-after:always;overflow:hidden;background:#fff}.print-slide .slide{display:block!important;position:absolute;inset:0;padding:109px 118px!important;animation:none}.print-slide .brand{font-size:24px}.print-slide .section-label{font-size:11px}.print-slide .slide-number{font-size:11px}.print-slide h1{font-size:72px}.print-slide h2{font-size:50px}.print-slide h3{font-size:18px}.print-slide p,.print-slide .lead{font-size:17px}.print-slide .support{font-size:13px}.print-slide .badge{font-size:10px}.print-slide .footer-label{font-size:11px}.print-slide .number{font-size:32px}.print-slide .card p{font-size:13px}.print-slide .principle p{font-size:14px}.print-slide .arch-row .label{font-size:14px}.print-slide .arch-row b{font-size:10px}.print-slide .arch-side p{font-size:13px}.print-slide .arch-side strong{font-size:32px}.print-slide .decision .amount{font-size:67px}.print-slide .decision p{font-size:14px}.print-slide .flow span{font-size:14px}.print-slide .bottom-call{font-size:15px}.print-slide .arch-note{font-size:11px}.print-slide .govern-row h3{font-size:15px}.print-slide .govern-row p{font-size:13px}.print-slide .output p{font-size:13px}.print-slide .table{font-size:13px}.print-slide .demo-steps li{font-size:15px}.print-slide .demo-button{font-size:15px}.print-slide .demo-note{font-size:13px}.print-slide .check h3{font-size:17px}.print-slide .check p{font-size:13px}.print-slide .check strong{font-size:36px}.print-slide .column-list p{font-size:15px}.print-slide .next{font-size:16px}.print-slide .quote{font-size:39px}.print-slide .dark-slide .support{font-size:20px}.print-slide .large-statement{font-size:32px}.print-slide .title-mark span{font-size:14px}.print-slide .diagram-frame{width:100%;height:600px}.print-slide .diagram-frame img{width:96%;height:96%}}
-#deck .slide{overflow-x:clip}.section-label{margin-bottom:2vh}h2{margin-bottom:3vh}.grid-3{height:43%;gap:2vh}.large-statement{margin-top:4vh}.arch{height:51%;margin-top:3vh}.arch-note{margin-top:2vh}.governance{height:52%;margin-top:4vh}.compare{height:34%;margin-top:3vh}.bottom-call{padding:2vh 3%}.flow{margin:3vh 0;height:8%}.demo-steps{margin:3vh 0 0}.demo-steps li{display:block;padding:1.4vh 0 1.4vh 4em;position:relative}.demo-steps li:before{position:absolute;left:0}.demo-steps li span{margin-top:0}.slide[data-title="Live demonstration"] .demo-note{bottom:10%;padding-top:2vh}.demo-button{margin-top:3vh}.checks{margin-top:4vh}.column-list{height:40%;margin-top:3vh}.column-list>div{padding-top:3vh}.column-list h3{margin-bottom:2vh}.column-list p{line-height:1.5}.table{margin-top:2vh}.table th,.table td{padding:1.5vh 1.5%}.dark-slide:before{right:6%;top:18%;width:18%;opacity:.35}
-@media(max-width:700px){.controls{gap:4px}.controls .wide{padding:0 5px;font-size:9px}.controls input[type=range]{width:70px}.controls .divider,.controls .hint,#fullscreen{display:none}.slide{padding-top:12%}.section-label{margin-bottom:1vh}h2{margin-bottom:1.5vh}.demo-steps li{padding-top:.8vh;padding-bottom:.8vh}.large-statement{margin-top:3vh}.grid-3{height:40%}}
+  :root {
+    --green: #86bc25;
+    --green-dark: #4f7311;
+    --green-soft: #f0f6e4;
+    --ink: #111111;
+    --graphite: #2b322e;
+    --muted: #646b66;
+    --line: #dfe4dc;
+    --canvas: #f5f7f3;
+    --paper: #ffffff;
+    --warn-bg: #fff5e6;
+    --warn: #8c4d00;
+    --red-bg: #fff0ef;
+    --red: #a32629;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: #1f221e;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  button, a { font: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; }
+
+  .deck {
+    width: min(100vw, calc((100vh - 50px) * 16 / 9));
+    height: min(calc(100vw * 9 / 16), calc(100vh - 50px));
+    position: relative;
+    background: var(--paper);
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, .35);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    background: var(--paper);
+    padding: 6.2% 6.8% 5.5%;
+    overflow-y: auto;
+    animation: slideIn .22s ease-out;
+  }
+  .slide.active { display: flex; flex-direction: column; }
+  @keyframes slideIn {
+    from { opacity: .2; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Slide Chrome */
+  .slide-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.4%;
+  }
+  .brand {
+    font-weight: 700;
+    font-size: clamp(13px, 1.35vw, 22px);
+    letter-spacing: -0.7px;
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .brand::after {
+    content: "";
+    width: .25em;
+    height: .25em;
+    border-radius: 50%;
+    background: var(--green);
+    margin-left: .12em;
+  }
+  .slide-number {
+    font-size: clamp(9px, .78vw, 13px);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .section-label {
+    font-size: clamp(8px, .68vw, 11px);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: .9%;
+  }
+  h1, h2, h3, h4, p { margin: 0; }
+  h1 {
+    font-size: clamp(26px, 4.1vw, 66px);
+    line-height: 1.07;
+    letter-spacing: -0.045em;
+    font-weight: 600;
+    max-width: 92%;
+  }
+  h2 {
+    font-size: clamp(20px, 2.7vw, 44px);
+    line-height: 1.12;
+    letter-spacing: -0.04em;
+    font-weight: 600;
+    margin-bottom: 1.8%;
+  }
+  h3 {
+    font-size: clamp(11px, 1.05vw, 17px);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  p {
+    font-size: clamp(10px, .95vw, 16px);
+    line-height: 1.5;
+  }
+  .green { color: var(--green-dark); }
+  .slide-footer {
+    margin-top: auto;
+    padding-top: 1.2%;
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(8px, .68vw, 12px);
+    color: var(--muted);
+    border-top: 1px solid #eef1ec;
+  }
+  .corner {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 7%;
+    height: 4px;
+    background: var(--green);
+  }
+
+  /* Slide 1: Title */
+  .title-slide {
+    background: linear-gradient(120deg, #fff 58%, #f3f7ea 100%);
+  }
+  .title-main {
+    margin-top: 4%;
+  }
+  .lead {
+    font-size: clamp(12px, 1.3vw, 22px);
+    color: #4b5449;
+    max-width: 74%;
+    margin-top: 2.2%;
+    line-height: 1.45;
+  }
+  .title-summary-strip {
+    margin-top: 4.5%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 1.4%;
+    align-items: stretch;
+  }
+  .summary-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--green);
+    padding: 3.5% 4%;
+    border-radius: 4px;
+  }
+  .summary-box span {
+    display: block;
+    font-size: clamp(8px, .65vw, 11px);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--green-dark);
+    font-weight: 700;
+    margin-bottom: 4%;
+  }
+  .summary-box strong {
+    display: block;
+    font-size: clamp(11px, 1.05vw, 17px);
+    margin-bottom: 3%;
+  }
+  .summary-box p {
+    font-size: clamp(9px, .78vw, 13px);
+    color: var(--muted);
+  }
+  .strip-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(14px, 1.4vw, 24px);
+    color: var(--green-dark);
+  }
+
+  /* Slide 2: Challenge */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2%;
+    margin-top: 1.5%;
+    flex: 1;
+    max-height: 50%;
+  }
+  .card {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-top: 3px solid #cfd6ca;
+    padding: 6%;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+  .card.active {
+    border-top-color: var(--green);
+    background: #f7faf0;
+  }
+  .card .number {
+    font-size: clamp(20px, 2.2vw, 36px);
+    font-weight: 500;
+    color: var(--green-dark);
+    margin-bottom: 8%;
+  }
+  .card h3 { margin-bottom: 5%; }
+  .card p {
+    font-size: clamp(9px, .84vw, 14px);
+    color: var(--graphite);
+  }
+  .bottom-callout {
+    margin-top: 2.5%;
+    border-left: 4px solid var(--green);
+    background: var(--green-soft);
+    padding: 2% 2.5%;
+    font-size: clamp(11px, 1.15vw, 19px);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Slide 3: Interactive Architecture */
+  .arch-layout {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 2.5%;
+    flex: 1;
+    min-height: 0;
+    align-items: stretch;
+  }
+  .arch-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8%;
+    justify-content: center;
+  }
+  .arch-tier {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .arch-block {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-left: 4px solid #c5cec0;
+    border-radius: 4px;
+    padding: 1.8% 2.5%;
+    text-align: left;
+    transition: border-color .15s, background .15s, transform .12s;
+  }
+  .arch-block:hover, .arch-block.selected {
+    border-color: var(--green);
+    border-left-color: var(--green);
+    background: var(--green-soft);
+  }
+  .arch-block.selected {
+    box-shadow: 0 2px 10px rgba(134, 188, 37, .18);
+  }
+  .arch-block-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .arch-block strong {
+    font-size: clamp(10px, .92vw, 15px);
+  }
+  .arch-block span.tag {
+    font-size: clamp(7px, .6vw, 10px);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+  .arch-block small {
+    display: block;
+    font-size: clamp(8px, .72vw, 12px);
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .arch-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8%;
+  }
+  .zoom-panel {
+    background: #141714;
+    color: #fff;
+    border-radius: 5px;
+    padding: 4.5% 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .zoom-eyebrow {
+    font-size: clamp(7px, .64vw, 11px);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 2%;
+  }
+  .zoom-panel h3 {
+    font-size: clamp(13px, 1.35vw, 22px);
+    color: #fff;
+    margin-bottom: 3%;
+  }
+  .zoom-panel p {
+    font-size: clamp(9px, .83vw, 14px);
+    color: #d6dcd4;
+    line-height: 1.5;
+    margin-bottom: 3%;
+  }
+  .zoom-meta {
+    border-top: 1px solid #2e342e;
+    padding-top: 3%;
+    font-size: clamp(8px, .76vw, 13px);
+    color: #b7c0b5;
+    line-height: 1.55;
+  }
+  .zoom-meta strong { color: #fff; }
+  .zoom-code {
+    margin-top: 3%;
+    background: #1f241f;
+    border: 1px solid #353d35;
+    border-radius: 3px;
+    padding: 2.5% 3%;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: clamp(7.5px, .68vw, 11.5px);
+    color: #c8df9e;
+    white-space: pre-wrap;
+  }
+
+  /* Slide 4: 3 Knowledge Layers */
+  .layers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2%;
+    margin-top: 1%;
+  }
+  .layer-card {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-top: 4px solid #bcc6b6;
+    border-radius: 4px;
+    padding: 4.5%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color .15s, background .15s;
+  }
+  .layer-card:hover, .layer-card.selected {
+    border-color: var(--green);
+    border-top-color: var(--green);
+    background: var(--green-soft);
+  }
+  .layer-num {
+    font-size: clamp(8px, .66vw, 11px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--green-dark);
+  }
+  .layer-card h3 { font-size: clamp(12px, 1.15vw, 19px); }
+  .layer-sub {
+    font-size: clamp(9px, .82vw, 14px);
+    font-weight: 600;
+    color: var(--graphite);
+  }
+  .layer-card p {
+    font-size: clamp(8.5px, .78vw, 13.5px);
+    color: var(--muted);
+  }
+  .zoom-drawer {
+    margin-top: 2%;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--green);
+    border-radius: 4px;
+    padding: 2.2% 3%;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3%;
+    align-items: center;
+  }
+  .zoom-drawer h4 {
+    font-size: clamp(10px, .95vw, 16px);
+    margin-bottom: 1.5%;
+  }
+  .zoom-drawer p {
+    font-size: clamp(9px, .8vw, 14px);
+    color: var(--graphite);
+  }
+  .drawer-rule {
+    background: var(--canvas);
+    padding: 3% 4%;
+    border-radius: 4px;
+    font-size: clamp(8.5px, .76vw, 13px);
+    color: var(--graphite);
+  }
+
+  /* Slide 5: 4-Stage Walkthrough */
+  .stages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.6%;
+    margin-top: 1%;
+  }
+  .stage-btn {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-top: 3px solid #c2cbbd;
+    border-radius: 4px;
+    padding: 4.5%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color .15s, background .15s;
+  }
+  .stage-btn:hover, .stage-btn.selected {
+    border-color: var(--green);
+    border-top-color: var(--green);
+    background: var(--green-soft);
+  }
+  .stage-btn.warn.selected {
+    background: var(--warn-bg);
+    border-color: #d9822b;
+    border-top-color: #d9822b;
+  }
+  .stage-tag {
+    font-size: clamp(7.5px, .62vw, 10.5px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--green-dark);
+  }
+  .stage-btn.warn .stage-tag { color: var(--warn); }
+  .stage-btn strong { font-size: clamp(11px, 1vw, 17px); }
+  .stage-btn p { font-size: clamp(8.5px, .76vw, 13px); color: var(--muted); }
+
+  .stage-detail-box {
+    margin-top: 2%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2%;
+    flex: 1;
+    max-height: 36%;
+  }
+  .actor-box {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 3% 4%;
+    background: #fff;
+  }
+  .actor-box.ai { border-left: 4px solid #35688f; }
+  .actor-box.human { border-left: 4px solid var(--green); background: #f8fbf2; }
+  .actor-box span {
+    display: block;
+    font-size: clamp(8px, .65vw, 11px);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 2%;
+  }
+  .actor-box.human span { color: var(--green-dark); }
+  .actor-box h4 {
+    font-size: clamp(11px, 1vw, 17px);
+    margin-bottom: 2%;
+  }
+  .actor-box p {
+    font-size: clamp(9px, .82vw, 14px);
+    color: var(--graphite);
+  }
+
+  /* Slide 6: Prototype Choice & Demo */
+  .demo-split {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3%;
+    margin-top: 1%;
+    flex: 1;
+  }
+  .demo-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5%;
+  }
+  .demo-steps li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 10px;
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2.8% 3.5%;
+    align-items: start;
+  }
+  .step-num {
+    font-size: clamp(14px, 1.4vw, 24px);
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+  .demo-steps strong {
+    display: block;
+    font-size: clamp(10px, .95vw, 16px);
+    margin-bottom: 2px;
+  }
+  .demo-steps span {
+    font-size: clamp(8.5px, .76vw, 13px);
+    color: var(--muted);
+  }
+  .demo-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    padding: 2.4% 4.5%;
+    border-radius: 4px;
+    font-size: clamp(10px, .95vw, 16px);
+    margin-top: 3%;
+  }
+  .demo-cta:hover { filter: brightness(.93); }
+  .stack-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5%;
+  }
+  .stack-card {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ink);
+    border-radius: 4px;
+    padding: 3% 4%;
+    background: #fff;
+  }
+  .stack-card h3 { font-size: clamp(10px, .95vw, 16px); margin-bottom: 2%; }
+  .stack-card p { font-size: clamp(8.5px, .77vw, 13px); color: var(--muted); }
+
+  /* Slide 7: Adoption & Q&A Deep-Dive Tabs */
+  .roadmap-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2%;
+    margin-bottom: 2%;
+  }
+  .roadmap-card {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 3% 4%;
+  }
+  .roadmap-card span {
+    font-size: clamp(7.5px, .62vw, 10.5px);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+  .roadmap-card h3 { margin: 2% 0; font-size: clamp(10px, .95vw, 16px); }
+  .roadmap-card p { font-size: clamp(8.5px, .76vw, 13px); color: var(--muted); }
+
+  .qa-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5%;
+  }
+  .qa-tab {
+    border: 1px solid var(--line);
+    background: var(--canvas);
+    padding: 1.2% 2%;
+    border-radius: 4px;
+    font-size: clamp(8.5px, .78vw, 13px);
+    font-weight: 600;
+    color: var(--graphite);
+  }
+  .qa-tab.selected {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .qa-panel {
+    background: #f8faf5;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--green);
+    border-radius: 4px;
+    padding: 2.5% 3%;
+    flex: 1;
+  }
+  .qa-panel h4 {
+    font-size: clamp(11px, 1.02vw, 17px);
+    margin-bottom: 1.5%;
+  }
+  .qa-panel p {
+    font-size: clamp(9px, .84vw, 14.5px);
+    color: var(--graphite);
+  }
+
+  /* Controls Bar */
+  .controls {
+    height: 50px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #d8ded1;
+    background: #1f221e;
+    padding: 0 16px;
+  }
+  .controls button, .controls a {
+    border: 1px solid #586055;
+    background: transparent;
+    color: #fff;
+    height: 28px;
+    padding: 0 10px;
+    font-size: 11px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  .controls button:hover, .controls a:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .controls input[type=range] {
+    width: 140px;
+    accent-color: var(--green);
+  }
+  .controls .counter {
+    font-size: 11px;
+    min-width: 52px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .controls .demo-nav {
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 600;
+  }
+  .progress {
+    height: 3px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: #e1e7dc;
+    width: 100%;
+  }
+  .progress span {
+    display: block;
+    height: 100%;
+    background: var(--green);
+    transition: width .2s;
+  }
+
+  /* Overview Overlay */
+  .overview {
+    position: absolute;
+    inset: 0;
+    background: var(--canvas);
+    z-index: 40;
+    padding: 4% 5%;
+    display: none;
+    overflow: auto;
+  }
+  .overview.open { display: block; }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .thumb {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 16px;
+    text-align: left;
+    border-radius: 4px;
+    min-height: 110px;
+  }
+  .thumb.current { border: 2px solid var(--green); }
+  .thumb small {
+    display: block;
+    font-size: 10px;
+    color: var(--green-dark);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .thumb strong { font-size: 15px; }
+  .close-overview {
+    position: absolute;
+    right: 4%;
+    top: 4%;
+    background: transparent;
+    border: 0;
+    font-size: 26px;
+  }
+
+  #print-list { display: none; }
+  @media (max-width: 780px) {
+    .arch-layout, .demo-split, .grid-3, .layers-grid, .stages-grid, .roadmap-row, .stage-detail-box, .zoom-drawer {
+      grid-template-columns: 1fr;
+    }
+    .title-summary-strip { grid-template-columns: 1fr; }
+    .strip-arrow { display: none; }
+    .controls .hide-sm { display: none; }
+  }
+  @media print {
+    html, body { height: auto; background: #fff; display: block; overflow: visible; }
+    .deck, .controls { display: none; }
+    #print-list { display: block; }
+    .print-slide {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      page-break-after: always;
+      overflow: hidden;
+    }
+    .print-slide .slide {
+      display: flex !important;
+      position: absolute;
+      inset: 0;
+      animation: none;
+    }
+  }
 </style>
 </head>
 <body>
 <main class="deck" id="deck" aria-label="Presentation deck">
-  <section class="slide title-slide" data-title="From evidence to governed decisions" data-notes="Open with the promise: this is not another AI authoring tool. It is a way to carry decisions into the work without losing their source, scope or accountability. The vertical slice is Northstar P2P scoping; all evidence is synthetic.">
-    <div class="brand">northstar</div><div class="slide-number">01 / 09</div>
-    <div class="section-label">A reusable AI framework for consulting deliverables</div>
-    <h1>From workshop evidence<br>to <span class="green">governed decisions.</span></h1>
-    <p class="lead">One shared engine. Specialized skills.<br>Explicit human control at every decision boundary.</p>
-    <div class="title-mark" aria-hidden="true"><div class="title-line"></div><div class="title-dot"></div><span>Evidence<br>→ Knowledge<br>→ Deliverables</span></div>
-    <div class="footer-label">SAP S/4HANA scoping · Procure-to-Pay</div><div class="footer-label foot-right">Architecture & live prototype</div><div class="corner"></div>
-  </section>
-  <section class="slide" data-title="The problem is settled truth" data-notes="Ask: in a 30-workshop programme, what happens when the fourth workshop says 50,000 and the first approved 25,000? Tools can produce more prose. The harder problem is to preserve what was said, what the team agreed, and what may now be treated as settled. This framework treats authorship as a separate concern.">
-    <div class="brand">northstar</div><div class="slide-number">02 / 09</div><div class="section-label">01 / The consulting problem</div>
-    <h2>Most tools generate documents.<br>Consultants must govern <span class="green">decisions.</span></h2>
-    <div class="grid-3">
-      <article class="card"><span class="number">30</span><h3>Workshops do not produce one truth.</h3><p>Statements accumulate. Scope changes. The same requirement evolves across process streams and roles.</p></article>
-      <article class="card active"><span class="number">01</span><h3>A contradiction needs a decision.</h3><p>EUR 25,000 and EUR 50,000 can both be faithfully recorded. Only one can be the approved rule for FR01.</p></article>
-      <article class="card"><span class="number">↗</span><h3>The output travels further than its evidence.</h3><p>Reports shape fit-gap, architecture and steering. An unresolved conflict must not disappear in the next document.</p></article>
+
+  <!-- SLIDE 1: TITLE & EXECUTIVE SUMMARY -->
+  <section class="slide title-slide" data-title="Executive Summary" data-notes="Open clearly: the client problem is 30 workshops over 26 weeks producing scattered notes and inconsistent deliverables. Our answer is one reusable AI framework: one Main Agent orchestrating Specialized Agents, a 3-layer Knowledge Base, and Pluggable Skills — with consultants always in control.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">01 / 07</div></div>
+    <div class="section-label">Technical Design &amp; Prototype · S/4HANA Scoping Case</div>
+    <div class="title-main">
+      <h1>A reusable AI framework for <span class="green">consultants.</span></h1>
+      <p class="lead">One shared multi-agent engine and pluggable skills to turn 30 workshops into consistent, source-backed deliverables — while keeping consultants in control.</p>
     </div>
-    <div class="large-statement">The unit of governance is not the document.<br><span class="green">It is the scoped, accountable decision.</span></div>
-    <div class="footer-label">Prepare → Assess → Analyze → Advise</div><div class="footer-label foot-right">The problem / ~1 min</div>
+    <div class="title-summary-strip">
+      <div class="summary-box">
+        <span>Input Reality</span>
+        <strong>30 Workshops &amp; Docs</strong>
+        <p>Notes, process lists, and technical inputs scattered across 26 weeks (Prepare, Assess, Analyze, Advise).</p>
+      </div>
+      <div class="strip-arrow" aria-hidden="true">→</div>
+      <div class="summary-box">
+        <span>One Reusable Engine</span>
+        <strong>Main Agent + Skills</strong>
+        <p>One entry-point agent coordinates specialized workers, a structured knowledge base, and 1 skill per deliverable.</p>
+      </div>
+      <div class="strip-arrow" aria-hidden="true">→</div>
+      <div class="summary-box">
+        <span>Verified Outputs</span>
+        <strong>Consistent &amp; Traceable</strong>
+        <p>Workshop reports, fit-gap analyses, target architecture, and steering decks linked to exact source passages.</p>
+      </div>
+    </div>
+    <div class="slide-footer"><span>Project: S/4HANA Scoping · Procure-to-Pay</span><span>Slide 1 · Overview</span></div>
+    <div class="corner"></div>
   </section>
-  <section class="slide" data-title="One engine, governed work" data-notes="This is the architectural idea. Keep the authoring surface consistent, and vary the skills. The orchestrator freezes an authorized context snapshot; the Deliverable Agent creates atomic claims against source evidence; the Steward compares candidates to approved facts; the Quality Reviewer checks the skill’s required contract. Retrieval safety is a shared invariant, not a per-skill feature.">
-    <div class="brand">northstar</div><div class="slide-number">03 / 09</div><div class="section-label">02 / The engine</div><h2>Reuse the work.<br><span class="green">Specialize only the deliverable contract.</span></h2>
-    <div class="arch"><div class="pipeline">
-      <div class="arch-row"><b>Workspace</b><span class="label">Consultant action / review / domain-lead approval</span></div>
-      <div class="arch-row main"><b>Orchestrator</b><span class="label">Scope + authorize + freeze snapshot + select skill</span></div>
-      <div class="arch-row"><b>Deliverable agent</b><span class="label">Workshop report · Fit-gap · Steering summary</span></div>
-      <div class="arch-row"><b>Shared governance</b><span class="label">Knowledge steward / quality reviewer / model gateway</span></div>
-    </div><aside class="arch-side"><h3>The same governed path.<br>Three distinct skills.</h3><strong>1 → 3</strong><p>A new skill declares its schema, evidence, tools, dependencies and review gates. It does not quietly override project security or invent an approved fact.</p></aside></div>
-    <p class="arch-note">Mistral is the selected live model gateway. The default demonstration uses clearly marked deterministic fixtures and never substitutes them after a live failure.</p>
-    <div class="footer-label">Consultant workspace → controlled execution → evidence-bound outputs</div><div class="footer-label foot-right">Engine / ~1.5 min</div>
+
+  <!-- SLIDE 2: THE CONSULTING PROBLEM -->
+  <section class="slide" data-title="The Consulting Challenge" data-notes="Emphasize why naive LLM prompting fails in real consulting: across 30 workshops, requirements evolve and contradict each other. If an AI silently picks EUR 50,000 over EUR 25,000, errors cascade into Fit-Gap and Target Architecture.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">02 / 07</div></div>
+    <div class="section-label">01 / The Problem</div>
+    <h2>Most AI tools write text.<br>Consultants must govern <span class="green">decisions.</span></h2>
+    <div class="grid-3">
+      <article class="card">
+        <span class="number">01</span>
+        <h3>Information Overload</h3>
+        <p>30 workshops across 26 weeks produce huge volumes of meeting notes, process lists, and technical documents scattered across teams.</p>
+      </article>
+      <article class="card">
+        <span class="number">02</span>
+        <h3>Repetitive Drafting &amp; Drift</h3>
+        <p>Consultants spend hours formatting reports instead of advising. Structure and thoroughness vary significantly from one author to another.</p>
+      </article>
+      <article class="card active">
+        <span class="number">03</span>
+        <h3>Hidden Contradictions</h3>
+        <p>When Workshop 4 states €50,000 after Workshop 1 approved €25,000, standard AI tools either hallucinate or silently overwrite the baseline.</p>
+      </article>
+    </div>
+    <div class="bottom-callout">
+      Core Principle: We do not build one tool per deliverable. We build <strong>one shared engine</strong> and plug in <strong>one skill per deliverable type</strong>.
+    </div>
+    <div class="slide-footer"><span>Prepare → Assess → Analyze → Advise</span><span>Slide 2 · Why a Framework</span></div>
   </section>
-  <section class="slide" data-title="Three layers of knowledge" data-notes="Three names prevent a subtle but dangerous collapse. Evidence is a faithful statement from a source. Canonical knowledge is a separately approved decision, with scope and version. A deliverable says something about those two, and is itself frozen after approval. When a fact changes, the old document does not silently grow a new number.">
-    <div class="brand">northstar</div><div class="slide-number">04 / 09</div><div class="section-label">03 / The knowledge model</div><h2>A source statement is not a validated fact.<br><span class="green">A draft is not an approved publication.</span></h2>
-    <div class="governance"><div class="axis"><span>CONTROLLED</span><div class="axis-line"></div><span>PRESERVED</span></div><div>
-      <div class="govern-row"><div><h3>01 / Source evidence</h3><p>Immutable text + source spans</p></div><p>WS-04 reports EUR 50,000.<br>Company-code scope remains unresolved.</p><p class="right"><strong>Record faithfully.</strong><br>No interpretation of product fit. No promotion.</p></div>
-      <div class="govern-row"><div><h3>02 / Canonical decisions</h3><p>Separated candidate + approved versions</p></div><p>DEC-P2P-004-v1 remains EUR 25,000 for FR01.<br>The candidate is Conflicted, not current.</p><p class="right"><strong>Approve explicitly.</strong><br>Clarify scope. Supersede with an auditable version.</p></div>
-      <div class="govern-row"><div><h3>03 / Deliverables</h3><p>Drafts + immutable publications</p></div><p>A fit-gap proposal can expose the conflict.<br>It cannot present a resolved configuration delta as settled.</p><p class="right"><strong>Freeze provenance.</strong><br>Preserve source versions, citations and approver.</p></div>
-    </div></div>
-    <div class="footer-label">Approval of a faithful report ≠ approval of the proposed fact.</div><div class="footer-label foot-right">Knowledge / ~1.5 min</div>
+
+  <!-- SLIDE 3: INTERACTIVE ARCHITECTURE (GENERAL VIEW + CLICK TO ZOOM IN) -->
+  <section class="slide" data-title="System Architecture" data-notes="Walk through the general view top-to-bottom, then click blocks live to zoom in if interviewers ask about a specific component. Emphasize: Main Agent is the single entry point; Deliverable Agent is shared across all skills; adding Target Architecture only requires adding a Skill folder.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">03 / 07</div></div>
+    <div class="section-label">02 / Architecture · Click any block to zoom in</div>
+    <h2>One Main Agent, Specialized Agents, <span class="green">Pluggable Skills.</span></h2>
+    <div class="arch-layout">
+      <div class="arch-diagram" id="arch-diagram">
+        <button class="arch-block selected" type="button" data-arch-id="main_agent">
+          <div class="arch-block-top"><strong>1. Main Agent (Orchestrator)</strong><span class="tag">Entry Point</span></div>
+          <small>Authenticates role, scopes project data, freezes context, selects the target Skill.</small>
+        </button>
+        <button class="arch-block" type="button" data-arch-id="specialized_agents">
+          <div class="arch-block-top"><strong>2. Specialized Agents</strong><span class="tag">3 Focused Workers</span></div>
+          <small>Deliverable Agent (drafts) · Knowledge Steward (compares) · Quality Reviewer (checks).</small>
+        </button>
+        <div class="arch-split">
+          <button class="arch-block" type="button" data-arch-id="skills">
+            <div class="arch-block-top"><strong>3. Pluggable Skills</strong><span class="tag">Extensible</span></div>
+            <small>Workshop Report · Fit-Gap · Steering · +Target Arch.</small>
+          </button>
+          <button class="arch-block" type="button" data-arch-id="knowledge_layers">
+            <div class="arch-block-top"><strong>4. Knowledge Base</strong><span class="tag">3 Layers</span></div>
+            <small>Raw Notes vs. Approved Decisions vs. Snapshots.</small>
+          </button>
+        </div>
+        <button class="arch-block" type="button" data-arch-id="model_gateway">
+          <div class="arch-block-top"><strong>5. Provider-Agnostic Model Gateway</strong><span class="tag">LLM Abstraction</span></div>
+          <small>Enforces JSON schema output &amp; routes by data sensitivity (Mistral, OpenAI, Claude, Local).</small>
+        </button>
+      </div>
+      <aside class="zoom-panel" id="arch-zoom-panel" aria-live="polite"></aside>
+    </div>
+    <div class="slide-footer"><span>Interactive General View · Click blocks on the left for detail</span><span>Slide 3 · Architecture</span></div>
   </section>
-  <section class="slide" data-title="The conflict walkthrough" data-notes="This is the central demonstration. Start with the left: approved v1. Move to the right: a new reported amount. Do not call the right false; it may be right, but its company-code scope is unresolved. The workflow therefore flags a candidate as conflicted, creates dependency reviews and blocks authoritative publication. It generates review content, but does not select a winner.">
-    <div class="brand">northstar</div><div class="slide-number">05 / 09</div><div class="section-label">04 / The case in one frame</div><h2>Preserve the conflict.<br><span class="green">Resolve the decision. Retain the history.</span></h2>
-    <div class="compare"><article class="decision approved"><div class="decision-head"><h3>DEC-P2P-004-v1 / validated</h3><span class="badge">Authority</span></div><div class="amount">25,000 <small>EUR</small></div><p>Procurement director approval<br>Company code <strong>FR01</strong></p><p class="history">Approved baseline · traceable to WS-01</p></article><article class="decision"><div class="decision-head"><h3>WS-04 / reported candidate</h3><span class="badge" style="background:#f7e7da;color:#965021">Conflicted</span></div><div class="amount">50,000 <small>EUR</small></div><p>Procurement director approval<br>Company code <strong>not established</strong></p><p class="history">Source statement ≠ approved replacement</p></article></div>
-    <div class="flow"><span>Faithful report</span><b>→</b><span class="stop">Unknown scope / conflict</span><b>→</b><span>WS-05: scoped clarification</span><b>→</b><span>Human approval</span></div>
-    <div class="bottom-call"><strong>Accept the candidate. Promote it separately.</strong><br>WS-05 establishes FR01 and 5 November 2026. v2 supersedes v1 only for FR01; the old publication stays reproducible.</div>
-    <div class="footer-label">Unpublished review can proceed. Authoritative publication cannot.</div><div class="footer-label foot-right">Case / ~2 min</div>
+
+  <!-- SLIDE 4: STRUCTURED KNOWLEDGE BASE (3 LAYERS) -->
+  <section class="slide" data-title="3-Layer Knowledge Base" data-notes="Explain why storing everything in a single vector database fails. We separate Raw Evidence (what someone said in a workshop) from Validated Project Knowledge (what the client approved) and Deliverable Snapshots (what was published).">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">04 / 07</div></div>
+    <div class="section-label">03 / Structured Knowledge Base · Click a layer to zoom in</div>
+    <h2>Separating <span class="green">what was said</span> from <span class="green">what was decided.</span></h2>
+    <div class="layers-grid">
+      <button class="layer-card selected" type="button" data-layer-id="l1">
+        <span class="layer-num">Layer 01</span>
+        <h3>Workshop Evidence</h3>
+        <div class="layer-sub">"What was said"</div>
+        <p>Raw meeting notes and client docs stored immutably with SHA-256 hashes and exact passage positions.</p>
+      </button>
+      <button class="layer-card" type="button" data-layer-id="l2">
+        <span class="layer-num">Layer 02</span>
+        <h3>Project Knowledge Base</h3>
+        <div class="layer-sub">"What is approved"</div>
+        <p>Structured, versioned rules &amp; decisions (v1 → v2). Only human approval updates an official baseline.</p>
+      </button>
+      <button class="layer-card" type="button" data-layer-id="l3">
+        <span class="layer-num">Layer 03</span>
+        <h3>Deliverable Snapshots</h3>
+        <div class="layer-sub">"What we publish"</div>
+        <p>Editable drafts and locked publications. Every version freezes its exact evidence, rule version, and model.</p>
+      </button>
+    </div>
+    <div class="zoom-drawer" id="layer-zoom-drawer" aria-live="polite"></div>
+    <div class="slide-footer"><span>Approving a workshop report ≠ approving a rule change</span><span>Slide 4 · Knowledge Governance</span></div>
   </section>
-  <section class="slide dark-slide" data-title="Reuse under governance" data-notes="This is the transition from case to reusable framework. Workshop reports must be faithful. Fit-gap adds a comparison context. Steering compresses the same controlled decision for an executive reader. The persona changes, but the shared engine does not. Target architecture remains a dependent deliverable scenario in this prototype; it is not presented as a fourth implemented generation skill.">
-    <div class="brand">northstar</div><div class="slide-number">06 / 09</div><div class="section-label">The reusable product</div>
-    <h2>Different moments.<br>Different readers.<br><span class="green">One governed backbone.</span></h2>
-    <p class="large-statement">Record what the workshop said.<br>Assess what the proposal changes.<br>Escalate what leadership must decide.</p>
-    <p class="support">Three skills are implemented by one Deliverable Agent.<br>Target architecture remains a visible dependency, not an invented capability.</p>
-    <div class="footer-label">Workshop report / fit-gap analysis / steering summary</div><div class="footer-label foot-right">Scale / ~1 min</div>
+
+  <!-- SLIDE 5: CONCRETE WALKTHROUGH (WORKSHOP TO FIT-GAP) -->
+  <section class="slide" data-title="Conflict Walkthrough" data-notes="Walk through the exact P2P example. In WS-01, EUR 25,000 is approved for FR01. In WS-04, someone mentions EUR 50,000 without saying which company code. The AI drafts the report, flags the conflict, blocks final Fit-Gap publication, and waits for WS-05 owner clarification.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">05 / 07</div></div>
+    <div class="section-label">04 / Concrete Walkthrough · Click a stage to zoom in</div>
+    <h2>Handling a contradiction: <span class="green">€50,000 vs. €25,000.</span></h2>
+    <div class="stages-grid">
+      <button class="stage-btn selected" type="button" data-stage-id="s1">
+        <span class="stage-tag">Stage 1 · Baseline</span>
+        <strong>WS-01 Approved</strong>
+        <p>€25,000 PO approval rule established for company code FR01 (Decision v1).</p>
+      </button>
+      <button class="stage-btn" type="button" data-stage-id="s2">
+        <span class="stage-tag">Stage 2 · New Input</span>
+        <strong>WS-04 Drafted</strong>
+        <p>Notes mention €50,000, but company-code scope is missing. Report cites exact passage.</p>
+      </button>
+      <button class="stage-btn warn" type="button" data-stage-id="s3">
+        <span class="stage-tag">Stage 3 · Conflict</span>
+        <strong>Conflict Caught</strong>
+        <p>Steward flags €50k vs €25k. Baseline stays €25k; Fit-Gap publication is blocked.</p>
+      </button>
+      <button class="stage-btn" type="button" data-stage-id="s4">
+        <span class="stage-tag">Stage 4 · Resolved</span>
+        <strong>WS-05 &amp; Publish v2</strong>
+        <p>Owner confirms €50k for FR01. Knowledge becomes v2; deliverables publish cleanly.</p>
+      </button>
+    </div>
+    <div class="stage-detail-box" id="stage-zoom-box" aria-live="polite"></div>
+    <div class="slide-footer"><span>AI proposes and checks · Consultants decide and validate</span><span>Slide 5 · End-to-End Flow</span></div>
   </section>
-  <section class="slide" data-title="Live demonstration" data-notes="Use the live demonstration at the linked URL. Work as consultant through report generation, source inspection, faithful-report approval and conflict flagging. Switch to domain lead to accept WS-05, then promote separately. Return to consultant for the three clarified outputs; switch back to domain lead to approve and publish. Encourage viewers to inspect source spans and audit provenance rather than trust the prose.">
-    <div class="brand">northstar</div><div class="slide-number">07 / 09</div><div class="section-label">Live demonstration / Mock mode</div><h2>Follow one statement<br><span class="green">all the way to an accountable output.</span></h2>
-    <ol class="demo-steps"><li>Generate WS-04’s workshop report. Inspect a source span.<span>Show faithful preservation of the unresolved scope.</span></li><li>Approve the record. Flag the conflict.<span>Show v1 unchanged and both dependent reviews created.</span></li><li>Review the proposed fit-gap and steering summary.<span>Unresolved claims remain review-only, not publishable.</span></li><li>Accept WS-05. Promote independently. Publish v2 outputs.<span>Inspect frozen provenance and the preserved v1 publication.</span></li></ol>
-    <a class="demo-button" id="demo-link" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Open the prototype&nbsp; ↗</a>
-    <div class="demo-note"><strong>Demo guidance</strong><br>Start on an empty server and Mock mode. Switch roles through the top-right selection. The server enforces the permissions; the UI only makes them visible.<br><br><span id="demo-origin">Run locally on http://127.0.0.1:8000/ · synthetic Internal Demo evidence only.</span></div>
-    <div class="footer-label">No live Mistral call is made in the tested demonstration path.</div><div class="footer-label foot-right">Demo / ~3 min</div>
+
+  <!-- SLIDE 6: PROTOTYPE CHOICE & LIVE DEMO -->
+  <section class="slide" data-title="Prototype & Live Demo" data-notes="Explain why we chose this minimal stack: FastAPI + Pydantic gives strict schema contracts; SQLite + FTS5 handles relational knowledge, search, and audit triggers in one zero-config file; Mock mode guarantees a reliable offline demo while Mistral live mode works with one env var.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">06 / 07</div></div>
+    <div class="section-label">05 / Minimal Prototype &amp; Live Demo</div>
+    <h2>Lightweight server. <span class="green">Full architectural proof.</span></h2>
+    <div class="demo-split">
+      <div>
+        <ol class="demo-steps">
+          <li>
+            <span class="step-num">01</span>
+            <div>
+              <strong>Draft Workshop Report (WS-04)</strong>
+              <span>Click any citation pill to verify exact source passages; approve the report without changing €25k baseline.</span>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">02</span>
+            <div>
+              <strong>Catch Conflict &amp; Preview Blocked Drafts</strong>
+              <span>Flag €50k vs €25k; run Fit-Gap and Steering skills to show how conflicts surface and block final publication.</span>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">03</span>
+            <div>
+              <strong>Apply WS-05 Clarification &amp; Publish v2</strong>
+              <span>Update Project Knowledge to v2 (€50k for FR01), regenerate deliverables, and inspect locked lineage.</span>
+            </div>
+          </li>
+        </ol>
+        <a class="demo-cta" id="demo-link" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Open Live Prototype ↗</a>
+      </div>
+      <div class="stack-list">
+        <div class="stack-card">
+          <h3>Why FastAPI + Pydantic?</h3>
+          <p>Minimal Python API server enforcing strict JSON output contracts on every skill and role-based checks on every route.</p>
+        </div>
+        <div class="stack-card">
+          <h3>Why SQLite + FTS5 (No Heavy Vector DB)?</h3>
+          <p>Single-file database handling relational knowledge versions, full-text passage retrieval, and immutable audit triggers with zero setup.</p>
+        </div>
+        <div class="stack-card">
+          <h3>Why Mock Mode + Live Mistral?</h3>
+          <p>Deterministic fixtures keep the interview demo fast and offline-safe; switching to Live Mistral requires only an API key, never a fallback.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer"><span>1-Click Reset available inside the prototype header</span><span>Slide 6 · Prototype Implementation</span></div>
   </section>
-  <section class="slide" data-title="What is proven and what is bounded" data-notes="The point of a prototype is to make claims testable. Mock mode ensures deterministic governance tests and repeatable demonstrations. The transport for live structured output is tested without an external call; this is not the same as a production live-provider evaluation. Also be clear: generated prose with a matched citation does not guarantee every general semantic claim is entailed. The golden tests exercise the bounded P2P evidence.">
-    <div class="brand">northstar</div><div class="slide-number">08 / 09</div><div class="section-label">Verification / evidence of behavior</div><h2>Test the boundaries,<br>not just the <span class="green">happy path.</span></h2>
-    <div class="checks"><article class="check"><strong>01</strong><h3>Traceable sources</h3><p>Document-hash checks and exact citation-span validation reject altered evidence.</p></article><article class="check"><strong>02</strong><h3>Independent decisions</h3><p>Report approval, candidate acceptance and knowledge promotion remain separate.</p></article><article class="check"><strong>03</strong><h3>Controlled authority</h3><p>ACL checks, blocked conflict publication and exact-draft domain-lead approval.</p></article><article class="check"><strong>04</strong><h3>Reproducible outputs</h3><p>Three skills, shared orchestration, frozen snapshots and immutability checks.</p></article></div>
-    <div class="column-list"><div><h3>What the tested demo shows</h3><p>A complete P2P scenario with synthetic evidence, repeatable mock generation, an end-to-end FastAPI workflow and a transport-level test of the live adapter.<br><br>The run instructions include the current local test count.</p></div><div class="quiet"><h3>What it does not yet establish</h3><p>Production authentication or tenant administration. General OCR, semantic-contradiction or claim-entailment guarantees. Authoritative S/4HANA recommendations. A production live-provider evaluation.<br><br>The synthetic fit-gap reference is only a comparison scenario.</p></div></div>
-    <div class="footer-label">See appendix for the full governance controls.</div><div class="footer-label foot-right">Evidence / ~1 min</div>
+
+  <!-- SLIDE 7: ADOPTION & INTERACTIVE Q&A DEEP-DIVES -->
+  <section class="slide" data-title="Roadmap & Deep-Dives" data-notes="Close with a pragmatic rollout: start with 2 deliverables, measure baseline vs quality gates, then add skills. Use the bottom tabs during Q&A to jump directly to common technical questions.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">07 / 07</div></div>
+    <div class="section-label">06 / Adoption &amp; Technical Q&amp;A</div>
+    <h2>Start narrow, prove trust, <span class="green">scale via skills.</span></h2>
+    <div class="roadmap-row">
+      <div class="roadmap-card">
+        <span>Phase 1 · Pilot (Weeks 1–4)</span>
+        <h3>2 Core Deliverables</h3>
+        <p>Launch Workshop Report + Fit-Gap on one active stream. Measure time saved vs. reviewer correction effort.</p>
+      </div>
+      <div class="roadmap-card">
+        <span>Phase 2 · Validate (Weeks 5–8)</span>
+        <h3>Golden Eval Gates</h3>
+        <p>Enforce 100% citation validity, ACL isolation, and seeded conflict detection before scaling.</p>
+      </div>
+      <div class="roadmap-card">
+        <span>Phase 3 · Scale</span>
+        <h3>Add New Skill Folders</h3>
+        <p>Extend to Target Architecture, Steering Decks, and Test Scripts using the exact same core engine.</p>
+      </div>
+    </div>
+    <div class="qa-tabs" role="tablist" aria-label="Technical Q&A topics">
+      <button class="qa-tab selected" type="button" data-qa="ext">1. Adding a 4th Deliverable</button>
+      <button class="qa-tab" type="button" data-qa="sec">2. Security &amp; Client Data</button>
+      <button class="qa-tab" type="button" data-qa="vec">3. Why Not Vector DB Alone?</button>
+      <button class="qa-tab" type="button" data-qa="eval">4. Automated Test Bench</button>
+    </div>
+    <div class="qa-panel" id="qa-panel" aria-live="polite"></div>
+    <div class="slide-footer"><span>Thank you · Ready for discussion &amp; live prototype walkthrough</span><span>Slide 7 · Roadmap &amp; Q&amp;A</span></div>
   </section>
-  <section class="slide" data-title="Appendix: decision gates" data-notes="Appendix for questions. Emphasize the resulting state after each action. Introducing evidence and accepting the candidate must not itself publish or promote any fact. Publication approval is exact-draft scoped. Additional system production concerns remain identity integration, transactional concurrency, semantic-claim evaluation and governed ingestion.">
-    <div class="brand">northstar</div><div class="slide-number">09 / 09</div><div class="section-label">Appendix A / Accountability chain</div><h2>Every transition has an actor<br>and a <span class="green">deliberate limit.</span></h2>
-    <table class="table"><thead><tr><th>Gate</th><th>Accountable role</th><th>What changes and what does not</th></tr></thead><tbody>
-    <tr><td>Evidence capture</td><td>System + authorized evidence reader</td><td>Stores immutable text and source spans. Conflicting evidence remains reviewable.</td></tr>
-    <tr><td>Draft generation</td><td>Consultant via skill contract</td><td class="key">Authorized snapshot → atomic claims → exact spans</td></tr>
-    <tr><td>Faithful-report review</td><td>Consultant / domain lead</td><td>Record may accurately contain an unresolved issue. No candidate promotion.</td></tr>
-    <tr><td>Conflict flagging</td><td>Consultant</td><td>Candidate becomes Conflicted. Baseline stays authoritative. Dependency reviews open.</td></tr>
-    <tr><td>WS-05 acceptance</td><td>Domain lead</td><td>Introduces written clarification and accepts scoped candidate <strong>before promotion</strong>.</td></tr>
-    <tr><td>Knowledge promotion</td><td>Domain lead, independent action</td><td class="key">v2 supersedes v1 for FR01. Both source versions stay bound to v2 provenance.</td></tr>
-    <tr><td>Publication</td><td>Domain lead, per deliverable</td><td>Approves this scoped change for this exact draft. No conflict or unknown claims.</td></tr></tbody></table>
-    <div class="footer-label">Operational safety ≠ general semantic truth. Evaluate both deliberately.</div><div class="footer-label foot-right">Appendix / Q&A</div>
-  </section>
+
   <div class="progress" aria-hidden="true"><span id="progress"></span></div>
 </main>
-<nav class="controls" aria-label="Presentation controls"><button id="prev" aria-label="Previous slide">←</button><span class="counter" id="counter">01 / 09</span><button id="next" aria-label="Next slide" data-testid="next-slide">→</button><input id="seek" type="range" min="1" max="9" value="1" aria-label="Slide number"><span class="divider"></span><button class="wide" id="timer" aria-pressed="false" title="Start or reset the timer">00:00</button><button class="wide" id="overview-btn" aria-label="Open slide overview">Overview</button><button class="wide" id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button><button class="wide" id="print" title="Print all slides with 16:9 pages">Print / PDF</button><a class="wide" href="http://127.0.0.1:8000/" id="bottom-demo" target="_blank" rel="noopener" style="text-decoration:none;color:var(--green);padding:7px 10px;font-size:11px">Live demo ↗</a><button class="wide" id="notes" aria-pressed="false">Notes</button><span class="hint">← → to navigate · Shift+? for help</span></nav>
-<dialog id="notes-dialog" style="max-width:700px;width:90%;border:0;border-top:4px solid var(--green);padding:32px;color:var(--ink);font:16px/1.65 Arial;box-shadow:0 18px 90px #0005"><div id="notes-content"></div><button id="close-notes" style="margin-top:22px;background:#111;color:#fff;border:0;padding:10px 20px">Close notes</button></dialog>
-<div class="overview" id="overview" role="dialog" aria-label="Slide overview"><button id="close-overview" class="close-overview" aria-label="Close overview">×</button><h2>Navigate the story.</h2><div class="overview-grid" id="overview-grid"></div></div>
+
+<nav class="controls" aria-label="Presentation controls">
+  <button id="prev" type="button" aria-label="Previous slide">←</button>
+  <span class="counter" id="counter">01 / 07</span>
+  <button id="next" type="button" aria-label="Next slide">→</button>
+  <input id="seek" class="hide-sm" type="range" min="1" max="7" value="1" aria-label="Slide slider">
+  <button id="timer" class="hide-sm" type="button" title="Start or pause timer">00:00</button>
+  <button id="overview-btn" type="button">Overview</button>
+  <button id="fullscreen" class="hide-sm" type="button">Fullscreen</button>
+  <button id="print" class="hide-sm" type="button">Print / PDF</button>
+  <button id="notes" type="button">Notes</button>
+  <a id="bottom-demo" class="demo-nav" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Live Prototype ↗</a>
+</nav>
+
+<dialog id="notes-dialog" style="max-width:660px;width:90%;border:0;border-top:4px solid #86bc25;padding:28px;font:15px/1.6 Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.35)">
+  <div id="notes-content"></div>
+  <button id="close-notes" type="button" style="margin-top:18px;background:#111;color:#fff;border:0;padding:8px 16px;border-radius:3px">Close notes</button>
+</dialog>
+
+<div class="overview" id="overview" role="dialog" aria-label="Slide overview">
+  <button id="close-overview" class="close-overview" type="button" aria-label="Close overview">×</button>
+  <h2>Slide Overview</h2>
+  <div class="overview-grid" id="overview-grid"></div>
+</div>
 <div id="print-list"></div>
+
 <script>
-const slides=[...document.querySelectorAll('.slide')];let index=0;let started=0;let elapsed=0;let timerId=null;
-const $=id=>document.getElementById(id); const pad=n=>String(n).padStart(2,'0');
-function show(n){index=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>{s.classList.toggle('active',i===index);s.setAttribute('aria-hidden',i===index?'false':'true')});$('counter').textContent=`${pad(index+1)} / ${pad(slides.length)}`;$('seek').value=index+1;$('progress').style.width=`${(index+1)/slides.length*100}%`;$('seek').setAttribute('aria-valuetext',`Slide ${index+1}: ${slides[index].dataset.title}`);document.title=`${slides[index].dataset.title} | Northstar`;document.querySelectorAll('.thumb').forEach((t,i)=>t.classList.toggle('current',i===index));if(location.hash!==`#${index+1}`)history.replaceState(null,'',`#${index+1}`);}
-function next(){show(index+1)} function previous(){show(index-1)}
-$('next').onclick=next;$('prev').onclick=previous;$('seek').oninput=e=>show(Number(e.target.value)-1);
-$('overview-grid').innerHTML=slides.map((s,i)=>`<button class="thumb" data-slide="${i}"><small>${pad(i+1)} / ${s.dataset.title.includes('Appendix')?'APPENDIX':'NORTHSTAR'}</small><strong>${s.dataset.title}</strong></button>`).join('');
-document.querySelectorAll('.thumb').forEach(b=>b.onclick=()=>{show(Number(b.dataset.slide));$('overview').classList.remove('open')});
-$('overview-btn').onclick=()=>{$('overview').classList.add('open');$('close-overview').focus()};$('close-overview').onclick=()=>{$('overview').classList.remove('open');$('overview-btn').focus()};
-$('fullscreen').onclick=()=>{if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().catch(()=>{})}else{document.exitFullscreen?.()}};
-$('print').onclick=()=>window.print();
-function timer(){if(timerId){clearInterval(timerId);timerId=null;$('timer').setAttribute('aria-pressed','false');return}started=Date.now()-elapsed*1000;$('timer').setAttribute('aria-pressed','true');timerId=setInterval(()=>{elapsed=Math.floor((Date.now()-started)/1000);$('timer').textContent=formatTime()},1000)}function formatTime(){return `${pad(Math.floor(elapsed/60))}:${pad(elapsed%60)}`} $('timer').onclick=timer;
-function notes(open=true){if(open){$('notes-content').innerHTML=`<div class="section-label">Speaker notes / ${pad(index+1)}</div><h2 style="font-size:26px;margin-bottom:16px">${slides[index].dataset.title}</h2><p>${slides[index].dataset.notes}</p>`;$('notes-dialog').showModal();$('notes').setAttribute('aria-pressed','true')}else{$('notes-dialog').close();$('notes').setAttribute('aria-pressed','false')}}$('notes').onclick=()=>notes();$('close-notes').onclick=()=>notes(false);
-document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT' || $('notes-dialog').open)return;if(e.key==='Escape'){$('overview').classList.remove('open');return}if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();previous()}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='o')$('overview-btn').click();if(e.key.toLowerCase()==='f')$('fullscreen').click();if(e.key.toLowerCase()==='n')notes();if(e.key==='?')notes();});
-slides.forEach((s,i)=>{const shell=document.createElement('div');shell.className=`print-slide${s.classList.contains('dark-slide')?' dark-slide':''}`;shell.append(s.cloneNode(true));shell.querySelector('.slide').classList.add('active');$('print-list').append(shell)});
-if(location.hostname==='127.0.0.1' || location.hostname==='localhost'){const url=`${location.protocol}//${location.hostname}${location.port?':'+location.port:''}/`;if(location.port==='8000'){$('demo-link').href=url;$('bottom-demo').href=url;$('demo-origin').textContent=`Connected to ${url} · synthetic Internal Demo evidence only.`}}
-show(Math.max(0,Math.min(slides.length-1,(Number(location.hash.slice(1))||1)-1)));
+const ARCH_DETAILS = {
+  main_agent: {
+    eyebrow: 'Zoom-In · 1 of 5',
+    title: 'Main Agent (Orchestrator)',
+    desc: 'The team’s single entry point. It never lets an agent browse the project freely or overwrite approved facts.',
+    io: '<strong>Inputs:</strong> Consultant request, role, project scope.<br><strong>Outputs:</strong> Read-only context snapshot + routed skill task.',
+    code: 'orchestrator.py :: Orchestrator\n-> checks role & scope\n-> freezes evidence + rule versions\n-> invokes DeliverableAgent(skill)'
+  },
+  specialized_agents: {
+    eyebrow: 'Zoom-In · 2 of 5',
+    title: 'Three Focused Agents',
+    desc: 'Each agent has one clear job instead of sprawling prompts or dozens of autonomous bots.',
+    io: '<strong>Deliverable Agent:</strong> Runs any Skill contract.<br><strong>Knowledge Steward:</strong> Compares proposals vs. approved rules.<br><strong>Quality Reviewer:</strong> Validates citations & blocks conflicts.',
+    code: 'agents.py\n- DeliverableAgent (shared)\n- KnowledgeSteward (delta check)\n- QualityReviewer (publication gate)'
+  },
+  skills: {
+    eyebrow: 'Zoom-In · 3 of 5',
+    title: 'Pluggable Skill Packages',
+    desc: 'Adding a new deliverable means adding a declarative Skill folder — zero changes to the orchestrator or UI.',
+    io: '<strong>Included in v1:</strong> workshop_report, fit_gap, steering_deck.<br><strong>Extension ready:</strong> target_architecture, test_scripts.',
+    code: 'skills/<name>/manifest.json\n{\n  "purpose": "...",\n  "sections": ["..."],\n  "mandatory_checks": ["exact_spans", ...]\n}'
+  },
+  knowledge_layers: {
+    eyebrow: 'Zoom-In · 4 of 5',
+    title: '3-Layer Knowledge Base',
+    desc: 'Prevents workshop chatter from accidentally becoming official project truth.',
+    io: '<strong>Layer 1:</strong> Immutable raw notes (SHA-256).<br><strong>Layer 2:</strong> Approved versioned decisions (v1 → v2).<br><strong>Layer 3:</strong> Locked published deliverables.',
+    code: 'knowledge.py :: KnowledgeStore\n- SQLite tables + FTS5 passage index\n- DB triggers forbid editing publications\n- Append-only SHA-256 audit chain'
+  },
+  model_gateway: {
+    eyebrow: 'Zoom-In · 5 of 5',
+    title: 'Provider-Agnostic Model Gateway',
+    desc: 'Decouples consulting workflows from any single AI vendor while enforcing strict output structure.',
+    io: '<strong>Routing:</strong> Picks approved model by data sensitivity.<br><strong>Contract:</strong> Enforces Pydantic JSON schema & logs latency/tokens.',
+    code: 'gateway.py :: MistralGateway\n- Mock mode: deterministic offline fixtures\n- Live mode: Mistral JSON-schema API\n- Explicit failure, zero silent fallback'
+  }
+};
+
+const LAYER_DETAILS = {
+  l1: {
+    title: 'Layer 1 Rule: Ingesting a document never validates its facts.',
+    desc: 'Workshop notes often contain side remarks, unclear scope, or contradictions. Layer 1 preserves original text, SHA-256 fingerprints, and exact character offsets so every AI claim links directly to the quote.',
+    rule: '<strong>Security boundary:</strong> Permissions are filtered <em>before</em> retrieval so unauthorized users never receive excerpts or embeddings.'
+  },
+  l2: {
+    title: 'Layer 2 Rule: Proposals stay separate until a human approves.',
+    desc: 'Each decision carries a stable ID (DEC-P2P-004), version number, applicable scope (FR01), and effective date. When WS-04 contradicts v1, v1 stays active while the candidate waits for clarification.',
+    rule: '<strong>Why structured records?</strong> Detecting conflicts on amounts, company codes, or effective dates requires exact queries, not fuzzy vector similarity.'
+  },
+  l3: {
+    title: 'Layer 3 Rule: Published deliverables are immutable snapshots.',
+    desc: 'Approving a report for accuracy never publishes a Fit-Gap change. Once approved for publication, SQLite triggers lock the document alongside the exact source hashes, knowledge version, skill, and model used.',
+    rule: '<strong>Auditability:</strong> Reopening v1 months later reproduces the exact €25,000 rule and evidence active on that date.'
+  }
+};
+
+const STAGE_DETAILS = {
+  s1: {
+    ai: 'Baseline Already Indexed',
+    aiDesc: 'WS-01 notes are stored in Layer 1, and Decision DEC-P2P-004 v1 (€25,000 for company code FR01) is active in Project Knowledge.',
+    human: 'Baseline Authority: €25,000',
+    humanDesc: 'The P2P Domain Lead approved v1 during Workshop 1. All downstream deliverables reference this exact ID and version.'
+  },
+  s2: {
+    ai: 'Workshop Report Skill Generates Draft',
+    aiDesc: 'The Deliverable Agent reads WS-04, quotes the €50,000 statement with exact character spans, and marks the missing company code as an open question.',
+    human: 'Consultant Reviews Faithfulness',
+    humanDesc: 'The consultant verifies citations and approves that the report accurately reflects the meeting — without promoting €50,000 as a new rule.'
+  },
+  s3: {
+    ai: 'Steward Flags Conflict & Blocks Publication',
+    aiDesc: 'Knowledge Steward compares €50k (scope unclear) vs €25k (FR01). Fit-Gap and Steering drafts expose the conflict, alert Target Architecture, and block final publication.',
+    human: 'Consultant Requests Clarification',
+    humanDesc: 'Instead of guessing what WS-04 meant, the consultant sends a written clarification request to the procurement process owner.'
+  },
+  s4: {
+    ai: 'Re-Drafts All Deliverables on v2',
+    aiDesc: 'Once v2 is promoted, the exact same engine runs Workshop Report, Fit-Gap, and Steering skills against DEC-P2P-004 v2 with zero conflict.',
+    human: 'Domain Lead Approves & Publishes v2',
+    humanDesc: 'Domain lead accepts WS-05, promotes v2 for FR01 (effective 5 Nov 2026), and locks new publications while v1 stays intact.'
+  }
+};
+
+const QA_DETAILS = {
+  ext: {
+    title: 'How do we add a 4th deliverable (e.g., Target Architecture or Test Scripts)?',
+    body: 'Create a new folder under <code>skills/&lt;name&gt;/</code> containing a declarative <code>manifest.json</code> (purpose, required sections, allowed claim statuses, and mandatory quality checks) plus a prompt template. Register it in <code>SKILLS</code>. The Main Agent, shared Deliverable Agent, Knowledge Base, and Model Gateway remain completely untouched.'
+  },
+  sec: {
+    title: 'How do we protect confidential client data?',
+    body: 'First, project and role permissions are checked <strong>before retrieval</strong>—unauthorized chunks never reach the LLM context. Second, the Model Gateway enforces data classification routing: confidential data can be routed strictly to approved European endpoints (e.g., Mistral) or self-hosted local models, while source text is treated as untrusted data to resist prompt injection.'
+  },
+  vec: {
+    title: 'Why not just use RAG with a Vector Database?',
+    body: 'Vector search excels at finding relevant text paragraphs, which is why we pair it with full-text passage retrieval (FTS5). However, consulting governance requires knowing <em>which decision is currently approved</em>, <em>which company code it applies to</em>, and <em>which deliverables depend on it</em>. Relational/canonical records handle state, versions, and exact diffs reliably.'
+  },
+  eval: {
+    title: 'How do we prove quality before rolling out to a team?',
+    body: 'The prototype includes a 14-test automated golden bench (<code>pytest</code>) verifying four non-negotiable gates: (1) cross-role ACL blocking, (2) exact character-span citation matching &amp; SHA-256 tamper rejection, (3) state-machine separation so report approval never auto-promotes facts, and (4) database trigger immutability on published deliverables and audit logs.'
+  }
+};
+
+const slides = [...document.querySelectorAll('.slide')];
+let index = 0, timerId = null, elapsed = 0, started = 0;
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+
+function renderArchZoom(id) {
+  const d = ARCH_DETAILS[id];
+  document.querySelectorAll('[data-arch-id]').forEach(el => el.classList.toggle('selected', el.dataset.archId === id));
+  $('arch-zoom-panel').innerHTML = `
+    <div>
+      <div class="zoom-eyebrow">${d.eyebrow}</div>
+      <h3>${d.title}</h3>
+      <p>${d.desc}</p>
+      <div class="zoom-meta">${d.io}</div>
+    </div>
+    <div class="zoom-code">${d.code}</div>`;
+}
+
+function renderLayerZoom(id) {
+  const d = LAYER_DETAILS[id];
+  document.querySelectorAll('[data-layer-id]').forEach(el => el.classList.toggle('selected', el.dataset.layerId === id));
+  $('layer-zoom-drawer').innerHTML = `
+    <div><h4>${d.title}</h4><p>${d.desc}</p></div>
+    <div class="drawer-rule">${d.rule}</div>`;
+}
+
+function renderStageZoom(id) {
+  const d = STAGE_DETAILS[id];
+  document.querySelectorAll('[data-stage-id]').forEach(el => el.classList.toggle('selected', el.dataset.stageId === id));
+  $('stage-zoom-box').innerHTML = `
+    <div class="actor-box ai"><span>What the AI Engine Does</span><h4>${d.ai}</h4><p>${d.aiDesc}</p></div>
+    <div class="actor-box human"><span>What the Consultant Decides</span><h4>${d.human}</h4><p>${d.humanDesc}</p></div>`;
+}
+
+function renderQa(id) {
+  const d = QA_DETAILS[id];
+  document.querySelectorAll('[data-qa]').forEach(el => el.classList.toggle('selected', el.dataset.qa === id));
+  $('qa-panel').innerHTML = `<h4>${d.title}</h4><p>${d.body}</p>`;
+}
+
+function show(n) {
+  index = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === index);
+    s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+  });
+  $('counter').textContent = `${pad(index + 1)} / ${pad(slides.length)}`;
+  $('seek').value = index + 1;
+  $('progress').style.width = `${((index + 1) / slides.length) * 100}%`;
+  document.title = `${slides[index].dataset.title} | Deloitte`;
+  document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('current', i === index));
+  if (location.hash !== `#${index + 1}`) history.replaceState(null, '', `#${index + 1}`);
+}
+
+const next = () => show(index + 1);
+const previous = () => show(index - 1);
+
+$('next').onclick = next;
+$('prev').onclick = previous;
+$('seek').oninput = e => show(Number(e.target.value) - 1);
+
+$('overview-grid').innerHTML = slides
+  .map((s, i) => `<button class="thumb" type="button" data-slide="${i}"><small>SLIDE ${pad(i + 1)}</small><strong>${s.dataset.title}</strong></button>`)
+  .join('');
+document.querySelectorAll('.thumb').forEach(b => (b.onclick = () => { show(Number(b.dataset.slide)); $('overview').classList.remove('open'); }));
+$('overview-btn').onclick = () => $('overview').classList.add('open');
+$('close-overview').onclick = () => $('overview').classList.remove('open');
+$('fullscreen').onclick = () => !document.fullscreenElement ? document.documentElement.requestFullscreen?.().catch(() => {}) : document.exitFullscreen?.();
+$('print').onclick = () => window.print();
+
+function toggleTimer() {
+  if (timerId) { clearInterval(timerId); timerId = null; return; }
+  started = Date.now() - elapsed * 1000;
+  timerId = setInterval(() => {
+    elapsed = Math.floor((Date.now() - started) / 1000);
+    $('timer').textContent = `${pad(Math.floor(elapsed / 60))}:${pad(elapsed % 60)}`;
+  }, 1000);
+}
+$('timer').onclick = toggleTimer;
+
+function toggleNotes(open = true) {
+  if (open) {
+    $('notes-content').innerHTML = `<div class="section-label">Speaker Notes · Slide ${pad(index + 1)}</div><h3 style="margin-bottom:10px">${slides[index].dataset.title}</h3><p>${slides[index].dataset.notes}</p>`;
+    $('notes-dialog').showModal();
+  } else {
+    $('notes-dialog').close();
+  }
+}
+$('notes').onclick = () => toggleNotes(true);
+$('close-notes').onclick = () => toggleNotes(false);
+
+document.querySelectorAll('[data-arch-id]').forEach(el => el.addEventListener('click', () => renderArchZoom(el.dataset.archId)));
+document.querySelectorAll('[data-layer-id]').forEach(el => el.addEventListener('click', () => renderLayerZoom(el.dataset.layerId)));
+document.querySelectorAll('[data-stage-id]').forEach(el => el.addEventListener('click', () => renderStageZoom(el.dataset.stageId)));
+document.querySelectorAll('[data-qa]').forEach(el => el.addEventListener('click', () => renderQa(el.dataset.qa)));
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || $('notes-dialog').open) return;
+  if (e.key === 'Escape') { $('overview').classList.remove('open'); return; }
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); next(); }
+  if (e.key === ' ' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); previous(); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+  if (e.key.toLowerCase() === 'o') $('overview').classList.toggle('open');
+  if (e.key.toLowerCase() === 'f') $('fullscreen').click();
+  if (e.key.toLowerCase() === 'n') toggleNotes(true);
+});
+
+slides.forEach(s => {
+  const shell = document.createElement('div');
+  shell.className = 'print-slide';
+  shell.append(s.cloneNode(true));
+  shell.querySelector('.slide').classList.add('active');
+  $('print-list').append(shell);
+});
+
+if ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port) {
+  const url = `${location.protocol}//${location.hostname}:${location.port}/`;
+  $('demo-link').href = url;
+  $('bottom-demo').href = url;
+}
+
+renderArchZoom('main_agent');
+renderLayerZoom('l1');
+renderStageZoom('s1');
+renderQa('ext');
+show(Math.max(0, Math.min(slides.length - 1, (Number(location.hash.slice(1)) || 1) - 1)));
 </script>
-</body></html>
+</body>
+</html>
