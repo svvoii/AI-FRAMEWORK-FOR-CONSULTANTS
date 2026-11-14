@@ -1,0 +1,50 @@
+%% Title: Three-Layer Knowledge Lifecycle, Governance & Security Gates
+%% Target: /Users/serge/Documents/PROJECTS/AI-ML/AI-FRAMEWORK-FOR-CONSULTANTS
+%% Sibling views: diagrams/architecture.mmd, diagrams/workshop-to-fit-gap.mmd
+%% Render: bash ~/.gemini/config/skills/diagram-mmd/scripts/render_mmd.sh diagrams/governance.mmd
+flowchart LR
+    subgraph SEC["1. Access & Data Policy"]
+        direction TB
+        REQ("Consultant Request<br/>Role + Project Scope"):::ui
+        ACL{"Pre-Retrieval Gate<br/>Project ACL & Role Check"}:::gate
+        POL{"Data Classification<br/>Route by sensitivity"}:::gate
+        REQ --> ACL --> POL
+    end
+
+    subgraph KNOW["2. Three-Layer Knowledge Model"]
+        direction TB
+        L1[("Layer 1: Raw Evidence<br/>Unvalidated notes & docs")]:::store
+        L2[("Layer 2: Canonical Knowledge<br/>Validated project decisions")]:::store
+        L3[("Layer 3: Deliverable Snapshots<br/>Immutable published versions")]:::store
+        L1 -. "promoted only via<br/>Steward + Human Gate" .-> L2
+        L2 -. "referenced by<br/>stable ID" .-> L3
+    end
+
+    subgraph QUAL["3. Claim Status & Quality Gates"]
+        direction TB
+        CL["Atomic Claim Tagging<br/>Sourced | Validated | Proposed<br/>Conflicted | Unknown"]:::core
+        QG{"Automated Quality Gate<br/>100% Citation & Schema valid?"}:::gate
+        HG{"Consultant Approval<br/>Accept / Edit / Reject"}:::gate
+        CL --> QG -- "Pass" --> HG
+    end
+
+    subgraph AUDIT["4. Audit & Cross-Project Reuse"]
+        direction TB
+        LOG[("Append-Only Audit Log<br/>Snapshot + Model + Approvals")]:::store
+        SAN["Sanitization Steward Gate<br/>Strip client PII & identifiers"]:::skill
+        REUSE[("Cross-Project Library<br/>Reusable templates & patterns")]:::store
+        HG == "Publish" ==> LOG
+        HG -. "Optional" .-> SAN --> REUSE
+    end
+
+    POL -- "Authorized filter" --> L1 & L2
+    L1 & L2 -- "Frozen snapshot" --> CL
+    HG == "Lock version" ==> L3
+
+    classDef ui fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:2px
+    classDef core fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    classDef skill fill:#FFF8E1,stroke:#F57F17,color:#E65100,stroke-width:2px
+    classDef store fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:2px
+    classDef gate fill:#E0F2F1,stroke:#00695C,color:#004D40,stroke-width:2px
+
+    linkStyle default stroke:#607D8B,stroke-width:1.5px

@@ -1,0 +1,60 @@
+%% Title: Reusable AI Framework Architecture for Consulting Deliverables
+%% Target: /Users/serge/Documents/PROJECTS/AI-ML/AI-FRAMEWORK-FOR-CONSULTANTS
+%% Sibling views: diagrams/workshop-to-fit-gap.mmd, diagrams/governance.mmd
+%% Render: bash ~/.gemini/config/skills/diagram-mmd/scripts/render_mmd.sh diagrams/architecture.mmd
+flowchart TD
+    subgraph UI["Consultant Workspace"]
+        direction LR
+        CW("Consultant / Domain Lead<br/>Request, Review & Approve"):::ui
+    end
+
+    subgraph ORCH["Controlled Multi-Agent Engine"]
+        direction TB
+        MA["Main Agent (Orchestrator)<br/>ACL check, snapshot freeze, routing"]:::core
+        DA["Deliverable Agent<br/>Context assembly & cited drafting"]:::core
+        KS["Knowledge Steward<br/>Fact extraction & delta comparison"]:::core
+        QR["Quality Reviewer<br/>Citation, schema & conflict gates"]:::core
+        MA -- "dispatch task" --> DA
+        MA -- "extract delta" --> KS
+        DA -- "validate draft" --> QR
+    end
+
+    subgraph SKILLS["Pluggable Skill Registry (1 Skill = 1 Deliverable Type)"]
+        direction LR
+        S1[["workshop-report<br/>Manifest + Schema + Rules"]]:::skill
+        S2[["fit-gap<br/>Manifest + Schema + Rules"]]:::skill
+        S3[["target-architecture<br/>Manifest + Schema + Rules"]]:::skill
+        S4[["steering-committee<br/>Manifest + Schema + Rules"]]:::skill
+    end
+
+    subgraph DATA["Three-Layer Governed Knowledge Store"]
+        direction LR
+        L1[("Layer 1: Evidence Store<br/>Immutable docs & chunks + ACLs")]:::store
+        L2[("Layer 2: Canonical Knowledge<br/>Validated facts, IDs & versions")]:::store
+        L3[("Layer 3: Deliverable Store<br/>Versioned drafts & approvals")]:::store
+    end
+
+    subgraph GW["Provider-Agnostic Model Gateway"]
+        direction LR
+        MG["Unified Model Connector<br/>Policy routing, schemas & audit"]:::gateway
+        P1("Claude / OpenAI<br/>(Enterprise API)"):::ext
+        P2("Mistral / Local LLM<br/>(Restricted Data)"):::ext
+        MG --> P1 & P2
+    end
+
+    CW -- "1. Request deliverable" --> MA
+    DA -- "2. Invoke contract" --> S1 & S2 & S3 & S4
+    DA -- "3. Retrieve authorized context" --> L1 & L2
+    KS -- "4. Propose canonical update" --> L2
+    DA & KS & QR -- "Structured LLM call" --> MG
+    QR -- "5. Cited draft + findings" --> CW
+    CW == "6. Explicit approval" ==> L2 & L3
+
+    classDef ui fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:2px
+    classDef core fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    classDef skill fill:#FFF8E1,stroke:#F57F17,color:#E65100,stroke-width:2px
+    classDef store fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:2px
+    classDef gateway fill:#E0F2F1,stroke:#00695C,color:#004D40,stroke-width:2px
+    classDef ext fill:#ECEFF1,stroke:#546E7A,color:#263238,stroke-width:1.5px
+
+    linkStyle default stroke:#607D8B,stroke-width:1.5px

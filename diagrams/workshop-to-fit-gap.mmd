@@ -1,0 +1,58 @@
+%% Title: End-to-End Walkthrough — Workshop Notes to Fit-Gap Update
+%% Light output: workshop-to-fit-gap.svg; dark output: workshop-to-fit-gap-dark.svg
+%% Sibling views: diagrams/architecture.mmd, diagrams/governance.mmd
+%% Render: bash scripts/render_mmd.sh diagrams/workshop-to-fit-gap.mmd
+flowchart TD
+    subgraph STEP1["1. Evidence and Report Review"]
+        direction TB
+        N1[/"Raw Notes WS-04<br/>PO above EUR 50k needs director approval"/]:::input
+        E1[("Evidence Store<br/>Immutable chunks and exact spans")]:::store
+        D_WR["Cited Workshop Report<br/>Candidate decision remains separate"]:::core
+        G1{"Consultant Review<br/>Is report faithful to evidence?"}:::gate
+        N1 -- "parse and fingerprint" --> E1
+        E1 -- "workshop-report skill" --> D_WR
+        D_WR -- "inspect citations" --> G1
+    end
+
+    subgraph STEP2["2. Conflict-Safe Knowledge Review"]
+        direction TB
+        KS["Knowledge Steward<br/>Review each candidate independently"]:::core
+        K_OLD[("Canonical DEC-P2P-004 v1<br/>Approved baseline: EUR 25k")]:::store
+        CONF["Conflicted Candidate<br/>EUR 50k scope unclear<br/>Baseline remains authoritative"]:::warn
+        G1 -- "faithful report, not fact approval" --> KS
+        K_OLD -- "compare value and scope" --> KS
+        KS -- "flag for clarification" --> CONF
+    end
+
+    subgraph STEP3["3. Draft Impact and Escalation"]
+        direction TB
+        D_FG["Fit-Gap Draft Delta<br/>CONFLICTED: publication blocked"]:::warn
+        IMP["Dependent Review Tasks<br/>Architecture and steering versions"]:::ui
+        ST["Steering Summary<br/>Escalates conflict; selects no threshold"]:::core
+        CONF -- "propose delta" --> D_FG
+        K_OLD -- "retain approved baseline" --> D_FG
+        D_FG -- "notify owners" --> IMP
+        CONF -- "open escalation" --> ST
+    end
+
+    subgraph STEP4["4. Clarify, Approve, and Version"]
+        direction TB
+        N2[/"New Clarification Evidence WS-05<br/>Company-code scope confirmed"/]:::input
+        G2{"Domain Lead Review<br/>Accept scoped change?"}:::gate
+        K_NEW[("Canonical Change v2<br/>Effective scope and supersession link")]:::store
+        PUB["New Immutable Deliverables<br/>Report, fit-gap, and steering"]:::gate
+        N2 -- "new source assertion" --> G2
+        CONF -- "clarification context" --> G2
+        G2 == "approve accepted change" ==> K_NEW
+        K_NEW -- "generate revised drafts" --> PUB
+    end
+
+    classDef input fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:2px
+    classDef core fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    classDef skill fill:#FFF8E1,stroke:#F57F17,color:#E65100,stroke-width:2px
+    classDef store fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:2px
+    classDef gate fill:#E0F2F1,stroke:#00695C,color:#004D40,stroke-width:2px
+    classDef warn fill:#FFEBEE,stroke:#C62828,color:#B71C1C,stroke-width:2px
+    classDef ui fill:#ECEFF1,stroke:#546E7A,color:#263238,stroke-width:1.5px
+
+    linkStyle default stroke:#607D8B,stroke-width:1.5px
