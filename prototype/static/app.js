@@ -125,7 +125,7 @@ function renderEmptyDraft() {
       <div class="empty-state">
         <span class="empty-kicker">STEP 2 · CONFLICT FLAGGED (€50,000 VS €25,000)</span>
         <h2>Preview conflicted Fit-Gap or Steering drafts, or resolve with WS-05.</h2>
-        <p>You can test generating Fit-Gap or Steering drafts right now to see how the engine flags the conflict and blocks final publication—or apply WS-05 in the Project Knowledge panel on the right.</p>
+        <p>You can test generating Fit-Gap or Steering drafts right now to see how the engine flags the conflict and blocks final publication, or apply WS-05 in the Project Knowledge panel on the right.</p>
         <div class="quick-skill-row">
           <button class="button secondary" type="button" data-quick-skill="fit_gap">Preview Conflicted Fit-Gap</button>
           <button class="button secondary" type="button" data-quick-skill="steering_deck">Preview Steering Escalation</button>
@@ -136,7 +136,7 @@ function renderEmptyDraft() {
       <div class="empty-state">
         <span class="empty-kicker">START HERE · STEP 1</span>
         <h2>Turn Workshop 4 notes into a cited draft.</h2>
-        <p>Click below to run the <strong>Workshop Report</strong> skill. Every claim will link back to its exact passage in WS-04—without silently overwriting the approved €25,000 baseline.</p>
+        <p>Click below to run the <strong>Workshop Report</strong> skill. Every claim will link back to its exact passage in WS-04 without silently overwriting the approved €25,000 baseline.</p>
         <button class="button" type="button" data-generate-report>1 · Generate WS-04 Workshop Report →</button>
       </div>`;
   }
@@ -211,7 +211,7 @@ function renderKnowledgePanel() {
           <span class="state-badge ${c.status === 'Conflicted' ? 'conflicted' : 'badge-proposed'}">${escapeHtml(c.status)}</span>
         </div>
         <div class="rule-amount">${money(c.amount)}</div>
-        <div class="rule-meta">${c.scope ? `Company code <strong>${escapeHtml(c.scope)}</strong>` : '<strong>Company code unclear</strong> — did not confirm if this replaces FR01 or adds a new entity.'}</div>
+        <div class="rule-meta">${c.scope ? `Company code <strong>${escapeHtml(c.scope)}</strong>` : '<strong>Company code unclear:</strong> did not confirm if this replaces FR01 or adds a new entity.'}</div>
         ${actionHtml}
       </div>`;
   }
@@ -586,11 +586,11 @@ async function openArchitectureZoom(key) {
         </div>`;
     } else if (key === 'knowledge_layers') {
       $('arch-eyebrow').textContent = 'ARCHITECTURE ZOOM-IN · 4 OF 5';
-      $('arch-title').textContent = 'Three-Layer Project Knowledge Base';
+      $('arch-title').textContent = 'Layered Project Knowledge Base';
       html = arch.knowledge_layers
         .map(
           (l) => `<div class="arch-modal-card">
-            <h3>${escapeHtml(l.layer)}: ${escapeHtml(l.title)} — <em>${escapeHtml(l.subtitle)}</em></h3>
+            <h3>${escapeHtml(l.layer)}: ${escapeHtml(l.title)} &middot; <em>${escapeHtml(l.subtitle)}</em></h3>
             <p>${escapeHtml(l.detail)}</p>
           </div>`
         )

@@ -167,7 +167,7 @@ def architecture():
                 'id': 'deliverable_agent',
                 'title': 'Deliverable Agent (Shared)',
                 'role': 'Assembles context and runs the selected Skill contract to produce a cited draft.',
-                'detail': 'One shared agent runs all deliverables — we do not build a separate agent per document.',
+                'detail': 'One shared agent runs all deliverables; we do not build a separate agent per document.',
                 'code_ref': 'app/agents.py :: DeliverableAgent',
             },
             {

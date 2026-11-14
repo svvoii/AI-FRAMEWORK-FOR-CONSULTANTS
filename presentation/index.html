@@ -16,10 +16,6 @@
     --line: #dfe4dc;
     --canvas: #f5f7f3;
     --paper: #ffffff;
-    --warn-bg: #fff5e6;
-    --warn: #8c4d00;
-    --red-bg: #fff0ef;
-    --red: #a32629;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
@@ -48,9 +44,9 @@
     inset: 0;
     display: none;
     background: var(--paper);
-    padding: 6.2% 6.8% 5.5%;
+    padding: 3.8% 5.2% 3.4%;
     overflow-y: auto;
-    animation: slideIn .22s ease-out;
+    animation: slideIn .2s ease-out;
   }
   .slide.active { display: flex; flex-direction: column; }
   @keyframes slideIn {
@@ -58,16 +54,16 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Slide Chrome */
+  /* Slide Header & Footer */
   .slide-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.4%;
+    margin-bottom: 1.1%;
   }
   .brand {
     font-weight: 700;
-    font-size: clamp(13px, 1.35vw, 22px);
+    font-size: clamp(14px, 1.4vw, 23px);
     letter-spacing: -0.7px;
     display: inline-flex;
     align-items: baseline;
@@ -81,49 +77,49 @@
     margin-left: .12em;
   }
   .slide-number {
-    font-size: clamp(9px, .78vw, 13px);
+    font-size: clamp(10px, .82vw, 14px);
     color: var(--muted);
     font-variant-numeric: tabular-nums;
   }
   .section-label {
-    font-size: clamp(8px, .68vw, 11px);
-    letter-spacing: .14em;
+    font-size: clamp(9px, .74vw, 12px);
+    letter-spacing: .13em;
     text-transform: uppercase;
     font-weight: 700;
     color: var(--green-dark);
-    margin-bottom: .9%;
+    margin-bottom: .6%;
   }
   h1, h2, h3, h4, p { margin: 0; }
   h1 {
-    font-size: clamp(26px, 4.1vw, 66px);
+    font-size: clamp(26px, 4vw, 64px);
     line-height: 1.07;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.04em;
     font-weight: 600;
     max-width: 92%;
   }
   h2 {
-    font-size: clamp(20px, 2.7vw, 44px);
+    font-size: clamp(21px, 2.35vw, 38px);
     line-height: 1.12;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.035em;
     font-weight: 600;
-    margin-bottom: 1.8%;
+    margin-bottom: 1.3%;
   }
   h3 {
-    font-size: clamp(11px, 1.05vw, 17px);
+    font-size: clamp(13px, 1.15vw, 20px);
     font-weight: 600;
-    line-height: 1.3;
+    line-height: 1.28;
   }
   p {
-    font-size: clamp(10px, .95vw, 16px);
-    line-height: 1.5;
+    font-size: clamp(11px, .98vw, 16px);
+    line-height: 1.48;
   }
   .green { color: var(--green-dark); }
   .slide-footer {
     margin-top: auto;
-    padding-top: 1.2%;
+    padding-top: 1%;
     display: flex;
     justify-content: space-between;
-    font-size: clamp(8px, .68vw, 12px);
+    font-size: clamp(9px, .72vw, 12.5px);
     color: var(--muted);
     border-top: 1px solid #eef1ec;
   }
@@ -136,398 +132,484 @@
     background: var(--green);
   }
 
-  /* Slide 1: Title */
-  .title-slide {
-    background: linear-gradient(120deg, #fff 58%, #f3f7ea 100%);
-  }
-  .title-main {
-    margin-top: 4%;
-  }
-  .lead {
-    font-size: clamp(12px, 1.3vw, 22px);
-    color: #4b5449;
-    max-width: 74%;
-    margin-top: 2.2%;
-    line-height: 1.45;
-  }
-  .title-summary-strip {
-    margin-top: 4.5%;
+  /* Slide 1: 50% Problem / 50% Mapped Solution + Progressive Reveal */
+  .slide1-title-row {
     display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr;
-    gap: 1.4%;
-    align-items: stretch;
-  }
-  .summary-box {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-top: 3px solid var(--green);
-    padding: 3.5% 4%;
-    border-radius: 4px;
-  }
-  .summary-box span {
-    display: block;
-    font-size: clamp(8px, .65vw, 11px);
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    color: var(--green-dark);
-    font-weight: 700;
-    margin-bottom: 4%;
-  }
-  .summary-box strong {
-    display: block;
-    font-size: clamp(11px, 1.05vw, 17px);
-    margin-bottom: 3%;
-  }
-  .summary-box p {
-    font-size: clamp(9px, .78vw, 13px);
-    color: var(--muted);
-  }
-  .strip-arrow {
-    display: flex;
+    grid-template-columns: 1fr 32px 1fr;
+    gap: 12px;
     align-items: center;
-    justify-content: center;
-    font-size: clamp(14px, 1.4vw, 24px);
-    color: var(--green-dark);
+    margin-bottom: 1.2%;
   }
-
-  /* Slide 2: Challenge */
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2%;
-    margin-top: 1.5%;
-    flex: 1;
-    max-height: 50%;
+  .slide1-title-row h2 {
+    margin-bottom: 0;
   }
-  .card {
-    background: var(--canvas);
-    border: 1px solid var(--line);
-    border-top: 3px solid #cfd6ca;
-    padding: 6%;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-  }
-  .card.active {
-    border-top-color: var(--green);
-    background: #f7faf0;
-  }
-  .card .number {
-    font-size: clamp(20px, 2.2vw, 36px);
-    font-weight: 500;
-    color: var(--green-dark);
-    margin-bottom: 8%;
-  }
-  .card h3 { margin-bottom: 5%; }
-  .card p {
-    font-size: clamp(9px, .84vw, 14px);
-    color: var(--graphite);
-  }
-  .bottom-callout {
-    margin-top: 2.5%;
-    border-left: 4px solid var(--green);
-    background: var(--green-soft);
-    padding: 2% 2.5%;
-    font-size: clamp(11px, 1.15vw, 19px);
-    font-weight: 500;
-    line-height: 1.4;
-  }
-
-  /* Slide 3: Interactive Architecture */
-  .arch-layout {
-    display: grid;
-    grid-template-columns: 1.45fr 1fr;
-    gap: 2.5%;
-    flex: 1;
-    min-height: 0;
-    align-items: stretch;
-  }
-  .arch-diagram {
-    display: flex;
-    flex-direction: column;
-    gap: 1.8%;
-    justify-content: center;
-  }
-  .arch-tier {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .arch-block {
-    background: var(--canvas);
-    border: 1px solid var(--line);
-    border-left: 4px solid #c5cec0;
-    border-radius: 4px;
-    padding: 1.8% 2.5%;
-    text-align: left;
-    transition: border-color .15s, background .15s, transform .12s;
-  }
-  .arch-block:hover, .arch-block.selected {
-    border-color: var(--green);
-    border-left-color: var(--green);
-    background: var(--green-soft);
-  }
-  .arch-block.selected {
-    box-shadow: 0 2px 10px rgba(134, 188, 37, .18);
-  }
-  .arch-block-top {
+  .slide1-right-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
   }
-  .arch-block strong {
-    font-size: clamp(10px, .92vw, 15px);
+  .step-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
-  .arch-block span.tag {
-    font-size: clamp(7px, .6vw, 10px);
+  .step-pill {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--graphite);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: clamp(9px, .72vw, 12px);
+    font-weight: 600;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .step-pill:hover {
+    border-color: var(--green);
+    color: var(--green-dark);
+    background: var(--green-soft);
+  }
+  .step-pill.accent {
+    background: var(--green-soft);
+    border-color: #c2da96;
+    color: var(--green-dark);
+  }
+  .mapping-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+    min-height: 0;
+    justify-content: space-between;
+  }
+  .mapping-row {
+    display: grid;
+    grid-template-columns: 1fr 32px 1fr;
+    gap: 12px;
+    align-items: stretch;
+    flex: 1;
+    cursor: pointer;
+    transition: opacity .36s cubic-bezier(.22, 1, .36, 1), transform .36s cubic-bezier(.22, 1, .36, 1);
+  }
+  .mapping-row .map-arrow,
+  .mapping-row .resolve-card {
+    transition: opacity .38s cubic-bezier(.22, 1, .36, 1) .08s, transform .38s cubic-bezier(.22, 1, .36, 1) .08s;
+  }
+  .mapping-row.hidden-step {
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+  }
+  .mapping-row.hidden-step .map-arrow,
+  .mapping-row.hidden-step .resolve-card {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  .mapping-row.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .mapping-row.revealed .map-arrow,
+  .mapping-row.revealed .resolve-card {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .problem-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ink);
+    border-radius: 6px;
+    padding: 8px 14px;
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 10px;
+    align-items: center;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+  }
+  .mapping-row.can-advance:hover .problem-card {
+    border-color: var(--green);
+    transform: translateY(-1px);
+  }
+  .mapping-row.current .problem-card {
+    border-color: var(--green);
+    box-shadow: 0 4px 14px rgba(134, 188, 37, .14);
+  }
+  .problem-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green-dark);
+    line-height: 1.2;
+  }
+  .problem-card strong {
+    display: block;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.22;
+    margin-bottom: 2px;
+  }
+  .problem-card div > span {
+    display: block;
+    font-size: clamp(11.5px, .98vw, 15.5px);
+    color: var(--muted);
+    line-height: 1.3;
+    margin-left: 0;
+  }
+  .map-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-dark);
+    font-size: clamp(14px, 1.25vw, 20px);
+    font-weight: 700;
+  }
+  .resolve-card {
+    background: var(--green-soft);
+    border: 1px solid #cde0ad;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+  }
+  .resolve-card p {
+    font-size: clamp(11.5px, .98vw, 15.5px);
+    line-height: 1.32;
+    color: var(--graphite);
+  }
+  .resolve-card b {
+    font-size: clamp(13px, 1.12vw, 18px);
+    color: var(--green-dark);
+  }
+
+  /* Slide 2: Proposed Solution (Dedicated Overview) */
+  .phase-strip {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ink);
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-bottom: 1.8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .phase-strip strong {
+    font-size: clamp(12.5px, 1.08vw, 18px);
+    color: var(--ink);
+  }
+  .phase-strip span {
+    font-size: clamp(10.5px, .9vw, 15px);
+    color: var(--muted);
+  }
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.2%;
+    flex: 1;
+    min-height: 0;
+  }
+  .solution-block {
+    background: var(--green-soft);
+    border: 1px solid #d1e2b4;
+    border-top: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .solution-block.dark {
+    background: var(--ink);
+    border-color: var(--ink);
+    border-top-color: var(--green);
+    color: #fff;
+  }
+  .sol-tag {
+    font-size: clamp(9.5px, .78vw, 13px);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+  }
+  .solution-block.dark .sol-tag { color: var(--green); }
+  .solution-block h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .solution-block p {
+    font-size: clamp(12px, 1.05vw, 17.5px);
+    color: var(--graphite);
+    line-height: 1.5;
+  }
+  .solution-block.dark p { color: #d5dcd3; }
+
+  /* Slide 3: System Architecture (5 Components + High-Level Zoom-In) */
+  .arch-pipeline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 4px;
+    align-items: stretch;
+    margin-top: .4%;
+  }
+  .arch-node {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-top: 3px solid #c4cdbe;
+    border-radius: 4px;
+    padding: 14px 12px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: border-color .15s, background .15s, transform .12s;
+  }
+  .arch-node:hover, .arch-node.selected {
+    border-color: var(--green);
+    border-top-color: var(--green);
+    background: var(--green-soft);
+    transform: translateY(-1px);
+  }
+  .arch-node.selected {
+    box-shadow: 0 4px 14px rgba(134, 188, 37, .18);
+  }
+  .arch-tag {
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: .08em;
     font-weight: 700;
     color: var(--green-dark);
   }
-  .arch-block small {
-    display: block;
-    font-size: clamp(8px, .72vw, 12px);
+  .arch-node strong {
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .arch-node small {
+    font-size: clamp(11px, .9vw, 14px);
     color: var(--muted);
-    margin-top: 2px;
+    white-space: nowrap;
   }
-  .arch-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.8%;
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8f9a8c;
+    font-size: clamp(14px, 1.2vw, 20px);
   }
-  .zoom-panel {
+
+  .arch-zoom-area {
+    margin-top: 2%;
     background: #141714;
     color: #fff;
     border-radius: 5px;
-    padding: 4.5% 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 2.8% 3.5%;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 4%;
+    align-items: start;
   }
-  .zoom-eyebrow {
-    font-size: clamp(7px, .64vw, 11px);
+  .zoom-col-label {
+    font-size: 10.5px;
     text-transform: uppercase;
-    letter-spacing: .12em;
+    letter-spacing: .08em;
+    white-space: nowrap;
     color: var(--green);
     font-weight: 700;
-    margin-bottom: 2%;
+    margin-bottom: 8px;
   }
-  .zoom-panel h3 {
-    font-size: clamp(13px, 1.35vw, 22px);
+  .arch-zoom-area h3 {
+    font-size: 20px;
     color: #fff;
-    margin-bottom: 3%;
+    margin-bottom: 10px;
   }
-  .zoom-panel p {
-    font-size: clamp(9px, .83vw, 14px);
+  .arch-zoom-area p {
+    font-size: 15.5px;
     color: #d6dcd4;
     line-height: 1.5;
-    margin-bottom: 3%;
   }
-  .zoom-meta {
-    border-top: 1px solid #2e342e;
-    padding-top: 3%;
-    font-size: clamp(8px, .76vw, 13px);
-    color: #b7c0b5;
-    line-height: 1.55;
-  }
-  .zoom-meta strong { color: #fff; }
-  .zoom-code {
-    margin-top: 3%;
-    background: #1f241f;
-    border: 1px solid #353d35;
-    border-radius: 3px;
-    padding: 2.5% 3%;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: clamp(7.5px, .68vw, 11.5px);
-    color: #c8df9e;
-    white-space: pre-wrap;
-  }
-
-  /* Slide 4: 3 Knowledge Layers */
-  .layers-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2%;
-    margin-top: 1%;
-  }
-  .layer-card {
-    background: var(--canvas);
-    border: 1px solid var(--line);
-    border-top: 4px solid #bcc6b6;
-    border-radius: 4px;
-    padding: 4.5%;
-    text-align: left;
+  .zoom-role-list {
+    margin: 0;
+    padding-left: 20px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    transition: border-color .15s, background .15s;
+    color: #d6dcd4;
+    font-size: 16px;
+    line-height: 1.45;
   }
-  .layer-card:hover, .layer-card.selected {
-    border-color: var(--green);
-    border-top-color: var(--green);
-    background: var(--green-soft);
+  .zoom-role-list li::marker {
+    color: var(--green);
   }
-  .layer-num {
-    font-size: clamp(8px, .66vw, 11px);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    color: var(--green-dark);
+  .subcard-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
   }
-  .layer-card h3 { font-size: clamp(12px, 1.15vw, 19px); }
-  .layer-sub {
-    font-size: clamp(9px, .82vw, 14px);
-    font-weight: 600;
-    color: var(--graphite);
-  }
-  .layer-card p {
-    font-size: clamp(8.5px, .78vw, 13.5px);
-    color: var(--muted);
-  }
-  .zoom-drawer {
-    margin-top: 2%;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--green);
+  .subcard {
+    background: #1f241f;
+    border: 1px solid #323932;
+    border-left: 3px solid var(--green);
     border-radius: 4px;
-    padding: 2.2% 3%;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 3%;
-    align-items: center;
+    padding: 10px 14px;
   }
-  .zoom-drawer h4 {
-    font-size: clamp(10px, .95vw, 16px);
-    margin-bottom: 1.5%;
+  .subcard strong {
+    display: block;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 3px;
   }
-  .zoom-drawer p {
-    font-size: clamp(9px, .8vw, 14px);
-    color: var(--graphite);
+  .subcard span {
+    display: block;
+    font-size: 13.5px;
+    color: #c5cec3;
+    line-height: 1.4;
   }
-  .drawer-rule {
-    background: var(--canvas);
-    padding: 3% 4%;
+  .value-card {
+    background: #1c221b;
+    border: 1px solid #354132;
     border-radius: 4px;
-    font-size: clamp(8.5px, .76vw, 13px);
-    color: var(--graphite);
+    padding: 16px 18px;
   }
 
-  /* Slide 5: 4-Stage Walkthrough */
-  .stages-grid {
+  /* Slide 4: Principles in Action */
+  .two-col-panels {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.6%;
-    margin-top: 1%;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5%;
+    flex: 1;
+    margin-top: .4%;
   }
-  .stage-btn {
+  .principle-panel {
     background: var(--canvas);
     border: 1px solid var(--line);
-    border-top: 3px solid #c2cbbd;
+    border-top: 4px solid var(--green);
     border-radius: 4px;
-    padding: 4.5%;
-    text-align: left;
+    padding: 3.5% 4.2%;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .principle-panel.dark-top { border-top-color: var(--ink); }
+  .panel-kicker {
+    font-size: clamp(8.5px, .72vw, 12px);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+  .principle-panel h3 {
+    font-size: clamp(14.5px, 1.35vw, 23px);
+  }
+  .skill-layer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .skill-layer {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 11px 14px;
+  }
+  .skill-layer strong {
+    display: block;
+    font-size: clamp(11.5px, .98vw, 16.5px);
+    margin-bottom: 3px;
+  }
+  .skill-layer span {
+    display: block;
+    font-size: clamp(10px, .86vw, 14.5px);
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .flow-stack {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    transition: border-color .15s, background .15s;
   }
-  .stage-btn:hover, .stage-btn.selected {
-    border-color: var(--green);
-    border-top-color: var(--green);
-    background: var(--green-soft);
-  }
-  .stage-btn.warn.selected {
-    background: var(--warn-bg);
-    border-color: #d9822b;
-    border-top-color: #d9822b;
-  }
-  .stage-tag {
-    font-size: clamp(7.5px, .62vw, 10.5px);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--green-dark);
-  }
-  .stage-btn.warn .stage-tag { color: var(--warn); }
-  .stage-btn strong { font-size: clamp(11px, 1vw, 17px); }
-  .stage-btn p { font-size: clamp(8.5px, .76vw, 13px); color: var(--muted); }
-
-  .stage-detail-box {
-    margin-top: 2%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2%;
-    flex: 1;
-    max-height: 36%;
-  }
-  .actor-box {
+  .flow-box {
+    background: #fff;
     border: 1px solid var(--line);
     border-radius: 4px;
-    padding: 3% 4%;
-    background: #fff;
+    padding: 10px 13px;
+    font-size: clamp(10.5px, .9vw, 15.5px);
+    line-height: 1.38;
   }
-  .actor-box.ai { border-left: 4px solid #35688f; }
-  .actor-box.human { border-left: 4px solid var(--green); background: #f8fbf2; }
-  .actor-box span {
-    display: block;
-    font-size: clamp(8px, .65vw, 11px);
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    font-weight: 700;
-    color: var(--muted);
-    margin-bottom: 2%;
+  .flow-box.human-gate {
+    background: var(--green-soft);
+    border-color: var(--green);
+    font-weight: 600;
   }
-  .actor-box.human span { color: var(--green-dark); }
-  .actor-box h4 {
-    font-size: clamp(11px, 1vw, 17px);
-    margin-bottom: 2%;
+  .flow-down {
+    text-align: center;
+    color: var(--green-dark);
+    font-size: clamp(11px, .95vw, 16px);
+    line-height: 1;
   }
-  .actor-box p {
-    font-size: clamp(9px, .82vw, 14px);
+  .takeaway-strip {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    font-size: clamp(10px, .86vw, 14.5px);
     color: var(--graphite);
   }
 
-  /* Slide 6: Prototype Choice & Demo */
-  .demo-split {
-    display: grid;
-    grid-template-columns: 1.15fr 1fr;
-    gap: 3%;
-    margin-top: 1%;
-    flex: 1;
+  /* Slide 5: Transition to Live Demo */
+  .demo-lead {
+    font-size: clamp(12px, 1.15vw, 19.5px);
+    color: var(--graphite);
+    max-width: 88%;
+    margin-bottom: 2.2%;
   }
-  .demo-steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5%;
-  }
-  .demo-steps li {
+  .demo-cards {
     display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.2%;
+  }
+  .demo-card {
     background: var(--canvas);
     border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 2.8% 3.5%;
-    align-items: start;
+    border-top: 3px solid var(--green);
+    border-radius: 5px;
+    padding: 4.5% 5%;
   }
-  .step-num {
-    font-size: clamp(14px, 1.4vw, 24px);
+  .demo-num {
+    font-size: clamp(18px, 1.9vw, 32px);
     font-weight: 700;
     color: var(--green-dark);
-  }
-  .demo-steps strong {
+    margin-bottom: 4%;
     display: block;
-    font-size: clamp(10px, .95vw, 16px);
-    margin-bottom: 2px;
   }
-  .demo-steps span {
-    font-size: clamp(8.5px, .76vw, 13px);
+  .demo-card h3 {
+    margin-bottom: 4%;
+    font-size: clamp(13px, 1.18vw, 20px);
+  }
+  .demo-card p {
+    font-size: clamp(10.5px, .92vw, 15.5px);
     color: var(--muted);
+    line-height: 1.48;
+  }
+  .demo-action-row {
+    margin-top: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: var(--green-soft);
+    border: 1px solid #cde0ad;
+    border-radius: 5px;
+    padding: 2.2% 3%;
+  }
+  .demo-action-row p {
+    font-size: clamp(11px, .98vw, 16.5px);
+    color: var(--graphite);
   }
   .demo-cta {
     display: inline-flex;
@@ -537,87 +619,12 @@
     color: var(--ink);
     font-weight: 700;
     text-decoration: none;
-    padding: 2.4% 4.5%;
+    padding: 1.4% 2.6%;
     border-radius: 4px;
     font-size: clamp(10px, .95vw, 16px);
-    margin-top: 3%;
+    white-space: nowrap;
   }
   .demo-cta:hover { filter: brightness(.93); }
-  .stack-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5%;
-  }
-  .stack-card {
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--ink);
-    border-radius: 4px;
-    padding: 3% 4%;
-    background: #fff;
-  }
-  .stack-card h3 { font-size: clamp(10px, .95vw, 16px); margin-bottom: 2%; }
-  .stack-card p { font-size: clamp(8.5px, .77vw, 13px); color: var(--muted); }
-
-  /* Slide 7: Adoption & Q&A Deep-Dive Tabs */
-  .roadmap-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2%;
-    margin-bottom: 2%;
-  }
-  .roadmap-card {
-    background: var(--canvas);
-    border: 1px solid var(--line);
-    border-top: 3px solid var(--green);
-    border-radius: 4px;
-    padding: 3% 4%;
-  }
-  .roadmap-card span {
-    font-size: clamp(7.5px, .62vw, 10.5px);
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    font-weight: 700;
-    color: var(--green-dark);
-  }
-  .roadmap-card h3 { margin: 2% 0; font-size: clamp(10px, .95vw, 16px); }
-  .roadmap-card p { font-size: clamp(8.5px, .76vw, 13px); color: var(--muted); }
-
-  .qa-tabs {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 1.5%;
-  }
-  .qa-tab {
-    border: 1px solid var(--line);
-    background: var(--canvas);
-    padding: 1.2% 2%;
-    border-radius: 4px;
-    font-size: clamp(8.5px, .78vw, 13px);
-    font-weight: 600;
-    color: var(--graphite);
-  }
-  .qa-tab.selected {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: #fff;
-  }
-  .qa-panel {
-    background: #f8faf5;
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--green);
-    border-radius: 4px;
-    padding: 2.5% 3%;
-    flex: 1;
-  }
-  .qa-panel h4 {
-    font-size: clamp(11px, 1.02vw, 17px);
-    margin-bottom: 1.5%;
-  }
-  .qa-panel p {
-    font-size: clamp(9px, .84vw, 14.5px);
-    color: var(--graphite);
-  }
 
   /* Controls Bar */
   .controls {
@@ -725,13 +732,11 @@
   }
 
   #print-list { display: none; }
-  @media (max-width: 780px) {
-    .arch-layout, .demo-split, .grid-3, .layers-grid, .stages-grid, .roadmap-row, .stage-detail-box, .zoom-drawer {
+  @media (max-width: 820px) {
+    .slide1-title-row, .mapping-row, .solution-grid, .arch-pipeline, .arch-zoom-area, .two-col-panels, .demo-cards {
       grid-template-columns: 1fr;
     }
-    .title-summary-strip { grid-template-columns: 1fr; }
-    .strip-arrow { display: none; }
-    .controls .hide-sm { display: none; }
+    .map-arrow, .arch-arrow, .controls .hide-sm { display: none; }
   }
   @media print {
     html, body { height: auto; background: #fff; display: block; overflow: visible; }
@@ -750,246 +755,257 @@
       inset: 0;
       animation: none;
     }
+    .mapping-row.hidden-step,
+    .mapping-row.hidden-step .map-arrow,
+    .mapping-row.hidden-step .resolve-card {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .step-controls { display: none; }
   }
 </style>
 </head>
 <body>
 <main class="deck" id="deck" aria-label="Presentation deck">
 
-  <!-- SLIDE 1: TITLE & EXECUTIVE SUMMARY -->
-  <section class="slide title-slide" data-title="Executive Summary" data-notes="Open clearly: the client problem is 30 workshops over 26 weeks producing scattered notes and inconsistent deliverables. Our answer is one reusable AI framework: one Main Agent orchestrating Specialized Agents, a 3-layer Knowledge Base, and Pluggable Skills — with consultants always in control.">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">01 / 07</div></div>
-    <div class="section-label">Technical Design &amp; Prototype · S/4HANA Scoping Case</div>
-    <div class="title-main">
-      <h1>A reusable AI framework for <span class="green">consultants.</span></h1>
-      <p class="lead">One shared multi-agent engine and pluggable skills to turn 30 workshops into consistent, source-backed deliverables — while keeping consultants in control.</p>
-    </div>
-    <div class="title-summary-strip">
-      <div class="summary-box">
-        <span>Input Reality</span>
-        <strong>30 Workshops &amp; Docs</strong>
-        <p>Notes, process lists, and technical inputs scattered across 26 weeks (Prepare, Assess, Analyze, Advise).</p>
-      </div>
-      <div class="strip-arrow" aria-hidden="true">→</div>
-      <div class="summary-box">
-        <span>One Reusable Engine</span>
-        <strong>Main Agent + Skills</strong>
-        <p>One entry-point agent coordinates specialized workers, a structured knowledge base, and 1 skill per deliverable.</p>
-      </div>
-      <div class="strip-arrow" aria-hidden="true">→</div>
-      <div class="summary-box">
-        <span>Verified Outputs</span>
-        <strong>Consistent &amp; Traceable</strong>
-        <p>Workshop reports, fit-gap analyses, target architecture, and steering decks linked to exact source passages.</p>
+  <!-- SLIDE 1: 50% PROBLEM / 50% MAPPED SOLUTION (PROGRESSIVE REVEAL) -->
+  <section class="slide" data-title="Case Study: Problems & Mapped Solutions" data-notes="Introduce the 26-week S/4HANA scoping case study (Prepare -> Assess -> Analyze -> Advise). Click any visible problem card on the left to reveal the next consulting pain point and its green framework solution one by one.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">01 / 05</div></div>
+
+    <div class="slide1-title-row">
+      <h2>Five consulting challenges.</h2>
+      <div></div>
+      <div class="slide1-right-head">
+        <h2><span class="green">Mapped solution.</span></h2>
+        <span class="step-controls">
+          <button class="step-pill accent" id="reveal-next-btn" type="button">1 / 5 · Click problem for #2</button>
+          <button class="step-pill" id="reveal-all-btn" type="button">Show all 5</button>
+        </span>
       </div>
     </div>
-    <div class="slide-footer"><span>Project: S/4HANA Scoping · Procure-to-Pay</span><span>Slide 1 · Overview</span></div>
+
+    <div class="mapping-rows" id="mapping-rows">
+      <div class="mapping-row" data-step="1">
+        <div class="problem-card">
+          <span class="problem-num">01</span>
+          <div>
+            <strong>High volume of information</strong>
+            <span>(client docs, workshop notes, process lists, technical analyses)</span>
+          </div>
+        </div>
+        <div class="map-arrow" aria-hidden="true">→</div>
+        <div class="resolve-card">
+          <p><b>Indexed Evidence DB &amp; Main Agent:</b> indexes workshop passages and client documents so agents retrieve exact context.</p>
+        </div>
+      </div>
+
+      <div class="mapping-row" data-step="2">
+        <div class="problem-card">
+          <span class="problem-num">02</span>
+          <div>
+            <strong>Repetitive drafting consumes time</strong>
+            <span>(writing, structuring, and formatting instead of advisory)</span>
+          </div>
+        </div>
+        <div class="map-arrow" aria-hidden="true">→</div>
+        <div class="resolve-card">
+          <p><b>Shared Deliverable Agent &amp; Model Gateway:</b> turns raw notes into cited drafts in seconds while consultants keep validation.</p>
+        </div>
+      </div>
+
+      <div class="mapping-row" data-step="3">
+        <div class="problem-card">
+          <span class="problem-num">03</span>
+          <div>
+            <strong>Variable deliverable quality</strong>
+            <span>(inconsistent format, rigor, and completeness across teams)</span>
+          </div>
+        </div>
+        <div class="map-arrow" aria-hidden="true">→</div>
+        <div class="resolve-card">
+          <p><b>Pluggable Skills (1 Skill = 1 Deliverable):</b> enforces standard Deloitte sections, schemas, and rules for every consultant.</p>
+        </div>
+      </div>
+
+      <div class="mapping-row" data-step="4">
+        <div class="problem-card">
+          <span class="problem-num">04</span>
+          <div>
+            <strong>Scattered knowledge across teams</strong>
+            <span>(dispersed across chats, folders, and individual memory)</span>
+          </div>
+        </div>
+        <div class="map-arrow" aria-hidden="true">→</div>
+        <div class="resolve-card">
+          <p><b>Layered Project Knowledge Base (DB):</b> centralizes raw workshop notes, validated decisions, and published versions.</p>
+        </div>
+      </div>
+
+      <div class="mapping-row" data-step="5">
+        <div class="problem-card">
+          <span class="problem-num">05</span>
+          <div>
+            <strong>Risk of omissions &amp; inconsistencies</strong>
+            <span>(contradictions between deliverables over 26 weeks)</span>
+          </div>
+        </div>
+        <div class="map-arrow" aria-hidden="true">→</div>
+        <div class="resolve-card">
+          <p><b>Knowledge Steward &amp; Quality Reviewer:</b> compares new notes against approved rules (e.g., &euro;50k vs &euro;25k) before publish.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer"><span>Click any problem card to reveal the next pair · Project: S/4HANA Scoping</span><span>Slide 1 · Problems &amp; Mapped Solutions</span></div>
     <div class="corner"></div>
   </section>
 
-  <!-- SLIDE 2: THE CONSULTING PROBLEM -->
-  <section class="slide" data-title="The Consulting Challenge" data-notes="Emphasize why naive LLM prompting fails in real consulting: across 30 workshops, requirements evolve and contradict each other. If an AI silently picks EUR 50,000 over EUR 25,000, errors cascade into Fit-Gap and Target Architecture.">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">02 / 07</div></div>
-    <div class="section-label">01 / The Problem</div>
-    <h2>Most AI tools write text.<br>Consultants must govern <span class="green">decisions.</span></h2>
-    <div class="grid-3">
-      <article class="card">
-        <span class="number">01</span>
-        <h3>Information Overload</h3>
-        <p>30 workshops across 26 weeks produce huge volumes of meeting notes, process lists, and technical documents scattered across teams.</p>
-      </article>
-      <article class="card">
-        <span class="number">02</span>
-        <h3>Repetitive Drafting &amp; Drift</h3>
-        <p>Consultants spend hours formatting reports instead of advising. Structure and thoroughness vary significantly from one author to another.</p>
-      </article>
-      <article class="card active">
-        <span class="number">03</span>
-        <h3>Hidden Contradictions</h3>
-        <p>When Workshop 4 states €50,000 after Workshop 1 approved €25,000, standard AI tools either hallucinate or silently overwrite the baseline.</p>
-      </article>
-    </div>
-    <div class="bottom-callout">
-      Core Principle: We do not build one tool per deliverable. We build <strong>one shared engine</strong> and plug in <strong>one skill per deliverable type</strong>.
-    </div>
-    <div class="slide-footer"><span>Prepare → Assess → Analyze → Advise</span><span>Slide 2 · Why a Framework</span></div>
-  </section>
+  <!-- SLIDE 2: PROPOSED SOLUTION · ONE REUSABLE FRAMEWORK -->
+  <section class="slide" data-title="Proposed Solution: One Reusable Framework" data-notes="Summarize the 3 pillars of Deloitte's proposed framework before zooming into the 5 system architecture components: 1 generic multi-agent engine, structured knowledge + skills with consultant control, and 1 skill per deliverable.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">02 / 05</div></div>
+    <h2>One shared consulting engine. <span class="green">Built to extend via Skills.</span></h2>
 
-  <!-- SLIDE 3: INTERACTIVE ARCHITECTURE (GENERAL VIEW + CLICK TO ZOOM IN) -->
-  <section class="slide" data-title="System Architecture" data-notes="Walk through the general view top-to-bottom, then click blocks live to zoom in if interviewers ask about a specific component. Emphasize: Main Agent is the single entry point; Deliverable Agent is shared across all skills; adding Target Architecture only requires adding a Skill folder.">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">03 / 07</div></div>
-    <div class="section-label">02 / Architecture · Click any block to zoom in</div>
-    <h2>One Main Agent, Specialized Agents, <span class="green">Pluggable Skills.</span></h2>
-    <div class="arch-layout">
-      <div class="arch-diagram" id="arch-diagram">
-        <button class="arch-block selected" type="button" data-arch-id="main_agent">
-          <div class="arch-block-top"><strong>1. Main Agent (Orchestrator)</strong><span class="tag">Entry Point</span></div>
-          <small>Authenticates role, scopes project data, freezes context, selects the target Skill.</small>
-        </button>
-        <button class="arch-block" type="button" data-arch-id="specialized_agents">
-          <div class="arch-block-top"><strong>2. Specialized Agents</strong><span class="tag">3 Focused Workers</span></div>
-          <small>Deliverable Agent (drafts) · Knowledge Steward (compares) · Quality Reviewer (checks).</small>
-        </button>
-        <div class="arch-split">
-          <button class="arch-block" type="button" data-arch-id="skills">
-            <div class="arch-block-top"><strong>3. Pluggable Skills</strong><span class="tag">Extensible</span></div>
-            <small>Workshop Report · Fit-Gap · Steering · +Target Arch.</small>
-          </button>
-          <button class="arch-block" type="button" data-arch-id="knowledge_layers">
-            <div class="arch-block-top"><strong>4. Knowledge Base</strong><span class="tag">3 Layers</span></div>
-            <small>Raw Notes vs. Approved Decisions vs. Snapshots.</small>
-          </button>
-        </div>
-        <button class="arch-block" type="button" data-arch-id="model_gateway">
-          <div class="arch-block-top"><strong>5. Provider-Agnostic Model Gateway</strong><span class="tag">LLM Abstraction</span></div>
-          <small>Enforces JSON schema output &amp; routes by data sensitivity (Mistral, OpenAI, Claude, Local).</small>
-        </button>
+    <div class="phase-strip">
+      <strong>Prepare → Assess → Analyze → Advise</strong>
+      <span>Fit-Gap Analyses · Workshop Reports · Target Architecture · Scenario Reports · Steering Decks</span>
+    </div>
+
+    <div class="solution-grid">
+      <div class="solution-block dark">
+        <span class="sol-tag">01 · Generic Engine</span>
+        <h3>Main Agent + Specialized Agents</h3>
+        <p>One entry-point agent coordinates focused agents to analyze, propose, structure, and draft deliverables across every project phase.</p>
       </div>
-      <aside class="zoom-panel" id="arch-zoom-panel" aria-live="polite"></aside>
-    </div>
-    <div class="slide-footer"><span>Interactive General View · Click blocks on the left for detail</span><span>Slide 3 · Architecture</span></div>
-  </section>
-
-  <!-- SLIDE 4: STRUCTURED KNOWLEDGE BASE (3 LAYERS) -->
-  <section class="slide" data-title="3-Layer Knowledge Base" data-notes="Explain why storing everything in a single vector database fails. We separate Raw Evidence (what someone said in a workshop) from Validated Project Knowledge (what the client approved) and Deliverable Snapshots (what was published).">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">04 / 07</div></div>
-    <div class="section-label">03 / Structured Knowledge Base · Click a layer to zoom in</div>
-    <h2>Separating <span class="green">what was said</span> from <span class="green">what was decided.</span></h2>
-    <div class="layers-grid">
-      <button class="layer-card selected" type="button" data-layer-id="l1">
-        <span class="layer-num">Layer 01</span>
-        <h3>Workshop Evidence</h3>
-        <div class="layer-sub">"What was said"</div>
-        <p>Raw meeting notes and client docs stored immutably with SHA-256 hashes and exact passage positions.</p>
-      </button>
-      <button class="layer-card" type="button" data-layer-id="l2">
-        <span class="layer-num">Layer 02</span>
-        <h3>Project Knowledge Base</h3>
-        <div class="layer-sub">"What is approved"</div>
-        <p>Structured, versioned rules &amp; decisions (v1 → v2). Only human approval updates an official baseline.</p>
-      </button>
-      <button class="layer-card" type="button" data-layer-id="l3">
-        <span class="layer-num">Layer 03</span>
-        <h3>Deliverable Snapshots</h3>
-        <div class="layer-sub">"What we publish"</div>
-        <p>Editable drafts and locked publications. Every version freezes its exact evidence, rule version, and model.</p>
-      </button>
-    </div>
-    <div class="zoom-drawer" id="layer-zoom-drawer" aria-live="polite"></div>
-    <div class="slide-footer"><span>Approving a workshop report ≠ approving a rule change</span><span>Slide 4 · Knowledge Governance</span></div>
-  </section>
-
-  <!-- SLIDE 5: CONCRETE WALKTHROUGH (WORKSHOP TO FIT-GAP) -->
-  <section class="slide" data-title="Conflict Walkthrough" data-notes="Walk through the exact P2P example. In WS-01, EUR 25,000 is approved for FR01. In WS-04, someone mentions EUR 50,000 without saying which company code. The AI drafts the report, flags the conflict, blocks final Fit-Gap publication, and waits for WS-05 owner clarification.">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">05 / 07</div></div>
-    <div class="section-label">04 / Concrete Walkthrough · Click a stage to zoom in</div>
-    <h2>Handling a contradiction: <span class="green">€50,000 vs. €25,000.</span></h2>
-    <div class="stages-grid">
-      <button class="stage-btn selected" type="button" data-stage-id="s1">
-        <span class="stage-tag">Stage 1 · Baseline</span>
-        <strong>WS-01 Approved</strong>
-        <p>€25,000 PO approval rule established for company code FR01 (Decision v1).</p>
-      </button>
-      <button class="stage-btn" type="button" data-stage-id="s2">
-        <span class="stage-tag">Stage 2 · New Input</span>
-        <strong>WS-04 Drafted</strong>
-        <p>Notes mention €50,000, but company-code scope is missing. Report cites exact passage.</p>
-      </button>
-      <button class="stage-btn warn" type="button" data-stage-id="s3">
-        <span class="stage-tag">Stage 3 · Conflict</span>
-        <strong>Conflict Caught</strong>
-        <p>Steward flags €50k vs €25k. Baseline stays €25k; Fit-Gap publication is blocked.</p>
-      </button>
-      <button class="stage-btn" type="button" data-stage-id="s4">
-        <span class="stage-tag">Stage 4 · Resolved</span>
-        <strong>WS-05 &amp; Publish v2</strong>
-        <p>Owner confirms €50k for FR01. Knowledge becomes v2; deliverables publish cleanly.</p>
-      </button>
-    </div>
-    <div class="stage-detail-box" id="stage-zoom-box" aria-live="polite"></div>
-    <div class="slide-footer"><span>AI proposes and checks · Consultants decide and validate</span><span>Slide 5 · End-to-End Flow</span></div>
-  </section>
-
-  <!-- SLIDE 6: PROTOTYPE CHOICE & LIVE DEMO -->
-  <section class="slide" data-title="Prototype & Live Demo" data-notes="Explain why we chose this minimal stack: FastAPI + Pydantic gives strict schema contracts; SQLite + FTS5 handles relational knowledge, search, and audit triggers in one zero-config file; Mock mode guarantees a reliable offline demo while Mistral live mode works with one env var.">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">06 / 07</div></div>
-    <div class="section-label">05 / Minimal Prototype &amp; Live Demo</div>
-    <h2>Lightweight server. <span class="green">Full architectural proof.</span></h2>
-    <div class="demo-split">
-      <div>
-        <ol class="demo-steps">
-          <li>
-            <span class="step-num">01</span>
-            <div>
-              <strong>Draft Workshop Report (WS-04)</strong>
-              <span>Click any citation pill to verify exact source passages; approve the report without changing €25k baseline.</span>
-            </div>
-          </li>
-          <li>
-            <span class="step-num">02</span>
-            <div>
-              <strong>Catch Conflict &amp; Preview Blocked Drafts</strong>
-              <span>Flag €50k vs €25k; run Fit-Gap and Steering skills to show how conflicts surface and block final publication.</span>
-            </div>
-          </li>
-          <li>
-            <span class="step-num">03</span>
-            <div>
-              <strong>Apply WS-05 Clarification &amp; Publish v2</strong>
-              <span>Update Project Knowledge to v2 (€50k for FR01), regenerate deliverables, and inspect locked lineage.</span>
-            </div>
-          </li>
-        </ol>
-        <a class="demo-cta" id="demo-link" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Open Live Prototype ↗</a>
+      <div class="solution-block">
+        <span class="sol-tag">02 · Knowledge &amp; Control</span>
+        <h3>Structured Knowledge + Skills</h3>
+        <p>Agents rely on layered databases and task-specific Skills. Consultant always keeps final decision and validation.</p>
       </div>
-      <div class="stack-list">
-        <div class="stack-card">
-          <h3>Why FastAPI + Pydantic?</h3>
-          <p>Minimal Python API server enforcing strict JSON output contracts on every skill and role-based checks on every route.</p>
+      <div class="solution-block">
+        <span class="sol-tag">03 · Modular Extension</span>
+        <h3>1 Skill = 1 Deliverable</h3>
+        <p>Each new deliverable (Fit-Gap, Workshop Report, Architecture, Steering) plugs into the shared engine as a dedicated Skill.</p>
+      </div>
+    </div>
+
+    <div class="slide-footer"><span>Reusable AI Framework for Consultants</span><span>Slide 2 · Proposed Solution</span></div>
+  </section>
+
+  <!-- SLIDE 3: SYSTEM ARCHITECTURE · GENERAL VIEW + ZOOM-IN -->
+  <section class="slide" data-title="System Architecture" data-notes="Present the 5 building blocks matching the live prototype's top bar. Walk across left-to-right first for the general view, then click any block to zoom into its high-level role, internal elements, and why it protects consultant control.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">03 / 05</div></div>
+    <h2>Five building blocks. <span class="green">One reusable engine.</span></h2>
+    <div class="arch-pipeline">
+      <button class="arch-node selected" type="button" data-arch-id="main_agent">
+        <span class="arch-tag">1. Entry Point</span>
+        <strong>Main Agent</strong>
+        <small>Checks scope &amp; routes tasks</small>
+      </button>
+      <span class="arch-arrow" aria-hidden="true">→</span>
+      <button class="arch-node" type="button" data-arch-id="specialized_agents">
+        <span class="arch-tag">2. Core Engine</span>
+        <strong>Specialized Agents</strong>
+        <small>Deliverable · Steward · Quality</small>
+      </button>
+      <span class="arch-arrow" aria-hidden="true">→</span>
+      <button class="arch-node" type="button" data-arch-id="skills">
+        <span class="arch-tag">3. Extensible</span>
+        <strong>Pluggable Skills</strong>
+        <small>1 Skill = 1 Deliverable type</small>
+      </button>
+      <span class="arch-arrow" aria-hidden="true">→</span>
+      <button class="arch-node" type="button" data-arch-id="knowledge_layers">
+        <span class="arch-tag">4. Layered Memory</span>
+        <strong>Project Knowledge</strong>
+        <small>Notes vs. Approved Rules</small>
+      </button>
+      <span class="arch-arrow" aria-hidden="true">→</span>
+      <button class="arch-node" type="button" data-arch-id="model_gateway">
+        <span class="arch-tag">5. LLM Layer</span>
+        <strong>Model Gateway</strong>
+        <small>Schema-checked &amp; swappable</small>
+      </button>
+    </div>
+
+    <div class="arch-zoom-area" id="arch-zoom-area" aria-live="polite"></div>
+
+    <div class="slide-footer"><span>High-Level Architecture · Same 5 blocks as the live platform</span><span>Slide 3 · Architecture Overview</span></div>
+  </section>
+
+  <!-- SLIDE 4: ARCHITECTURAL PRINCIPLES IN ACTION -->
+  <section class="slide" data-title="Principles in Action" data-notes="Reinforce the two architectural guarantees from the case brief: first, adding a deliverable only means adding a Skill package; second, AI proposes and checks, while only the consultant validates changes into Project Knowledge.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">04 / 05</div></div>
+    <h2>AI proposes and structures. <span class="green">The consultant decides.</span></h2>
+    <div class="two-col-panels">
+      <div class="principle-panel">
+        <span class="panel-kicker">Extensibility · Skill Anatomy</span>
+        <h3>How a new deliverable is added</h3>
+        <div class="skill-layer-list">
+          <div class="skill-layer">
+            <strong>1. Input Contract</strong>
+            <span>Defines which workshop notes and approved project decisions the skill reads.</span>
+          </div>
+          <div class="skill-layer">
+            <strong>2. Deliverable Structure</strong>
+            <span>Enforces Deloitte's standard consulting sections and output format.</span>
+          </div>
+          <div class="skill-layer">
+            <strong>3. Quality &amp; Consistency Rules</strong>
+            <span>Requires source links and flags missing scope or contradictions before review.</span>
+          </div>
         </div>
-        <div class="stack-card">
-          <h3>Why SQLite + FTS5 (No Heavy Vector DB)?</h3>
-          <p>Single-file database handling relational knowledge versions, full-text passage retrieval, and immutable audit triggers with zero setup.</p>
+        <div class="takeaway-strip">
+          <strong>Result:</strong> Same shared engine, predictable deliverable quality across every consultant.
         </div>
-        <div class="stack-card">
-          <h3>Why Mock Mode + Live Mistral?</h3>
-          <p>Deterministic fixtures keep the interview demo fast and offline-safe; switching to Live Mistral requires only an API key, never a fallback.</p>
+      </div>
+
+      <div class="principle-panel dark-top">
+        <span class="panel-kicker">Governance · Human-in-the-Loop</span>
+        <h3>How knowledge stays reliable over 30 workshops</h3>
+        <div class="flow-stack">
+          <div class="flow-box"><strong>Workshop Notes:</strong> Raw client statements captured without altering baselines</div>
+          <div class="flow-down" aria-hidden="true">↓</div>
+          <div class="flow-box"><strong>AI Drafts &amp; Flags Contradictions:</strong> Surfaces conflicts (e.g., €50k vs €25k) instead of guessing</div>
+          <div class="flow-down" aria-hidden="true">↓</div>
+          <div class="flow-box human-gate">Consultant Validates: Approves report accuracy separately from decision changes</div>
+          <div class="flow-down" aria-hidden="true">↓</div>
+          <div class="flow-box"><strong>Project Knowledge &amp; Deliverables Updated:</strong> Full version history preserved</div>
+        </div>
+        <div class="takeaway-strip">
+          <strong>Result:</strong> Zero silent overwrites; every published claim traces back to its workshop source.
         </div>
       </div>
     </div>
-    <div class="slide-footer"><span>1-Click Reset available inside the prototype header</span><span>Slide 6 · Prototype Implementation</span></div>
+    <div class="slide-footer"><span>Extend via Skills · Govern via Human Validation</span><span>Slide 4 · Design Principles</span></div>
   </section>
 
-  <!-- SLIDE 7: ADOPTION & INTERACTIVE Q&A DEEP-DIVES -->
-  <section class="slide" data-title="Roadmap & Deep-Dives" data-notes="Close with a pragmatic rollout: start with 2 deliverables, measure baseline vs quality gates, then add skills. Use the bottom tabs during Q&A to jump directly to common technical questions.">
-    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">07 / 07</div></div>
-    <div class="section-label">06 / Adoption &amp; Technical Q&amp;A</div>
-    <h2>Start narrow, prove trust, <span class="green">scale via skills.</span></h2>
-    <div class="roadmap-row">
-      <div class="roadmap-card">
-        <span>Phase 1 · Pilot (Weeks 1–4)</span>
-        <h3>2 Core Deliverables</h3>
-        <p>Launch Workshop Report + Fit-Gap on one active stream. Measure time saved vs. reviewer correction effort.</p>
+  <!-- SLIDE 5: TRANSITION TO LIVE PROTOTYPE DEMO -->
+  <section class="slide" data-title="Live Platform Demo" data-notes="Transition cleanly into the live prototype. Remind the audience of the concrete scenario we are about to run: Workshop 1 approved EUR 25,000 for FR01, Workshop 4 mentions EUR 50,000 without company code, and we watch the engine catch and resolve it in 3 steps.">
+    <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">05 / 05</div></div>
+    <h2>Seeing the architecture in action: <span class="green">Workshop to Fit-Gap.</span></h2>
+    <p class="demo-lead">We will walk through an S/4HANA Procure-to-Pay scenario where <strong>Workshop 4</strong> introduces a <strong>€50,000</strong> approval threshold that contradicts <strong>Workshop 1 (€25,000)</strong>.</p>
+    <div class="demo-cards">
+      <div class="demo-card">
+        <span class="demo-num">01</span>
+        <h3>Draft Workshop Report</h3>
+        <p>Run the Workshop Report skill on Workshop 4 notes and inspect the linked source quotes without altering the €25k rule.</p>
       </div>
-      <div class="roadmap-card">
-        <span>Phase 2 · Validate (Weeks 5–8)</span>
-        <h3>Golden Eval Gates</h3>
-        <p>Enforce 100% citation validity, ACL isolation, and seeded conflict detection before scaling.</p>
+      <div class="demo-card">
+        <span class="demo-num">02</span>
+        <h3>Catch the Contradiction</h3>
+        <p>Watch the Knowledge Steward and Quality Reviewer flag €50k vs €25k and block premature Fit-Gap &amp; Steering publication.</p>
       </div>
-      <div class="roadmap-card">
-        <span>Phase 3 · Scale</span>
-        <h3>Add New Skill Folders</h3>
-        <p>Extend to Target Architecture, Steering Decks, and Test Scripts using the exact same core engine.</p>
+      <div class="demo-card">
+        <span class="demo-num">03</span>
+        <h3>Clarify &amp; Update Deliverables</h3>
+        <p>Apply the process owner's clarification (WS-05) and generate updated Fit-Gap and Steering deliverables from the same engine.</p>
       </div>
     </div>
-    <div class="qa-tabs" role="tablist" aria-label="Technical Q&A topics">
-      <button class="qa-tab selected" type="button" data-qa="ext">1. Adding a 4th Deliverable</button>
-      <button class="qa-tab" type="button" data-qa="sec">2. Security &amp; Client Data</button>
-      <button class="qa-tab" type="button" data-qa="vec">3. Why Not Vector DB Alone?</button>
-      <button class="qa-tab" type="button" data-qa="eval">4. Automated Test Bench</button>
+    <div class="demo-action-row">
+      <p><strong>Live Prototype Ready:</strong> Includes all 5 architectural blocks, 3 pluggable skills, source passage verification, and 1-click reset.</p>
+      <a class="demo-cta" id="demo-link" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Launch Live Platform Demo ↗</a>
     </div>
-    <div class="qa-panel" id="qa-panel" aria-live="polite"></div>
-    <div class="slide-footer"><span>Thank you · Ready for discussion &amp; live prototype walkthrough</span><span>Slide 7 · Roadmap &amp; Q&amp;A</span></div>
+    <div class="slide-footer"><span>Project: S/4HANA Scoping · Procure-to-Pay</span><span>Slide 5 · Live Demo</span></div>
   </section>
 
   <div class="progress" aria-hidden="true"><span id="progress"></span></div>
@@ -997,9 +1013,9 @@
 
 <nav class="controls" aria-label="Presentation controls">
   <button id="prev" type="button" aria-label="Previous slide">←</button>
-  <span class="counter" id="counter">01 / 07</span>
+  <span class="counter" id="counter">01 / 05</span>
   <button id="next" type="button" aria-label="Next slide">→</button>
-  <input id="seek" class="hide-sm" type="range" min="1" max="7" value="1" aria-label="Slide slider">
+  <input id="seek" class="hide-sm" type="range" min="1" max="5" value="1" aria-label="Slide slider">
   <button id="timer" class="hide-sm" type="button" title="Start or pause timer">00:00</button>
   <button id="overview-btn" type="button">Overview</button>
   <button id="fullscreen" class="hide-sm" type="button">Fullscreen</button>
@@ -1008,7 +1024,7 @@
   <a id="bottom-demo" class="demo-nav" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Live Prototype ↗</a>
 </nav>
 
-<dialog id="notes-dialog" style="max-width:660px;width:90%;border:0;border-top:4px solid #86bc25;padding:28px;font:15px/1.6 Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.35)">
+<dialog id="notes-dialog" style="max-width:640px;width:90%;border:0;border-top:4px solid #86bc25;padding:28px;font:15px/1.6 Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.35)">
   <div id="notes-content"></div>
   <button id="close-notes" type="button" style="margin-top:18px;background:#111;color:#fff;border:0;padding:8px 16px;border-radius:3px">Close notes</button>
 </dialog>
@@ -1025,101 +1041,73 @@ const ARCH_DETAILS = {
   main_agent: {
     eyebrow: 'Zoom-In · 1 of 5',
     title: 'Main Agent (Orchestrator)',
-    desc: 'The team’s single entry point. It never lets an agent browse the project freely or overwrite approved facts.',
-    io: '<strong>Inputs:</strong> Consultant request, role, project scope.<br><strong>Outputs:</strong> Read-only context snapshot + routed skill task.',
-    code: 'orchestrator.py :: Orchestrator\n-> checks role & scope\n-> freezes evidence + rule versions\n-> invokes DeliverableAgent(skill)'
+    roles: [
+      'Single entry point for the team.',
+      'Receives the request.',
+      'Checks project scope and permissions.',
+      'Coordinates the specialized agents.'
+    ],
+    elements: [
+      { name: 'Intent & Deliverable Router', desc: 'Identifies the requested deliverable and selects the matching Skill.' },
+      { name: 'Project Scope & Permission Guard', desc: 'Limits retrieval strictly to authorized project documents.' },
+      { name: 'Workflow Coordinator', desc: 'Ensures drafting, comparison, and quality checks run in order.' }
+    ]
   },
   specialized_agents: {
     eyebrow: 'Zoom-In · 2 of 5',
-    title: 'Three Focused Agents',
-    desc: 'Each agent has one clear job instead of sprawling prompts or dozens of autonomous bots.',
-    io: '<strong>Deliverable Agent:</strong> Runs any Skill contract.<br><strong>Knowledge Steward:</strong> Compares proposals vs. approved rules.<br><strong>Quality Reviewer:</strong> Validates citations & blocks conflicts.',
-    code: 'agents.py\n- DeliverableAgent (shared)\n- KnowledgeSteward (delta check)\n- QualityReviewer (publication gate)'
+    title: 'Specialized Agents',
+    roles: [
+      'Three focused agents with clear, bounded responsibilities.',
+      'Separates drafting from knowledge checks and quality review.',
+      'Avoids giant unmaintainable prompts or uncontrolled agent swarms.'
+    ],
+    elements: [
+      { name: 'Deliverable Agent', desc: 'Structures and drafts content using the selected Skill contract.' },
+      { name: 'Knowledge Steward', desc: 'Extracts candidate facts and compares them against approved decisions.' },
+      { name: 'Quality Reviewer', desc: 'Checks citations, completeness, and flags unresolved conflicts.' }
+    ]
   },
   skills: {
     eyebrow: 'Zoom-In · 3 of 5',
-    title: 'Pluggable Skill Packages',
-    desc: 'Adding a new deliverable means adding a declarative Skill folder — zero changes to the orchestrator or UI.',
-    io: '<strong>Included in v1:</strong> workshop_report, fit_gap, steering_deck.<br><strong>Extension ready:</strong> target_architecture, test_scripts.',
-    code: 'skills/<name>/manifest.json\n{\n  "purpose": "...",\n  "sections": ["..."],\n  "mandatory_checks": ["exact_spans", ...]\n}'
+    title: 'Pluggable Skills',
+    roles: [
+      'Packages each deliverable type as a modular Skill.',
+      'Plugs new deliverables directly into the shared engine.',
+      'Enforces consistent structure across all consultants.'
+    ],
+    elements: [
+      { name: 'Workshop Report Skill', desc: 'Captures meeting outcomes and open questions with source links.' },
+      { name: 'Fit-Gap & Target Architecture Skills', desc: 'Assesses impact against approved rules and flags scope gaps.' },
+      { name: 'Steering Committee Skill', desc: 'Summarizes validated progress and escalates open decisions.' }
+    ]
   },
   knowledge_layers: {
     eyebrow: 'Zoom-In · 4 of 5',
-    title: '3-Layer Knowledge Base',
-    desc: 'Prevents workshop chatter from accidentally becoming official project truth.',
-    io: '<strong>Layer 1:</strong> Immutable raw notes (SHA-256).<br><strong>Layer 2:</strong> Approved versioned decisions (v1 → v2).<br><strong>Layer 3:</strong> Locked published deliverables.',
-    code: 'knowledge.py :: KnowledgeStore\n- SQLite tables + FTS5 passage index\n- DB triggers forbid editing publications\n- Append-only SHA-256 audit chain'
+    title: 'Project Knowledge (Layered Memory)',
+    roles: [
+      'Structured layered memory model for the engagement.',
+      'Separates raw workshop inputs from approved project decisions.',
+      'Links published deliverables to exact knowledge versions.'
+    ],
+    elements: [
+      { name: 'Workshop & Client Evidence', desc: 'Immutable raw notes and client docs ("what was said").' },
+      { name: 'Validated Project Knowledge', desc: 'Versioned, human-approved rules ("what was decided").' },
+      { name: 'Deliverable Versions', desc: 'Drafts and locked publications linked to exact knowledge versions.' }
+    ]
   },
   model_gateway: {
     eyebrow: 'Zoom-In · 5 of 5',
-    title: 'Provider-Agnostic Model Gateway',
-    desc: 'Decouples consulting workflows from any single AI vendor while enforcing strict output structure.',
-    io: '<strong>Routing:</strong> Picks approved model by data sensitivity.<br><strong>Contract:</strong> Enforces Pydantic JSON schema & logs latency/tokens.',
-    code: 'gateway.py :: MistralGateway\n- Mock mode: deterministic offline fixtures\n- Live mode: Mistral JSON-schema API\n- Explicit failure, zero silent fallback'
-  }
-};
-
-const LAYER_DETAILS = {
-  l1: {
-    title: 'Layer 1 Rule: Ingesting a document never validates its facts.',
-    desc: 'Workshop notes often contain side remarks, unclear scope, or contradictions. Layer 1 preserves original text, SHA-256 fingerprints, and exact character offsets so every AI claim links directly to the quote.',
-    rule: '<strong>Security boundary:</strong> Permissions are filtered <em>before</em> retrieval so unauthorized users never receive excerpts or embeddings.'
-  },
-  l2: {
-    title: 'Layer 2 Rule: Proposals stay separate until a human approves.',
-    desc: 'Each decision carries a stable ID (DEC-P2P-004), version number, applicable scope (FR01), and effective date. When WS-04 contradicts v1, v1 stays active while the candidate waits for clarification.',
-    rule: '<strong>Why structured records?</strong> Detecting conflicts on amounts, company codes, or effective dates requires exact queries, not fuzzy vector similarity.'
-  },
-  l3: {
-    title: 'Layer 3 Rule: Published deliverables are immutable snapshots.',
-    desc: 'Approving a report for accuracy never publishes a Fit-Gap change. Once approved for publication, SQLite triggers lock the document alongside the exact source hashes, knowledge version, skill, and model used.',
-    rule: '<strong>Auditability:</strong> Reopening v1 months later reproduces the exact €25,000 rule and evidence active on that date.'
-  }
-};
-
-const STAGE_DETAILS = {
-  s1: {
-    ai: 'Baseline Already Indexed',
-    aiDesc: 'WS-01 notes are stored in Layer 1, and Decision DEC-P2P-004 v1 (€25,000 for company code FR01) is active in Project Knowledge.',
-    human: 'Baseline Authority: €25,000',
-    humanDesc: 'The P2P Domain Lead approved v1 during Workshop 1. All downstream deliverables reference this exact ID and version.'
-  },
-  s2: {
-    ai: 'Workshop Report Skill Generates Draft',
-    aiDesc: 'The Deliverable Agent reads WS-04, quotes the €50,000 statement with exact character spans, and marks the missing company code as an open question.',
-    human: 'Consultant Reviews Faithfulness',
-    humanDesc: 'The consultant verifies citations and approves that the report accurately reflects the meeting — without promoting €50,000 as a new rule.'
-  },
-  s3: {
-    ai: 'Steward Flags Conflict & Blocks Publication',
-    aiDesc: 'Knowledge Steward compares €50k (scope unclear) vs €25k (FR01). Fit-Gap and Steering drafts expose the conflict, alert Target Architecture, and block final publication.',
-    human: 'Consultant Requests Clarification',
-    humanDesc: 'Instead of guessing what WS-04 meant, the consultant sends a written clarification request to the procurement process owner.'
-  },
-  s4: {
-    ai: 'Re-Drafts All Deliverables on v2',
-    aiDesc: 'Once v2 is promoted, the exact same engine runs Workshop Report, Fit-Gap, and Steering skills against DEC-P2P-004 v2 with zero conflict.',
-    human: 'Domain Lead Approves & Publishes v2',
-    humanDesc: 'Domain lead accepts WS-05, promotes v2 for FR01 (effective 5 Nov 2026), and locks new publications while v1 stays intact.'
-  }
-};
-
-const QA_DETAILS = {
-  ext: {
-    title: 'How do we add a 4th deliverable (e.g., Target Architecture or Test Scripts)?',
-    body: 'Create a new folder under <code>skills/&lt;name&gt;/</code> containing a declarative <code>manifest.json</code> (purpose, required sections, allowed claim statuses, and mandatory quality checks) plus a prompt template. Register it in <code>SKILLS</code>. The Main Agent, shared Deliverable Agent, Knowledge Base, and Model Gateway remain completely untouched.'
-  },
-  sec: {
-    title: 'How do we protect confidential client data?',
-    body: 'First, project and role permissions are checked <strong>before retrieval</strong>—unauthorized chunks never reach the LLM context. Second, the Model Gateway enforces data classification routing: confidential data can be routed strictly to approved European endpoints (e.g., Mistral) or self-hosted local models, while source text is treated as untrusted data to resist prompt injection.'
-  },
-  vec: {
-    title: 'Why not just use RAG with a Vector Database?',
-    body: 'Vector search excels at finding relevant text paragraphs, which is why we pair it with full-text passage retrieval (FTS5). However, consulting governance requires knowing <em>which decision is currently approved</em>, <em>which company code it applies to</em>, and <em>which deliverables depend on it</em>. Relational/canonical records handle state, versions, and exact diffs reliably.'
-  },
-  eval: {
-    title: 'How do we prove quality before rolling out to a team?',
-    body: 'The prototype includes a 14-test automated golden bench (<code>pytest</code>) verifying four non-negotiable gates: (1) cross-role ACL blocking, (2) exact character-span citation matching &amp; SHA-256 tamper rejection, (3) state-machine separation so report approval never auto-promotes facts, and (4) database trigger immutability on published deliverables and audit logs.'
+    title: 'Model Gateway',
+    roles: [
+      'Single provider-agnostic interface to enterprise LLMs.',
+      'Enforces data sensitivity and residency rules.',
+      'Validates structured outputs across AI vendors.'
+    ],
+    elements: [
+      { name: 'Data Sensitivity Router', desc: 'Routes requests only to models approved for the project’s confidentiality.' },
+      { name: 'Structured Output Enforcer', desc: 'Ensures every AI response matches the required deliverable structure.' },
+      { name: 'Multi-Provider Connectors', desc: 'Supports Mistral, OpenAI, Claude, or self-hosted enterprise models.' }
+    ]
   }
 };
 
@@ -1131,36 +1119,20 @@ const pad = n => String(n).padStart(2, '0');
 function renderArchZoom(id) {
   const d = ARCH_DETAILS[id];
   document.querySelectorAll('[data-arch-id]').forEach(el => el.classList.toggle('selected', el.dataset.archId === id));
-  $('arch-zoom-panel').innerHTML = `
+  $('arch-zoom-area').innerHTML = `
     <div>
-      <div class="zoom-eyebrow">${d.eyebrow}</div>
+      <div class="zoom-col-label">${d.eyebrow} · Role in Architecture</div>
       <h3>${d.title}</h3>
-      <p>${d.desc}</p>
-      <div class="zoom-meta">${d.io}</div>
+      <ul class="zoom-role-list">
+        ${d.roles.map(r => `<li>${r}</li>`).join('')}
+      </ul>
     </div>
-    <div class="zoom-code">${d.code}</div>`;
-}
-
-function renderLayerZoom(id) {
-  const d = LAYER_DETAILS[id];
-  document.querySelectorAll('[data-layer-id]').forEach(el => el.classList.toggle('selected', el.dataset.layerId === id));
-  $('layer-zoom-drawer').innerHTML = `
-    <div><h4>${d.title}</h4><p>${d.desc}</p></div>
-    <div class="drawer-rule">${d.rule}</div>`;
-}
-
-function renderStageZoom(id) {
-  const d = STAGE_DETAILS[id];
-  document.querySelectorAll('[data-stage-id]').forEach(el => el.classList.toggle('selected', el.dataset.stageId === id));
-  $('stage-zoom-box').innerHTML = `
-    <div class="actor-box ai"><span>What the AI Engine Does</span><h4>${d.ai}</h4><p>${d.aiDesc}</p></div>
-    <div class="actor-box human"><span>What the Consultant Decides</span><h4>${d.human}</h4><p>${d.humanDesc}</p></div>`;
-}
-
-function renderQa(id) {
-  const d = QA_DETAILS[id];
-  document.querySelectorAll('[data-qa]').forEach(el => el.classList.toggle('selected', el.dataset.qa === id));
-  $('qa-panel').innerHTML = `<h4>${d.title}</h4><p>${d.body}</p>`;
+    <div>
+      <div class="zoom-col-label">Key Elements Inside</div>
+      <div class="subcard-stack">
+        ${d.elements.map(el => `<div class="subcard"><strong>${el.name}</strong><span>${el.desc}</span></div>`).join('')}
+      </div>
+    </div>`;
 }
 
 function show(n) {
@@ -1215,9 +1187,45 @@ $('notes').onclick = () => toggleNotes(true);
 $('close-notes').onclick = () => toggleNotes(false);
 
 document.querySelectorAll('[data-arch-id]').forEach(el => el.addEventListener('click', () => renderArchZoom(el.dataset.archId)));
-document.querySelectorAll('[data-layer-id]').forEach(el => el.addEventListener('click', () => renderLayerZoom(el.dataset.layerId)));
-document.querySelectorAll('[data-stage-id]').forEach(el => el.addEventListener('click', () => renderStageZoom(el.dataset.stageId)));
-document.querySelectorAll('[data-qa]').forEach(el => el.addEventListener('click', () => renderQa(el.dataset.qa)));
+
+const mappingRows = [...document.querySelectorAll('.mapping-row')];
+let revealedCount = 1;
+
+function syncMappingSteps() {
+  const canAdvance = revealedCount < mappingRows.length;
+  mappingRows.forEach((row, idx) => {
+    const step = idx + 1;
+    const isRevealed = step <= revealedCount;
+    row.classList.toggle('revealed', isRevealed);
+    row.classList.toggle('hidden-step', !isRevealed);
+    row.classList.toggle('current', step === revealedCount);
+    row.classList.toggle('can-advance', isRevealed && canAdvance);
+  });
+  const nextBtn = $('reveal-next-btn');
+  const allBtn = $('reveal-all-btn');
+  if (nextBtn) {
+    nextBtn.textContent = canAdvance
+      ? `${revealedCount} / ${mappingRows.length} · Click problem for #${revealedCount + 1}`
+      : `${mappingRows.length} / ${mappingRows.length} · All revealed`;
+  }
+  if (allBtn) {
+    allBtn.textContent = canAdvance ? 'Show all 5' : 'Replay 1 by 1';
+  }
+}
+
+function advanceMappingStep() {
+  if (revealedCount < mappingRows.length) {
+    revealedCount += 1;
+    syncMappingSteps();
+  }
+}
+
+mappingRows.forEach(row => row.addEventListener('click', () => advanceMappingStep()));
+$('reveal-next-btn')?.addEventListener('click', advanceMappingStep);
+$('reveal-all-btn')?.addEventListener('click', () => {
+  revealedCount = revealedCount < mappingRows.length ? mappingRows.length : 1;
+  syncMappingSteps();
+});
 
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || $('notes-dialog').open) return;
@@ -1231,6 +1239,8 @@ document.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'f') $('fullscreen').click();
   if (e.key.toLowerCase() === 'n') toggleNotes(true);
 });
+
+syncMappingSteps();
 
 slides.forEach(s => {
   const shell = document.createElement('div');
@@ -1247,9 +1257,6 @@ if ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && 
 }
 
 renderArchZoom('main_agent');
-renderLayerZoom('l1');
-renderStageZoom('s1');
-renderQa('ext');
 show(Math.max(0, Math.min(slides.length - 1, (Number(location.hash.slice(1)) || 1) - 1)));
 </script>
 </body>
