@@ -1,0 +1,8 @@
+{
+  "reference_id": "SYNTH-P2P-001",
+  "disclaimer": "Synthetic demonstration data, not an authoritative S/4HANA claim.",
+  "requirement": "Role-based approval for purchase orders above a configured amount within a defined company-code scope.",
+  "classification": "Fit pending configuration",
+  "rationale": "The synthetic reference solution supports a configurable approval threshold and approval role. Confirm specific configuration and controls during solution design.",
+  "gap": "No functional gap is asserted by this prototype; company-code applicability and responsible role must be approved."
+}

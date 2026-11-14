@@ -206,7 +206,7 @@ AI-FRAMEWORK-FOR-CONSULTANTS/
      - *Contradiction and scope:* Seeded value/scope/negation conflicts are marked `Conflicted`; an unresolved candidate never replaces the current canonical record.
      - *Publication gate:* Invalid citations, invalid schema, unauthorized context, unresolved critical conflicts affecting the assertion, or missing required approval block publication.
 3. **Pluggable Skill Registry (`skills/`):**
-   - Each skill folder contains a declarative `manifest.yaml` (name, version, required inputs, output schema, mandatory sections/checks, supported claim statuses) and prompt/template rules:
+   - Each skill folder contains a declarative `manifest.json` (name, version, required inputs, output schema, mandatory sections/checks, supported claim statuses) and prompt/template rules:
      - `workshop_report`: Produces structured summary, candidate decisions, gaps, actions, and open questions from workshop notes. Report approval verifies faithful documentation only.
      - `fit_gap`: Compares requirements to the explicitly synthetic solution-reference records, incorporates candidate knowledge deltas, and surfaces conflicts. A conflicted proposal may be saved as a draft but cannot be published as the resolved fit-gap.
      - `steering_deck`: Aggregates `Validated` decisions, open `Conflicted` escalations, and critical gaps without upgrading conflicted candidates into established facts.

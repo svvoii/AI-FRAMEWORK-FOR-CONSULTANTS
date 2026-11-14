@@ -1,0 +1,7 @@
+{
+  "name": "fit_gap",
+  "version": "1.0.0",
+  "purpose": "Compare scoped approved requirements with synthetic reference capability and preserve unresolved change.",
+  "sections": ["Validated decision", "Fit assessment", "Control boundary"],
+  "mandatory_checks": ["authorized_citations", "exact_spans", "conflict_publication_gate"]
+}

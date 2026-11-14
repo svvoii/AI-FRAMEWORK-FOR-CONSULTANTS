@@ -1,0 +1,7 @@
+{
+  "name": "steering_deck",
+  "version": "1.0.0",
+  "purpose": "Summarize validated decisions and surface unresolved negotiations for owner action.",
+  "sections": ["Decision closed", "Scope and control"],
+  "mandatory_checks": ["validated_provenance", "conflict_preserved", "no_unsupported_product_claims"]
+}

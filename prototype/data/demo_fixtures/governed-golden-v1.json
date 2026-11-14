@@ -1,0 +1,72 @@
+{
+  "fixture_id": "governed-golden-v1",
+  "responses": {
+    "workshop_report.initial": {
+      "skill": "workshop_report",
+      "title": "WS-04 · Procure-to-Pay follow-up",
+      "summary": "A faithful record of a new threshold statement and the unresolved company-code scope.",
+      "sections": [
+        {"title": "Reported threshold", "content": "WS-04 states that purchase orders above EUR 50,000 require procurement director approval.", "status": "Sourced", "citations": [{"ref": "ws04-1"}]},
+        {"title": "Open question", "content": "The workshop did not establish the applicable company code or whether this replaces the earlier decision.", "status": "Conflicted", "citations": [{"ref": "ws04-2"}]},
+        {"title": "Candidate decision", "content": "Proposed for stewardship review: replace EUR 25,000 with EUR 50,000 only after the scope is clarified and an authorized domain lead approves.", "status": "Proposed", "citations": [{"ref": "ws04-1"}, {"ref": "ws04-2"}]}
+      ]
+    },
+    "fit_gap.initial": {
+      "skill": "fit_gap",
+      "title": "P2P approval · Proposed fit-gap",
+      "summary": "A review item, not a resolved fit-gap publication.",
+      "sections": [
+        {"title": "Fit assessment", "content": "Configuration impact cannot be determined: the current approved FR01 threshold is EUR 25,000; WS-04 reports EUR 50,000 with unclear scope. Both remain visible and no supersession is asserted.", "status": "Conflicted", "citations": [{"ref": "ws01-1"}, {"ref": "ws04-1"}, {"ref": "ws04-2"}], "canonical_ids": ["DEC-P2P-004"]},
+        {"title": "Reference requirement", "content": "The source identifies standard purchase-order approval management as the initial process scope; configuration and authorization remain subject to design review.", "status": "Sourced", "citations": [{"ref": "ws01-2"}]},
+        {"title": "Required clarification", "content": "Determine the company-code scope before assessing configuration impact or publishing the proposed delta.", "status": "Unknown", "citations": [{"ref": "ws04-2"}]}
+      ]
+    },
+    "steering_deck.initial": {
+      "skill": "steering_deck",
+      "title": "Steering committee · Decision exposure",
+      "summary": "One decision requires clarification before configuration can be treated as settled.",
+      "sections": [
+        {"title": "Approved baseline", "content": "The validated company-code FR01 rule remains EUR 25,000 until a scoped replacement is approved.", "status": "Validated", "citations": [{"ref": "ws01-1"}], "canonical_ids": ["DEC-P2P-004"]},
+        {"title": "Scope and control", "content": "WS-04 reports EUR 50,000, but does not establish its company-code scope or supersede the baseline.", "status": "Conflicted", "citations": [{"ref": "ws04-1"}, {"ref": "ws04-2"}], "canonical_ids": ["DEC-P2P-004"]},
+        {"title": "Requested owner action", "content": "Provide written company-code clarification; the steering summary does not select either threshold as the settled enterprise rule.", "status": "Proposed", "citations": [{"ref": "ws04-2"}]}
+      ]
+    },
+    "fit_gap.resolved": {
+      "skill": "fit_gap",
+      "title": "P2P approval · Clarified fit-gap",
+      "summary": "Approved scope and superseded history support a new configuration review.",
+      "sections": [
+        {"title": "Validated decision", "content": "For FR01, the approved threshold is EUR 50,000 above which procurement director approval applies, effective 2026-11-05.", "status": "Validated", "citations": [{"ref": "ws05-1"}], "canonical_ids": ["DEC-P2P-004"]},
+        {"title": "Fit assessment", "content": "Configuration review is required against the synthetic role-based configurable approval reference; no product-specific gap is asserted.", "status": "Sourced", "citations": [{"ref": "ws01-2"}]},
+        {"title": "Control boundary", "content": "The decision replaces the earlier amount only for company code FR01. No urgent-purchase-order exception applies. Historical v1 remains available.", "status": "Sourced", "citations": [{"ref": "ws05-1"}, {"ref": "ws05-2"}], "canonical_ids": []}
+      ]
+    },
+    "steering_deck.resolved": {
+      "skill": "steering_deck",
+      "title": "Steering committee · Decision closed",
+      "summary": "The scoped threshold decision is approved and linked to immutable history.",
+      "sections": [
+        {"title": "Decision closed", "content": "For FR01, the approved threshold changed from EUR 25,000 to EUR 50,000, effective 2026-11-05.", "status": "Validated", "citations": [{"ref": "ws05-1"}], "canonical_ids": ["DEC-P2P-004"]},
+        {"title": "Scope and control", "content": "The supersession applies only to FR01; procurement director approval applies above EUR 50,000 with no urgent-purchase-order exception.", "status": "Validated", "citations": [{"ref": "ws05-1"}, {"ref": "ws05-2"}], "canonical_ids": ["DEC-P2P-004"]}
+      ]
+    },
+    "workshop_report.accepted_clarification": {
+      "skill": "workshop_report", "title": "WS-04 · Conflict review accepted",
+      "summary": "WS-05 supplies scoped clarification; knowledge promotion remains a separate gate.",
+      "sections": [
+        {"title": "Reported threshold", "content": "EUR 50,000 replaces EUR 25,000 only for FR01 in the accepted WS-05 clarification; canonical v1 has not yet changed.", "status": "Conflicted", "citations": [{"ref": "ws01-1"}, {"ref": "ws04-1"}]},
+        {"title": "Open question", "content": "The initial scope question is answered in new evidence, but the domain lead has not yet promoted the accepted candidate.", "status": "Conflicted", "citations": [{"ref": "ws04-2"}]},
+        {"title": "Candidate decision", "content": "Proceed to the independent promote-to-knowledge action, then generate the resolved deliverables.", "status": "Proposed", "citations": [{"ref": "ws04-2"}]}
+      ]
+    },
+    "workshop_report.resolved": {
+      "skill": "workshop_report",
+      "title": "WS-05 · Approved process-owner clarification",
+      "summary": "Written scope confirmation, with previous decision history retained.",
+      "sections": [
+        {"title": "Confirmed scope", "content": "FR01 is now explicitly covered by the EUR 50,000 threshold, effective 2026-11-05.", "status": "Validated", "citations": [{"ref": "ws05-1"}], "canonical_ids": ["DEC-P2P-004"]},
+        {"title": "Supersession", "content": "The earlier EUR 25,000 decision is replaced only for FR01 and remains available in approval history.", "status": "Validated", "citations": [{"ref": "ws05-1"}, {"ref": "ws05-2"}], "canonical_ids": ["DEC-P2P-004"]}
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+[project]
+name = "northstar-governed-prototype"
+version = "1.0.0"
+description = "Synthetic S/4HANA procure-to-pay governance prototype"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.128,<1",
+    "httpx>=0.28,<1",
+    "pydantic>=2.12,<3",
+    "pyyaml>=6,<7",
+    "uvicorn>=0.40,<1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9,<10",
+]

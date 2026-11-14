@@ -1,0 +1,11 @@
+{
+  "record_id": "DEC-P2P-004-v1",
+  "stable_id": "DEC-P2P-004",
+  "version": 1,
+  "statement": "For company code FR01, purchase orders above EUR 25,000 require procurement director approval.",
+  "amount": 25000,
+  "currency": "EUR",
+  "scope": "FR01",
+  "effective_date": "2026-10-06",
+  "roles": ["consultant", "domain_lead", "viewer"]
+}

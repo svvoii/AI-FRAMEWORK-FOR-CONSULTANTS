@@ -1,0 +1,7 @@
+{
+  "name": "workshop_report",
+  "version": "1.0.0",
+  "purpose": "Document the discussion faithfully without approving its candidate decisions.",
+  "sections": ["Reported threshold", "Open question", "Candidate decision"],
+  "mandatory_checks": ["authorized_citations", "exact_spans", "report_fact_separation"]
+}
