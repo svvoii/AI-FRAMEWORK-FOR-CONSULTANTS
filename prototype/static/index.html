@@ -7,8 +7,8 @@
   <meta name="description" content="Reusable AI framework prototype for consultants: Main Agent, Specialized Agents, Pluggable Skills, and Project Knowledge.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3Ccircle cx='24' cy='8' r='4' fill='%2386BC25'/%3E%3C/svg%3E">
   <title>Deloitte | Reusable AI Framework for Consultants</title>
-  <link rel="stylesheet" href="/static/style.css">
-  <script src="/static/app.js" defer></script>
+  <link rel="stylesheet" href="/static/style.css?v=7">
+  <script src="/static/app.js?v=7" defer></script>
 </head>
 <body>
   <header class="masthead">
@@ -22,7 +22,9 @@
         <label for="provider">Model</label>
         <select id="provider" data-testid="provider-select" aria-label="Model operating mode">
           <option value="mock">Mock · Instant Demo</option>
-          <option value="live">Live · Mistral API</option>
+          <option value="live:mistral">Live · Mistral API</option>
+          <option value="live:gemini">Live · Gemini API</option>
+          <option value="live:openai">Live · OpenAI API</option>
         </select>
       </div>
       <div class="control-group">
@@ -34,20 +36,27 @@
         </select>
       </div>
       <button class="header-btn" id="audit-top" type="button">Audit Trail</button>
-      <button class="header-btn reset-btn" id="reset-demo" type="button" title="Reset demo back to Step 1">↺ Reset Demo</button>
+      <button class="header-btn reset-btn" id="reset-demo" type="button" title="Reset demo back to Stage 1">↺ Reset</button>
       <a class="header-btn slides-link" href="/presentation/">Slides ↗</a>
     </div>
   </header>
 
   <main>
-    <!-- Interactive Architecture Strip: General View -> Click to Zoom In -->
-    <section class="arch-strip-wrap">
+    <!-- Ultra-Slim Collapsible System Architecture Bar -->
+    <section class="arch-strip-wrap strip-collapsed" id="arch-strip-wrap">
       <div class="page-width">
         <div class="arch-strip-header">
-          <span class="eyebrow">System Architecture · General View</span>
-          <span class="arch-hint">Click any block to inspect its role &amp; code contract</span>
+          <div class="arch-strip-title-group">
+            <span class="eyebrow" style="margin:0">Architecture · Five Building Blocks</span>
+            <span class="arch-hint" id="arch-hint">Click any block to inspect</span>
+          </div>
+          <button class="arch-toggle-btn" id="toggle-arch" type="button" aria-expanded="false" aria-controls="arch-pipeline">
+            <span class="arch-toggle-dot" aria-hidden="true"></span>
+            <span id="toggle-arch-label">Show 5 Blocks</span>
+            <span class="arch-toggle-chevron" id="toggle-arch-icon" aria-hidden="true">▾</span>
+          </button>
         </div>
-        <div class="arch-pipeline" role="region" aria-label="Interactive system architecture">
+        <div class="arch-pipeline collapsed" id="arch-pipeline" role="region" aria-label="Interactive system architecture">
           <button class="arch-node" type="button" data-arch="main_agent">
             <span class="arch-tag">1. Entry Point</span>
             <strong>Main Agent</strong>
@@ -81,122 +90,146 @@
       </div>
     </section>
 
-    <!-- Context + 3-Step Guided Story Bar -->
-    <section class="page-width story-header">
-      <div class="story-title-row">
-        <div>
-          <div class="eyebrow">Project: S/4HANA Scoping · Procure-to-Pay (26 Weeks · 30 Workshops)</div>
-          <h1>From workshop notes to <span class="green-word">verified deliverables.</span></h1>
-        </div>
-        <div class="status-pill-box">
-          <span class="live-dot"></span>
-          <span id="phase-label">Step 1 · Ready to draft</span>
-          <span class="pill-sep">·</span>
-          <span id="provider-note" class="muted">Offline deterministic fixtures</span>
-        </div>
-      </div>
-
-      <div class="workflow" aria-label="3-Step Guided Walkthrough">
-        <button class="step active" type="button" data-step="1">
-          <span class="step-index">01</span>
-          <span>
-            <b>Draft Workshop Report</b>
-            <small>Cite WS-04 notes without changing rules</small>
-          </span>
-        </button>
-        <span class="step-connector" aria-hidden="true">→</span>
-        <button class="step" type="button" data-step="2" data-testid="step-report">
-          <span class="step-index">02</span>
-          <span>
-            <b>Catch €50k vs €25k Conflict</b>
-            <small>Flag unclear scope &amp; block silent overwrite</small>
-          </span>
-        </button>
-        <span class="step-connector" aria-hidden="true">→</span>
-        <button class="step" type="button" data-step="3">
-          <span class="step-index">03</span>
-          <span>
-            <b>Clarify &amp; Publish v2</b>
-            <small>Apply WS-05 owner reply &amp; update outputs</small>
-          </span>
-        </button>
-      </div>
-
-      <div id="banner" aria-live="polite"></div>
-    </section>
-
-    <!-- Minimal Two-Column Workspace -->
+    <!-- LEFT ~65%: Dark Main Agent Console (+ Deliverable Card once generated) | RIGHT ~35%: Stages & Decisions -->
     <section class="page-width workspace-grid">
-      <!-- Left Column: Deliverable Studio -->
       <div class="left-column">
-        <section class="panel studio-panel">
-          <div class="section-heading compact">
-            <div>
-              <div class="eyebrow">One Shared Engine · Pluggable Deliverable Skills</div>
-              <h2>Generate a deliverable</h2>
+        <div class="agent-console" aria-label="Main Agent Conversational Console">
+          <div class="agent-console-head">
+            <div class="agent-head-left">
+              <span class="agent-pulse-dot" id="agent-pulse-dot" aria-hidden="true"></span>
+              <span class="agent-title">Main Agent</span>
             </div>
-            <button class="extension-pill" type="button" data-arch="skills">+ Target Architecture (Skill Extension)</button>
+            <div class="agent-head-right">
+              <span class="agent-status-chip">
+                <span id="phase-label">Stage 1 · Evidence Ready</span>
+                <span class="chip-sep" aria-hidden="true">·</span>
+                <span id="provider-note">Mock Mode</span>
+              </span>
+              <button class="dark-ghost-btn" type="button" data-arch="skills">+ Skills (3)</button>
+            </div>
           </div>
-          <div class="skill-grid">
-            <button class="skill-button primary-skill" type="button" data-skill="workshop_report" data-testid="generate-workshop">
-              <span class="skill-number">01</span>
-              <span class="skill-copy">
-                <b>Workshop Report</b>
-                <small>Summarize notes &amp; extract proposals</small>
-              </span>
-              <span class="skill-action">Generate ↗</span>
-            </button>
-            <button class="skill-button" type="button" data-skill="fit_gap" data-testid="generate-fitgap">
-              <span class="skill-number">02</span>
-              <span class="skill-copy">
-                <b>Fit-Gap Analysis</b>
-                <small>Assess impact against approved baseline</small>
-              </span>
-              <span class="skill-action">Generate ↗</span>
-            </button>
-            <button class="skill-button" type="button" data-skill="steering_deck" data-testid="generate-steering">
-              <span class="skill-number">03</span>
-              <span class="skill-copy">
-                <b>Steering Summary</b>
-                <small>Escalate open decisions to leadership</small>
-              </span>
-              <span class="skill-action">Generate ↗</span>
-            </button>
-          </div>
-        </section>
 
-        <section class="panel draft-panel" id="draft-panel">
-          <div id="draft-content">
-            <div class="empty-state">
-              <span class="empty-kicker">START HERE · STEP 1</span>
-              <h2>Turn Workshop 4 notes into a cited draft.</h2>
-              <p>Click below to run the <strong>Workshop Report</strong> skill. Every statement will link directly to the exact passage in the source notes without changing the approved €25,000 baseline.</p>
-              <button class="button" type="button" data-generate-report>1 · Generate WS-04 Workshop Report →</button>
+          <div class="agent-thread" id="agent-thread" aria-live="polite"></div>
+
+          <div class="agent-composer-wrap">
+            <div class="quick-prompts-row" role="group" aria-label="Quick prompts">
+              <span class="quick-row-label">Skills</span>
+              <button
+                class="quick-pill suggested"
+                type="button"
+                data-prompt-skill="workshop_report"
+                aria-pressed="false"
+                data-testid="generate-workshop"
+                id="chip-workshop_report"
+                title="Draft the WS-04 Workshop Report and stage any proposed baseline changes"
+              >
+                <span>01 · Workshop Report</span>
+                <span class="pill-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button
+                class="quick-pill"
+                type="button"
+                data-prompt-skill="fit_gap"
+                aria-pressed="false"
+                data-testid="generate-fitgap"
+                id="chip-fit_gap"
+                title="Generate Fit-Gap Analysis comparing WS-04 proposals against the DEC-P2P-004 baseline"
+              >
+                <span>02 · Fit-Gap Analysis</span>
+                <span class="pill-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button
+                class="quick-pill"
+                type="button"
+                data-prompt-skill="steering_deck"
+                aria-pressed="false"
+                data-testid="generate-steering"
+                id="chip-steering_deck"
+                title="Prepare a Steering Summary escalation brief for open P2P threshold conflicts"
+              >
+                <span>03 · Steering Summary</span>
+                <span class="pill-arrow" aria-hidden="true">↗</span>
+              </button>
+              <span class="quick-row-divider" aria-hidden="true"></span>
+              <button
+                class="quick-pill chat-pill"
+                type="button"
+                data-quick-question="What is the approved FR01 rule and why is EUR 50,000 not active yet?"
+                title="Ask a grounded conversational question"
+              >
+                <span>Ask · Why EUR 50k conflict?</span>
+              </button>
+              <button class="clear-thread-btn" id="clear-chat" type="button" title="Clear conversation thread">Clear</button>
             </div>
+
+            <form id="agent-prompt-form" class="prompt-form">
+              <label for="agent-prompt-input" class="sr-only">Message Main Agent</label>
+              <input
+                id="agent-prompt-input"
+                class="prompt-input"
+                type="text"
+                placeholder="Select a skill above, or ask Main Agent about the scoping docs, then press Enter..."
+                autocomplete="off"
+              >
+              <span id="matched-skill-pill" class="route-pill">Chat QA</span>
+              <button id="send-prompt-btn" class="send-btn" type="submit">Send ↵</button>
+            </form>
           </div>
+        </div>
+
+        <section class="panel draft-panel hidden" id="draft-panel" aria-live="polite">
+          <div id="draft-content"></div>
         </section>
       </div>
 
-      <!-- Right Column: Knowledge Base + Tabbed Inspector -->
       <aside class="right-column">
+        <section class="panel stage-tracker-panel" aria-label="Five governed demo stages">
+          <div class="stage-tracker-head">
+            <span class="eyebrow" style="margin:0">Workflow Governance · 5 Stages</span>
+          </div>
+          <div class="stage-pills" role="list">
+            <div class="stage-pill active" role="listitem" data-stage="1">
+              <span class="stage-num">01</span>
+              <span class="stage-name">Evidence</span>
+            </div>
+            <div class="stage-pill" role="listitem" data-stage="2" data-testid="step-report">
+              <span class="stage-num">02</span>
+              <span class="stage-name">Report</span>
+            </div>
+            <div class="stage-pill" role="listitem" data-stage="3">
+              <span class="stage-num">03</span>
+              <span class="stage-name">Conflict</span>
+            </div>
+            <div class="stage-pill" role="listitem" data-stage="4">
+              <span class="stage-num">04</span>
+              <span class="stage-name">WS-05</span>
+            </div>
+            <div class="stage-pill" role="listitem" data-stage="5">
+              <span class="stage-num">05</span>
+              <span class="stage-name">KB v2</span>
+            </div>
+          </div>
+          <div id="banner" aria-live="polite"></div>
+        </section>
+
         <section class="panel knowledge-panel">
           <div class="section-heading compact">
             <div>
-              <div class="eyebrow">Project Knowledge Base · DEC-P2P-004</div>
-              <h2>Approved Rule vs. Proposal</h2>
+              <div class="eyebrow">Decisions &amp; Governance · DEC-P2P-004</div>
+              <h2>Approved Baseline vs. Proposal</h2>
             </div>
           </div>
           <div id="knowledge-compare"></div>
         </section>
 
         <section class="panel tabs-panel">
-          <div class="tab-bar" role="tablist" aria-label="Project context tabs">
-            <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="evidence">Workshop Notes <span class="tab-count" id="count-evidence">3</span></button>
-            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tasks">Impact Alerts <span class="tab-count" id="count-tasks">0</span></button>
+          <div class="tab-bar" role="tablist" aria-label="Deep-dive project context">
+            <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="evidence">Notes <span class="tab-count" id="count-evidence">3</span></button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tasks">Alerts <span class="tab-count" id="count-tasks">0</span></button>
             <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="publications">Published <span class="tab-count" id="count-pubs">1</span></button>
           </div>
           <div class="tab-pane active" id="pane-evidence" role="tabpanel">
-            <p class="tab-intro">Click any note to inspect its original text and verified passages.</p>
+            <p class="tab-intro">Click any note to verify original passages and SHA-256 fingerprints.</p>
             <div id="evidence-list" class="evidence-list"></div>
           </div>
           <div class="tab-pane" id="pane-tasks" role="tabpanel">
@@ -212,13 +245,12 @@
     </section>
 
     <footer class="page-width">
-      <span>Deloitte · Reusable AI Framework for Consultants (FastAPI + SQLite + Mistral / Offline Mock)</span>
+      <span>Deloitte · Reusable AI Framework for Consultants</span>
       <span>Synthetic Procure-to-Pay scoping data · Human approval required at every boundary</span>
     </footer>
   </main>
 
-  <!-- Zoom-In Modal for Architecture Elements -->
-  <dialog id="arch-dialog" aria-label="Architecture component details">
+  <dialog id="arch-dialog" class="engine-dialog" aria-label="Architecture component details">
     <div class="dialog-heading">
       <div>
         <div class="eyebrow" id="arch-eyebrow">ARCHITECTURE ZOOM-IN</div>
@@ -229,7 +261,6 @@
     <div id="arch-content"></div>
   </dialog>
 
-  <!-- Source Passage & Publication Snapshot Modal -->
   <dialog id="evidence-dialog" aria-label="Evidence and snapshot inspector">
     <div class="dialog-heading">
       <div>
@@ -241,7 +272,6 @@
     <div id="evidence-content"></div>
   </dialog>
 
-  <!-- Append-only Audit Trail Modal -->
   <dialog id="audit-dialog" aria-label="System audit trail">
     <div class="dialog-heading">
       <div>

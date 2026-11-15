@@ -32,6 +32,14 @@ class DraftPayload(BaseModel):
 class GenerateRequest(BaseModel):
     skill: Literal['workshop_report', 'fit_gap', 'steering_deck']
     provider: Literal['mock', 'live'] = 'mock'
+    live_backend: Literal['mistral', 'gemini', 'openai'] | None = None
+    prompt_text: str | None = None
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    provider: Literal['mock', 'live'] = 'mock'
+    live_backend: Literal['mistral', 'gemini', 'openai'] | None = None
 
 
 class ReviewRequest(BaseModel):

@@ -300,3 +300,73 @@ def test_guided_flow_and_reset(client):
     assert reset_data['state'] == 'evidence'
     assert reset_data['baseline']['amount'] == 25000
     assert len(reset_data['publications']) == 1
+
+
+def test_conversational_chat_trace_and_multi_backend_live_gateway(client, monkeypatch):
+    ws = client.get('/api/workspace', headers={'X-Demo-Role': 'domain_lead'}).json()
+    assert 'llm' in ws and 'backends' in ws['llm']
+
+    # Conversational chat in Stage 1 must not expose inactive WS-05 chunks.
+    chat_res = client.post(
+        '/api/chat',
+        json={'message': 'What did WS-05 decide for FR01?', 'provider': 'mock'},
+        headers={'X-Demo-Role': 'consultant'},
+    )
+    assert chat_res.status_code == 200
+    chat_data = chat_res.json()
+    assert chat_data['mode'] == 'chat'
+    assert len(chat_data['trace']) >= 3
+    assert all(not c['chunk_id'].startswith('ws05') for c in chat_data['citations'])
+
+    # Generate returns real backend trace and concise assistant_message.
+    gen_res = client.post(
+        '/api/generate',
+        json={'skill': 'workshop_report', 'provider': 'mock'},
+        headers={'X-Demo-Role': 'consultant'},
+    )
+    assert gen_res.status_code == 200
+    gen_data = gen_res.json()
+    assert len(gen_data['trace']) == 4
+    assert 'assistant_message' in gen_data and 'EUR 25,000' in gen_data['assistant_message']
+
+    # Gemini and OpenAI live structured + chat paths work via MockTransport without external calls.
+    monkeypatch.setenv('GEMINI_API_KEY', 'test-gemini-key')
+    fixture = json.loads((Path(__file__).parents[1] / 'data/demo_fixtures/governed-golden-v1.json').read_text())
+    draft_content = fixture['responses']['workshop_report.initial']
+    seen_urls = []
+
+    def handler(request):
+        seen_urls.append(str(request.url))
+        body = json.loads(request.content)
+        assert body['response_format']['type'] == 'json_schema'
+        if 'reply' in str(body['response_format']):
+            payload = {'reply': 'Approved rule is EUR 25,000 for FR01.', 'cited_refs': ['ws01-1']}
+        else:
+            payload = draft_content
+        return httpx.Response(
+            200,
+            json={'choices': [{'message': {'content': json.dumps(payload)}}], 'usage': {'prompt_tokens': 40, 'completion_tokens': 20}},
+        )
+
+    gw = MistralGateway(transport=httpx.MockTransport(handler))
+    res_draft = gw.generate_structured(
+        {'citations': [{'chunk_id': 'ws04-1', 'text': 'Test'}]},
+        provider='live',
+        skill='workshop_report',
+        phase='initial',
+        live_backend='gemini',
+    )
+    assert res_draft.provider == 'Gemini'
+    res_chat = gw.chat(
+        'What is approved?',
+        [{'chunk_id': 'ws01-1', 'text': 'EUR 25,000 for FR01.'}],
+        {'record_id': 'DEC-P2P-004-v1', 'amount': 25000, 'scope': 'FR01', 'statement': 'EUR 25k'},
+        {'id': 'CAND-DEC004-V2', 'amount': 50000, 'scope': None, 'status': 'Proposed'},
+        'evidence',
+        'consultant',
+        provider='live',
+        live_backend='gemini',
+    )
+    assert res_chat.provider == 'Gemini'
+    assert res_chat.content['cited_refs'] == ['ws01-1']
+    assert all('generativelanguage.googleapis.com' in u for u in seen_urls)

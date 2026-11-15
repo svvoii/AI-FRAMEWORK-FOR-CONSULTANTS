@@ -11,8 +11,9 @@ class DeliverableAgent:
 
     def __init__(self, store: KnowledgeStore):
         self.store = store
+        self.last_telemetry = None
 
-    def generate(self, skill, role, provider, gateway: MistralGateway, snapshot_id, phase):
+    def generate(self, skill, role, provider, gateway: MistralGateway, snapshot_id, phase, live_backend=None):
         if skill not in SKILLS:
             raise GovernanceError('Unsupported skill. No deliverable contract improvised.')
         snapshot = self.store.db.execute('SELECT context FROM snapshots WHERE id=?', (snapshot_id,)).fetchone()
@@ -40,8 +41,19 @@ class DeliverableAgent:
             'steering_deck': ['ws05-1', 'ws05-2'] if scenario == 'resolved' else ['ws01-1', 'ws04-1', 'ws04-2'],
         }[skill]
         citations = [self.store.citation(ref, role).model_dump() for ref in refs]
-        prompt = {'citations': citations, 'manifest': skill_manifest(skill), 'phase': scenario, 'snapshot_id': snapshot_id}
-        result = gateway.generate_structured(prompt, DraftPayload, provider=provider, skill=skill, phase=scenario)
+        canonical = self.store.current_canonical()
+        candidate = self.store.candidate()
+        prompt = {
+            'citations': citations,
+            'manifest': skill_manifest(skill),
+            'phase': scenario,
+            'snapshot_id': snapshot_id,
+            'canonical': canonical,
+            'candidate': candidate,
+        }
+        result = gateway.generate_structured(
+            prompt, DraftPayload, provider=provider, skill=skill, phase=scenario, live_backend=live_backend
+        )
         content = result.model_dump(mode='json')['content']
         if content.get('skill') != skill:
             raise GatewayError('Model returned the wrong skill contract.')
@@ -56,6 +68,23 @@ class DeliverableAgent:
         QualityReviewer.check(structured, skill)
         draft_id = self.store.save_draft(skill, structured, snapshot_id, f'{result.provider} · {result.model}', scenario, role)
         self.store.audit('model_call', f'{result.provider}/{result.model}; draft {draft_id}; snapshot {snapshot_id}; {result.latency_ms}ms.', role)
+        self.last_telemetry = {
+            'draft_id': draft_id,
+            'skill': skill,
+            'phase': scenario,
+            'snapshot_id': snapshot_id,
+            'refs': refs,
+            'provider': result.provider,
+            'model': result.model,
+            'mode': result.mode,
+            'latency_ms': result.latency_ms,
+            'input_tokens': result.input_tokens,
+            'output_tokens': result.output_tokens,
+            'steward': KnowledgeSteward(self.store).compare_candidate(),
+            'sections_count': len(structured.sections),
+            'title': structured.title,
+            'summary': structured.summary,
+        }
         return draft_id
 
 

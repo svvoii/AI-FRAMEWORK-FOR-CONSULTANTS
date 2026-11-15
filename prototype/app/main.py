@@ -7,15 +7,25 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from .gateway import GatewayError
+from .gateway import GatewayError, load_dotenv_file
 from .knowledge import GovernanceError, KnowledgeStore
-from .models import GenerateRequest, PublishRequest
+from .models import ChatRequest, GenerateRequest, PublishRequest
 from .orchestrator import Orchestrator
 from .skills.registry import SKILLS, skill_manifest
 
 BASE = Path(__file__).resolve().parent.parent
 ROOT = BASE.parent
 app = FastAPI(title='Deloitte · Reusable AI Framework for Consultants', version='1.0.0')
+
+
+@app.middleware('http')
+async def no_cache_static(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path == '/' or request.url.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'no-store, max-age=0'
+    return response
+
+
 app.mount('/static', StaticFiles(directory=BASE / 'static'), name='static')
 
 
@@ -57,8 +67,14 @@ def gateway_error(_request, exc):
     return JSONResponse(status_code=502, content={'detail': str(exc)})
 
 
+def _sync_dotenv():
+    if 'PYTEST_CURRENT_TEST' not in os.environ:
+        load_dotenv_file()
+
+
 @app.get('/api/workspace')
 def get_workspace(x_demo_role: str = Header(default='viewer')):
+    _sync_dotenv()
     return engine().workspace(x_demo_role)
 
 
@@ -84,7 +100,14 @@ def evidence(doc_id: str, x_demo_role: str = Header(default='viewer')):
 
 @app.post('/api/generate')
 def generate(body: GenerateRequest, x_demo_role: str = Header(default='viewer')):
-    return engine().generate(body.skill, x_demo_role, body.provider)
+    _sync_dotenv()
+    return engine().generate(body.skill, x_demo_role, body.provider, live_backend=body.live_backend)
+
+
+@app.post('/api/chat')
+def chat(body: ChatRequest, x_demo_role: str = Header(default='viewer')):
+    _sync_dotenv()
+    return engine().chat(body.message, x_demo_role, body.provider, live_backend=body.live_backend)
 
 
 @app.post('/api/drafts/{draft_id}/approve-report')

@@ -14,6 +14,8 @@ uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 `uv sync` creates `.venv`, installs the locked runtime dependencies and includes the development test group by default. No manual virtual-environment activation is needed.
 
+Add `--reload` while editing `app/` or `static/`. A server started before a code change keeps serving the old routes, which surfaces as a `404` on a newly added endpoint or a `502` when `.env` keys are not loaded yet.
+
 - Workspace: http://127.0.0.1:8000/
 - Presentation: http://127.0.0.1:8000/presentation/
 - OpenAPI: http://127.0.0.1:8000/docs

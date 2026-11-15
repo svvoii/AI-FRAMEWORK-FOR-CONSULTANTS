@@ -1,12 +1,46 @@
 const state = {
   workspace: null,
   draft: null,
-  architecture: null,
   role: 'domain_lead',
   provider: 'mock',
+  liveBackend: null,
+  providerChosenByUser: false,
   activeTab: 'evidence',
   busy: false,
+  messages: [],
+  selectedSkill: null,
 };
+
+const PROMPT_PRESETS = {
+  initial: {
+    workshop_report: 'Draft the WS-04 Workshop Report and stage any proposed baseline changes',
+    fit_gap: 'Generate Fit-Gap Analysis comparing WS-04 proposals against the DEC-P2P-004 baseline',
+    steering_deck: 'Prepare a Steering Summary escalation brief for open P2P threshold conflicts',
+  },
+  clarified: {
+    workshop_report: 'Draft the WS-05 Workshop Report confirming EUR 50,000 for FR01',
+    fit_gap: 'Generate updated Fit-Gap Analysis using approved Knowledge v2 (EUR 50,000 for FR01)',
+    steering_deck: 'Prepare Steering Summary decision update with Knowledge v2 (FR01)',
+  },
+};
+
+function currentPresets() {
+  return state.workspace?.state === 'clarified' ? PROMPT_PRESETS.clarified : PROMPT_PRESETS.initial;
+}
+
+function matchSkillIntent(text) {
+  const q = String(text || '').toLowerCase().trim();
+  if (!q) return null;
+  const isActionVerb = /\b(draft|generate|create|run|prepare|build|make|produce|summarize|write)\b/.test(q);
+  const looksLikeQuestion = q.endsWith('?') || /^(what|why|when|where|who|which|how|explain|compare|does|is|are|can|could)\b/.test(q);
+  if (looksLikeQuestion && !isActionVerb) {
+    return null;
+  }
+  if (/(fit[\s-]?gap|fitgap)/.test(q) || (isActionVerb && /\b(impact|baseline|delta)\b/.test(q))) return 'fit_gap';
+  if (/(steering|escalation brief|steering deck|steering summary)/.test(q) || (isActionVerb && /\b(executive|committee|brief)\b/.test(q))) return 'steering_deck';
+  if (/(workshop[\s-]?report)/.test(q) || (isActionVerb && /\b(workshop|ws[\s-]?0?[145]|notes|report|clarification)\b/.test(q))) return 'workshop_report';
+  return null;
+}
 
 const $ = (id) => document.getElementById(id);
 const escapeHtml = (value) =>
@@ -17,6 +51,10 @@ const escapeHtml = (value) =>
     '"': '&quot;',
     "'": '&#39;',
   }[c]));
+
+function formatInlineText(value) {
+  return escapeHtml(value).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
 
 const money = (amount) => (amount == null ? 'Unknown' : `EUR ${Number(amount).toLocaleString('en-US')}`);
 const skillNames = {
@@ -64,6 +102,181 @@ function formatCitationLabel(chunkId) {
   return `${doc.toUpperCase()} · Passage ${num || '1'} ↗`;
 }
 
+function defaultGreeting() {
+  const w = state.workspace;
+  const amt = w?.baseline ? money(w.baseline.amount) : 'EUR 25,000';
+  const scope = w?.baseline?.scope || 'FR01';
+  const ver = w?.baseline?.version ? `v${w.baseline.version}` : 'v1';
+  return {
+    id: 'welcome',
+    role: 'assistant',
+    text: `Ready on Procure-to-Pay scoping (**${ver} · ${amt}** approved for **${scope}**). Ask a question about the evidence or select a skill below to generate a cited deliverable.`,
+    thoughtLabel: null,
+    thoughtOpen: false,
+    steps: [],
+    citations: [],
+  };
+}
+
+function syncSkillSelection() {
+  document.querySelectorAll('.quick-pill[data-prompt-skill]').forEach((btn) => {
+    const selected = btn.dataset.promptSkill === state.selectedSkill;
+    btn.classList.toggle('selected', selected);
+    btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+  });
+}
+
+function setSelectedSkill(skill) {
+  state.selectedSkill = state.selectedSkill === skill ? null : skill;
+  syncSkillSelection();
+  syncRoutePill();
+}
+
+function syncRoutePill() {
+  const input = $('agent-prompt-input');
+  const pill = $('matched-skill-pill');
+  if (!input || !pill) return null;
+  const matched = state.selectedSkill || matchSkillIntent(input.value.trim());
+  pill.classList.toggle('skill-match', Boolean(matched));
+  pill.textContent = matched ? `Skill: ${skillNames[matched]}` : 'Chat QA';
+  return matched;
+}
+
+function syncProviderUI() {
+  const llm = state.workspace?.llm;
+  const select = $('provider');
+  const note = $('provider-note');
+  if (!select || !note) return;
+
+  [...select.options].forEach((option) => {
+    if (!option.value.startsWith('live:')) return;
+    const backend = option.value.split(':', 2)[1];
+    if (!option.dataset.baseLabel) option.dataset.baseLabel = option.textContent;
+    const configured = llm?.backends?.[backend]?.configured;
+    option.textContent = configured ? option.dataset.baseLabel : `${option.dataset.baseLabel} · no key`;
+  });
+
+  if (!state.providerChosenByUser && llm?.any_live_configured && llm.default_live_backend) {
+    const autoVal = `live:${llm.default_live_backend}`;
+    if ([...select.options].some((o) => o.value === autoVal)) {
+      select.value = autoVal;
+      state.provider = 'live';
+      state.liveBackend = llm.default_live_backend;
+    }
+  }
+
+  note.classList.remove('live-ready', 'needs-key');
+  if (state.provider === 'mock') {
+    note.textContent = llm?.any_live_configured ? 'Mock Mode (Live Key Ready)' : 'Mock Mode';
+    return;
+  }
+  const backend = state.liveBackend || 'mistral';
+  const info = llm?.backends?.[backend];
+  if (info?.configured) {
+    note.textContent = `Live · ${info.label} (${info.model})`;
+    note.classList.add('live-ready');
+  } else {
+    const envVar = info?.env_var || 'MISTRAL_API_KEY';
+    note.textContent = `Live · Set ${envVar} in .env`;
+    note.classList.add('needs-key');
+  }
+}
+
+function missingLiveKey() {
+  if (state.provider !== 'live') return null;
+  const backend = state.liveBackend || 'mistral';
+  const info = state.workspace?.llm?.backends?.[backend];
+  if (info && !info.configured) return { label: info.label || backend, envVar: info.env_var || 'MISTRAL_API_KEY' };
+  return null;
+}
+
+function renderThread() {
+  const container = $('agent-thread');
+  if (!container) return;
+  const items = state.messages.length ? state.messages : [defaultGreeting()];
+
+  container.innerHTML = items
+    .map((msg) => {
+      if (msg.role === 'user') {
+        return `<div class="msg-row user"><div class="msg-user-bubble">${escapeHtml(msg.text)}</div></div>`;
+      }
+      const hasLog = Boolean(msg.thoughtLabel) || (msg.steps && msg.steps.length > 0);
+      const drawerHtml = hasLog
+        ? `<details class="thought-drawer" ${msg.thoughtOpen ? 'open' : ''}>
+            <summary class="thought-summary">
+              <span class="thought-summary-left">
+                <span class="thought-dot ${msg.thoughtStatus || 'done'}" aria-hidden="true"></span>
+                <span class="thought-title">${escapeHtml(msg.thoughtLabel || 'Thinking & actions')}</span>
+              </span>
+              <span class="thought-summary-right">
+                ${msg.thoughtMeta ? `<span class="thought-meta">${escapeHtml(msg.thoughtMeta)}</span>` : ''}
+                <span class="thought-chevron" aria-hidden="true">▾</span>
+              </span>
+            </summary>
+            ${
+              msg.steps?.length
+                ? `<div class="thought-steps">
+                    ${msg.steps
+                      .map(
+                        (s) => `<div class="thought-step ${s.state || 'done'}">
+                          <span class="thought-actor">${escapeHtml(s.actor)}</span>
+                          <span class="thought-detail">${escapeHtml(s.detail)}</span>
+                          <span class="thought-tag">${escapeHtml(s.tag || '')}</span>
+                        </div>`
+                      )
+                      .join('')}
+                  </div>`
+                : ''
+            }
+          </details>`
+        : '';
+
+      const citesHtml =
+        msg.citations?.length
+          ? `<div class="agent-reply-citations">
+              ${msg.citations
+                .map(
+                  (c) => `<button class="dark-citation" type="button" data-evidence="${escapeHtml(c.chunk_id.split('-')[0])}" data-chunk="${escapeHtml(c.chunk_id)}" title="${escapeHtml(c.text)}">${formatCitationLabel(c.chunk_id)}</button>`
+                )
+                .join('')}
+            </div>`
+          : '';
+
+      const bodyHtml = msg.text
+        ? `<div class="agent-reply-text ${msg.isError ? 'error-text' : ''}">${formatInlineText(msg.text)}</div>`
+        : '';
+
+      return `<div class="msg-row">
+        <div class="msg-assistant">
+          <div class="agent-avatar" aria-hidden="true">M</div>
+          <div class="msg-assistant-body">
+            ${drawerHtml}
+            ${bodyHtml}
+            ${citesHtml}
+          </div>
+        </div>
+      </div>`;
+    })
+    .join('');
+
+  const dot = $('agent-pulse-dot');
+  if (dot) {
+    dot.classList.remove('running', 'blocked');
+    const last = items[items.length - 1];
+    if (state.busy) dot.classList.add('running');
+    else if (last?.isError || last?.thoughtStatus === 'blocked') dot.classList.add('blocked');
+  }
+
+  container.scrollTop = container.scrollHeight;
+  bindCitationAndDraftLinks();
+}
+
+function collapseOlderThoughts() {
+  state.messages.forEach((m) => {
+    if (m.role === 'assistant') m.thoughtOpen = false;
+  });
+}
+
 async function refresh() {
   state.workspace = await api('/api/workspace');
   renderWorkspace();
@@ -80,7 +293,7 @@ async function refresh() {
   }
 }
 
-async function action(path, success, body, clearDraftOnClarified = false) {
+async function action(path, success, body, { clearDraft = false, targetTab = null } = {}) {
   if (state.busy) return;
   state.busy = true;
   try {
@@ -88,11 +301,14 @@ async function action(path, success, body, clearDraftOnClarified = false) {
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined,
     });
-    if (clearDraftOnClarified) {
+    if (clearDraft) {
       state.draft = null;
     }
+    if (targetTab) {
+      switchTab(targetTab);
+    }
     await refresh();
-    if (result?.payload && typeof result.payload === 'object' && result.draft_id === undefined && !clearDraftOnClarified) {
+    if (result?.payload && typeof result.payload === 'object' && result.draft_id === undefined && !clearDraft) {
       state.draft = result;
       renderDraft();
     }
@@ -105,42 +321,10 @@ async function action(path, success, body, clearDraftOnClarified = false) {
 }
 
 function renderEmptyDraft() {
-  const w = state.workspace;
-  if (!w) return;
-  const s = w.state;
-  if (s === 'clarified') {
-    $('draft-content').innerHTML = `
-      <div class="empty-state">
-        <span class="empty-kicker">STEP 3 · KNOWLEDGE UPDATED TO V2 (€50,000 FOR FR01)</span>
-        <h2>Generate updated deliverables from approved Knowledge v2.</h2>
-        <p>The process owner's reply (WS-05) is now the approved Project Knowledge baseline. Run any of the three skills below using the exact same shared engine.</p>
-        <div class="quick-skill-row">
-          <button class="button" type="button" data-quick-skill="fit_gap">Generate Fit-Gap (v2) →</button>
-          <button class="button secondary" type="button" data-quick-skill="steering_deck">Generate Steering (v2)</button>
-          <button class="button secondary" type="button" data-quick-skill="workshop_report">Generate WS-05 Record</button>
-        </div>
-      </div>`;
-  } else if (s === 'conflict' || s === 'accepted_clarification') {
-    $('draft-content').innerHTML = `
-      <div class="empty-state">
-        <span class="empty-kicker">STEP 2 · CONFLICT FLAGGED (€50,000 VS €25,000)</span>
-        <h2>Preview conflicted Fit-Gap or Steering drafts, or resolve with WS-05.</h2>
-        <p>You can test generating Fit-Gap or Steering drafts right now to see how the engine flags the conflict and blocks final publication, or apply WS-05 in the Project Knowledge panel on the right.</p>
-        <div class="quick-skill-row">
-          <button class="button secondary" type="button" data-quick-skill="fit_gap">Preview Conflicted Fit-Gap</button>
-          <button class="button secondary" type="button" data-quick-skill="steering_deck">Preview Steering Escalation</button>
-        </div>
-      </div>`;
-  } else {
-    $('draft-content').innerHTML = `
-      <div class="empty-state">
-        <span class="empty-kicker">START HERE · STEP 1</span>
-        <h2>Turn Workshop 4 notes into a cited draft.</h2>
-        <p>Click below to run the <strong>Workshop Report</strong> skill. Every claim will link back to its exact passage in WS-04 without silently overwriting the approved €25,000 baseline.</p>
-        <button class="button" type="button" data-generate-report>1 · Generate WS-04 Workshop Report →</button>
-      </div>`;
-  }
-  bindDynamic();
+  const panel = $('draft-panel');
+  const content = $('draft-content');
+  if (panel) panel.classList.add('hidden');
+  if (content) content.innerHTML = '';
 }
 
 function evidenceCard(doc) {
@@ -151,7 +335,7 @@ function evidenceCard(doc) {
       <span class="source-mark ${locked ? 'future' : ''}">${id}</span>
       <span>
         <span class="evidence-title">${escapeHtml(doc.title)}</span>
-        <span class="evidence-subtitle">${locked ? 'Owner reply · unlocks in Step 3' : 'Indexed source · click to view passages'}</span>
+        <span class="evidence-subtitle">${locked ? 'Owner reply · unlocks in Stage 4' : 'Indexed source · click to view passages'}</span>
       </span>
     </span>
     <span class="state-badge ${locked ? 'pending' : ''}">${locked ? 'Pending' : 'Active'}</span>
@@ -165,6 +349,7 @@ function renderKnowledgePanel() {
   const c = w.candidate;
   const isClarified = s === 'clarified';
   const isConflict = s === 'conflict' || s === 'accepted_clarification';
+  const hasDrafts = Boolean(state.draft) || (w.drafts && w.drafts.length > 0);
 
   const historyChips = [...w.canonical_history]
     .reverse()
@@ -172,7 +357,13 @@ function renderKnowledgePanel() {
     .join('<span aria-hidden="true">→</span>');
 
   let proposalBox = '';
-  if (isClarified) {
+  if (s === 'evidence' && !hasDrafts) {
+    proposalBox = `
+      <div class="no-proposal-box">
+        <strong>No candidate decision deltas staged yet.</strong><br>
+        Run <em>01 · Workshop Report</em> above to let KnowledgeSteward extract proposals from WS-04 without modifying the approved EUR 25,000 rule.
+      </div>`;
+  } else if (isClarified) {
     proposalBox = `
       <div class="rule-box clarified-box">
         <div class="rule-head">
@@ -186,19 +377,19 @@ function renderKnowledgePanel() {
     if (s === 'report') {
       actionHtml = `
         <div class="resolve-action-wrap">
-          <button class="button full-btn" type="button" id="flag-conflict" data-testid="flag-conflict">Flag Scope Conflict (€50k vs €25k) →</button>
-          <p class="helper-note">Marks this proposal as conflicted without altering the approved €25,000 rule.</p>
+          <button class="button full-btn" type="button" id="flag-conflict" data-testid="flag-conflict" ${state.role === 'viewer' ? 'disabled' : ''}>Gate 2 · Flag Scope Conflict (EUR 50k vs 25k) →</button>
+          <p class="helper-note">Marks this proposal as conflicted and notifies dependent deliverables without changing v1.</p>
         </div>`;
     } else if (isConflict) {
       actionHtml = `
         <div class="resolve-action-wrap">
-          <button class="button full-btn" type="button" id="guided-resolve" ${state.role === 'viewer' ? 'disabled' : ''}>3 · Apply WS-05 Clarification &amp; Approve €50k (v2) →</button>
-          <p class="helper-note">Loads the process owner's written reply (WS-05) confirming company code FR01, then updates Project Knowledge to v2.</p>
-          <details class="granular-controls">
-            <summary>Step-by-step promotion gates</summary>
+          <button class="button full-btn" type="button" id="guided-resolve" ${state.role !== 'domain_lead' ? 'disabled title="Requires Domain Lead role"' : ''}>Gates 3 &amp; 4 · Apply WS-05 &amp; Promote to KB v2 →</button>
+          <p class="helper-note">Loads the process owner's reply (WS-05) confirming FR01, then updates Project Knowledge to v2.</p>
+          <details class="granular-controls" open>
+            <summary>Explicit human gates (Domain Lead)</summary>
             <div class="granular-row">
-              <button class="button secondary small" type="button" id="accept-clarification" data-testid="accept-clarification" ${s !== 'conflict' || state.role !== 'domain_lead' ? 'disabled' : ''}>A · Accept WS-05 Scope</button>
-              <button class="button secondary small" type="button" id="promote" data-testid="promote" ${s !== 'accepted_clarification' || state.role !== 'domain_lead' ? 'disabled' : ''}>B · Promote to Knowledge v2</button>
+              <button class="button secondary small" type="button" id="accept-clarification" data-testid="accept-clarification" ${s !== 'conflict' || state.role !== 'domain_lead' ? 'disabled' : ''}>Gate 3 · Accept WS-05 Scope</button>
+              <button class="button secondary small" type="button" id="promote" data-testid="promote" ${s !== 'accepted_clarification' || state.role !== 'domain_lead' ? 'disabled' : ''}>Gate 4 · Promote to KB v2</button>
             </div>
           </details>
         </div>`;
@@ -207,11 +398,11 @@ function renderKnowledgePanel() {
     proposalBox = `
       <div class="rule-box ${isConflict ? 'conflict-box' : ''}">
         <div class="rule-head">
-          <span class="eyebrow" style="margin:0">Workshop 4 Proposal (${c.id})</span>
+          <span class="eyebrow" style="margin:0">Extracted Proposal (${c.id})</span>
           <span class="state-badge ${c.status === 'Conflicted' ? 'conflicted' : 'badge-proposed'}">${escapeHtml(c.status)}</span>
         </div>
         <div class="rule-amount">${money(c.amount)}</div>
-        <div class="rule-meta">${c.scope ? `Company code <strong>${escapeHtml(c.scope)}</strong>` : '<strong>Company code unclear:</strong> did not confirm if this replaces FR01 or adds a new entity.'}</div>
+        <div class="rule-meta">${c.scope ? `Company code <strong>${escapeHtml(c.scope)}</strong>` : '<strong>Company code unclear:</strong> WS-04 did not confirm if this replaces FR01 or adds a new entity.'}</div>
         ${actionHtml}
       </div>`;
   }
@@ -235,27 +426,38 @@ function renderWorkspace() {
   const s = w.state;
 
   const phaseText = {
-    evidence: 'Step 1 · Draft WS-04 Workshop Report',
-    report: 'Step 1 · Report reviewed, ready to flag conflict',
-    conflict: 'Step 2 · €50k vs €25k conflict active',
-    accepted_clarification: 'Step 2 · WS-05 accepted, ready to promote v2',
-    clarified: 'Step 3 · Knowledge v2 active (€50,000)',
+    evidence: 'Stage 1 · Evidence Ready',
+    report: 'Stage 2 · Report Approved',
+    conflict: 'Stage 3 · EUR 50k vs 25k Conflict',
+    accepted_clarification: 'Stage 4 · WS-05 Scope Accepted',
+    clarified: 'Stage 5 · KB v2 Active (EUR 50k)',
   }[s] || s;
   $('phase-label').textContent = phaseText;
 
-  // 3-step progress bar state
-  const currentStep = s === 'clarified' ? 3 : (s === 'conflict' || s === 'accepted_clarification') ? 2 : 1;
-  document.querySelectorAll('.step').forEach((el) => {
-    const stepNum = Number(el.dataset.step);
-    el.classList.toggle('active', stepNum === currentStep);
-    el.classList.toggle('done', stepNum < currentStep || (s === 'clarified' && stepNum === 3 && w.publications.length > 1));
+  syncProviderUI();
+
+  const stageIndex = {
+    evidence: 1,
+    report: 2,
+    conflict: 3,
+    accepted_clarification: 4,
+    clarified: 5,
+  }[s] || 1;
+  document.querySelectorAll('.stage-pill').forEach((el) => {
+    const idx = Number(el.dataset.stage);
+    const isActive = idx === stageIndex;
+    const isDone = idx < stageIndex || (s === 'clarified' && idx === 5 && w.publications.length > 1);
+    el.classList.toggle('active', isActive && s !== 'conflict');
+    el.classList.toggle('conflict-active', isActive && s === 'conflict');
+    el.classList.toggle('done', isDone);
   });
 
-  // Update skill highlights
-  document.querySelectorAll('.skill-button').forEach((btn) => {
-    const sk = btn.dataset.skill;
+  const presets = currentPresets();
+  document.querySelectorAll('.quick-pill[data-prompt-skill]').forEach((btn) => {
+    const sk = btn.dataset.promptSkill;
+    if (presets[sk]) btn.title = presets[sk];
     btn.classList.remove('suggested', 'muted-skill');
-    if (s === 'evidence') {
+    if (s === 'evidence' || s === 'report') {
       if (sk === 'workshop_report') btn.classList.add('suggested');
       else btn.classList.add('muted-skill');
     } else if (s === 'conflict') {
@@ -264,20 +466,22 @@ function renderWorkspace() {
       btn.classList.add('suggested');
     }
   });
+  syncSkillSelection();
 
-  // Guidance banner
   const guidance = {
-    evidence: '<strong>Step 1:</strong> Generate the <strong>Workshop Report</strong> from WS-04 notes. Notice that drafting a report never overwrites the approved €25,000 rule.',
-    report: '<strong>Step 1 complete:</strong> The report faithfully records the €50,000 discussion. Next, click <strong>Flag Conflict</strong> to preserve the contradiction.',
-    conflict: '<strong>Step 2 (Conflict Caught):</strong> €50k vs €25k is flagged. You can preview conflicted Fit-Gap or Steering drafts (publication is blocked), then click <strong>Apply WS-05 Clarification</strong> on the right.',
-    accepted_clarification: '<strong>Clarification accepted:</strong> Now promote the scoped rule to make €50,000 the official v2 Project Knowledge.',
-    clarified: '<strong>Step 3 (Resolved):</strong> Project Knowledge is now <strong>v2 (€50,000 for FR01)</strong>. Generate updated deliverables and publish them with full version history.',
+    evidence: '<strong>Next:</strong> Run <strong>01 · Workshop Report</strong> above to extract WS-04 evidence. Baseline v1 stays untouched.',
+    report: '<strong>Report approved:</strong> Extracted proposal lacks company code. Click <strong>Gate 2 · Flag Scope Conflict</strong> below.',
+    conflict: '<strong>Conflict caught:</strong> Preview Fit-Gap/Steering or click <strong>Gates 3 &amp; 4 · Apply WS-05</strong> below.',
+    accepted_clarification: '<strong>WS-05 accepted:</strong> Click <strong>Gate 4 · Promote to KB v2</strong> below to activate EUR 50,000 for FR01.',
+    clarified: '<strong>Resolved (KB v2):</strong> Run updated <strong>Fit-Gap</strong> or <strong>Steering</strong> skills above and publish locked v2.',
   }[s];
-  $('banner').innerHTML = `<div class="note ${isConflictState(s) ? 'conflict' : ''}"><span>${guidance}</span>${state.role === 'viewer' ? '<span class="state-badge conflicted">Read-Only Mode (Writes Blocked)</span>' : ''}</div>`;
+  $('banner').innerHTML = `<div class="note ${isConflictState(s) ? 'conflict' : ''}"><span>${guidance}</span>${state.role === 'viewer' ? '<span class="state-badge conflicted">Read-Only Mode</span>' : ''}</div>`;
 
   renderKnowledgePanel();
+  if (!state.messages.length) {
+    renderThread();
+  }
 
-  // Tabs & counts
   $('count-evidence').textContent = w.documents.length;
   $('count-tasks').textContent = w.tasks.length;
   $('count-pubs').textContent = w.publications.length;
@@ -285,7 +489,7 @@ function renderWorkspace() {
   $('evidence-list').innerHTML = w.documents.map(evidenceCard).join('');
   $('tasks-content').innerHTML = w.tasks.length
     ? w.tasks.map((t) => `<div class="task"><span class="task-symbol">!</span><div><p>${escapeHtml(t.subject)}</p><small>${escapeHtml(t.status)}</small></div></div>`).join('')
-    : '<p class="helper-note">No alerts yet. Flagging the €50k vs €25k conflict automatically notifies dependent deliverables.</p>';
+    : '<p class="helper-note">No alerts yet. Flagging the EUR 50k vs 25k conflict automatically notifies dependent deliverables.</p>';
 
   $('publications-list').innerHTML = w.publications
     .map((p) => `<div class="publication">
@@ -319,7 +523,7 @@ function draftActions(d) {
       ${pub ? `<button class="button secondary small" type="button" data-publication="${pub.id}">Inspect Snapshot ↗</button>` : ''}
     </div>`;
   } else if (d.phase === 'initial' && d.skill === 'workshop_report' && (wsState === 'evidence' || wsState === 'report')) {
-    primaryHtml = `<button class="button" type="button" id="guided-flag-conflict" ${state.role === 'viewer' ? 'disabled' : ''}>2 · Approve Report &amp; Catch €50k Conflict →</button>`;
+    primaryHtml = `<button class="button" type="button" id="guided-flag-conflict" ${state.role === 'viewer' ? 'disabled' : ''}>2 · Approve Report &amp; Catch EUR 50k Conflict →</button>`;
   } else if (d.phase === 'initial' && d.skill !== 'workshop_report') {
     primaryHtml = `<span class="state-badge conflicted">Review Draft Only · Final Publication Blocked Until Conflict Resolved</span>`;
   } else if (d.phase === 'resolved') {
@@ -366,12 +570,13 @@ function renderDraft() {
     renderEmptyDraft();
     return;
   }
+  if ($('draft-panel')) $('draft-panel').classList.remove('hidden');
   const p = d.payload;
   const history = state.workspace?.drafts || [];
   const staleWarning =
     state.workspace?.state === 'clarified' && d.phase === 'initial'
       ? `<div class="stale-draft-banner">
-          <span><strong>Update available:</strong> Project Knowledge is now v2 (€50,000 for FR01). Generate an updated deliverable to see the resolved output.</span>
+          <span><strong>Update available:</strong> Project Knowledge is now v2 (EUR 50,000 for FR01). Generate an updated deliverable to see the resolved output.</span>
           <button class="button small" type="button" data-quick-skill="${d.skill === 'workshop_report' ? 'fit_gap' : d.skill}">Generate Updated ${escapeHtml(skillNames[d.skill === 'workshop_report' ? 'fit_gap' : d.skill])} →</button>
         </div>`
       : '';
@@ -384,9 +589,12 @@ function renderDraft() {
         <p>${escapeHtml(p.summary)}</p>
       </div>
       <div class="draft-history-wrap">
-        <select id="draft-history" aria-label="Draft history">
-          ${history.map((item) => `<option value="${item.id}" ${item.id === d.id ? 'selected' : ''}>${escapeHtml(skillNames[item.skill] || item.skill)} · ${item.phase === 'resolved' ? 'v2' : 'initial'} (${item.id.slice(0, 8)})</option>`).join('')}
-        </select>
+        <div style="display:flex;align-items:center">
+          <select id="draft-history" aria-label="Draft history">
+            ${history.map((item) => `<option value="${item.id}" ${item.id === d.id ? 'selected' : ''}>${escapeHtml(skillNames[item.skill] || item.skill)} · ${item.phase === 'resolved' ? 'v2' : 'initial'} (${item.id.slice(0, 8)})</option>`).join('')}
+          </select>
+          <button class="close-draft-btn" id="close-draft-btn" type="button" title="Hide deliverable card">✕</button>
+        </div>
         <span class="draft-id">${escapeHtml(d.id)}</span>
       </div>
     </div>
@@ -416,6 +624,12 @@ function renderDraft() {
   `;
 
   bindDynamic();
+  if ($('close-draft-btn')) {
+    $('close-draft-btn').onclick = () => {
+      state.draft = null;
+      renderEmptyDraft();
+    };
+  }
   if ($('draft-history')) {
     $('draft-history').onchange = async (e) => {
       try {
@@ -428,34 +642,154 @@ function renderDraft() {
   }
 }
 
-async function generate(skill) {
+async function generate(skill, userPrompt = null) {
   if (state.busy) return;
+  const missingKey = missingLiveKey();
+  if (missingKey) {
+    toast(`Live mode needs ${missingKey.envVar} in prototype/.env. Add the key or switch Model to Mock.`, true);
+    return;
+  }
   state.busy = true;
-  $('draft-content').innerHTML = `<div class="loading"><div><div class="loading-bar"></div>Main Agent checking scope &amp; running ${escapeHtml(skillNames[skill] || skill)} skill…</div></div>`;
+  state.selectedSkill = null;
+  syncSkillSelection();
+  syncRoutePill();
+  const skillLabel = skillNames[skill] || skill;
+  const promptText = userPrompt || currentPresets()[skill] || `Run ${skillLabel}`;
+  const wsState = state.workspace?.state || 'evidence';
+  const liveTag = state.provider === 'live' ? (state.liveBackend || 'mistral') : 'mock';
+
+  collapseOlderThoughts();
+  const assistantTurn = {
+    id: `turn-${Date.now()}`,
+    role: 'assistant',
+    text: '',
+    thoughtStatus: 'running',
+    thoughtLabel: `Thinking & executing actions for ${skillLabel}…`,
+    thoughtMeta: `${wsState} · ${liveTag}`,
+    thoughtOpen: true,
+    steps: [
+      { actor: 'Main Agent', detail: `Checking ACL for "${state.role}" & selecting "${skill}" skill contract`, tag: 'ACL + Skill', state: 'done' },
+      { actor: 'Knowledge DB', detail: 'Freezing SQLite snapshot & retrieving FTS5 evidence chunks', tag: 'SQLite FTS5', state: 'running' },
+      { actor: 'ModelGateway', detail: `Calling ${state.provider === 'live' ? `Live ${liveTag}` : 'Offline Mock'} structured generation`, tag: liveTag, state: 'running' },
+    ],
+    citations: [],
+  };
+  state.messages.push({ id: `u-${Date.now()}`, role: 'user', text: promptText }, assistantTurn);
+  renderThread();
+
+  if ($('draft-panel') && $('draft-content')) {
+    $('draft-panel').classList.remove('hidden');
+    $('draft-content').innerHTML = `<div class="loading"><div><div class="loading-bar"></div>Main Agent checking scope &amp; running ${escapeHtml(skillLabel)}…</div></div>`;
+  }
   try {
     const draft = await api('/api/generate', {
       method: 'POST',
-      body: JSON.stringify({ skill, provider: state.provider }),
+      body: JSON.stringify({
+        skill,
+        provider: state.provider,
+        live_backend: state.liveBackend,
+        prompt_text: promptText,
+      }),
     });
     state.draft = draft;
+    const steps = draft.trace || assistantTurn.steps;
+    assistantTurn.thoughtStatus = 'done';
+    assistantTurn.thoughtLabel = `Thinking & actions · ${steps.length} steps`;
+    assistantTurn.thoughtMeta = `${draft.provider} · ${draft.snapshot_id}`;
+    assistantTurn.steps = steps;
+    assistantTurn.text = draft.assistant_message || `${skillLabel} is ready below.`;
+    assistantTurn.citations = (draft.payload?.sections || [])
+      .flatMap((sec) => sec.citations || [])
+      .filter((c, i, arr) => arr.findIndex((x) => x.chunk_id === c.chunk_id) === i)
+      .slice(0, 4);
+
     await refresh();
-    renderDraft();
-    toast(`${skillNames[skill]} generated. Click any passage pill to verify its source citation.`);
+    renderThread();
+    toast(`${skillLabel} generated. Inspect citations and governance actions below.`);
   } catch (error) {
+    assistantTurn.thoughtStatus = 'blocked';
+    assistantTurn.thoughtLabel = `Blocked at governance / model check`;
+    assistantTurn.thoughtMeta = `${liveTag} · blocked`;
+    assistantTurn.steps = [
+      { actor: 'Main Agent', detail: `Evaluated "${skill}" at stage "${wsState}"`, tag: 'Check', state: 'done' },
+      { actor: 'Policy / Gateway', detail: error.message, tag: 'Blocked', state: 'blocked' },
+    ];
+    assistantTurn.text = error.message;
+    assistantTurn.isError = true;
+
+    renderThread();
     toast(error.message, true);
     if (!state.draft) {
-      $('draft-content').innerHTML = `<div class="empty-state">
-        <span class="empty-kicker">GOVERNANCE CHECK BLOCKED THIS ACTION</span>
-        <h2>Main Agent held the workflow gate.</h2>
-        <p>${escapeHtml(error.message)}</p>
-        <button class="button" type="button" data-generate-report>Generate WS-04 Workshop Report →</button>
-      </div>`;
-      bindDynamic();
+      renderEmptyDraft();
     } else {
       renderDraft();
     }
   } finally {
     state.busy = false;
+    renderThread();
+  }
+}
+
+async function sendChat(question) {
+  if (state.busy) return;
+  const missingKey = missingLiveKey();
+  if (missingKey) {
+    toast(`Live mode needs ${missingKey.envVar} in prototype/.env. Add the key or switch Model to Mock.`, true);
+    return;
+  }
+  state.busy = true;
+  const wsState = state.workspace?.state || 'evidence';
+  const liveTag = state.provider === 'live' ? (state.liveBackend || 'mistral') : 'mock';
+
+  collapseOlderThoughts();
+  const assistantTurn = {
+    id: `turn-${Date.now()}`,
+    role: 'assistant',
+    text: '',
+    thoughtStatus: 'running',
+    thoughtLabel: 'Thinking & querying authorized Project Knowledge…',
+    thoughtMeta: `${wsState} · ${liveTag}`,
+    thoughtOpen: true,
+    steps: [
+      { actor: 'Main Agent', detail: `Checking role "${state.role}" & scanning P2P-DEMO scope`, tag: 'ACL Guard', state: 'done' },
+      { actor: 'Knowledge DB', detail: 'Querying SQLite FTS5 across active notes & canonical rule', tag: 'SQLite FTS5', state: 'running' },
+      { actor: 'ModelGateway', detail: `Generating concise grounded response (${liveTag})`, tag: liveTag, state: 'running' },
+    ],
+    citations: [],
+  };
+  state.messages.push({ id: `u-${Date.now()}`, role: 'user', text: question }, assistantTurn);
+  renderThread();
+
+  try {
+    const res = await api('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        message: question,
+        provider: state.provider,
+        live_backend: state.liveBackend,
+      }),
+    });
+    const steps = res.trace || assistantTurn.steps;
+    assistantTurn.thoughtStatus = 'done';
+    assistantTurn.thoughtLabel = `Thinking & actions · ${steps.length} steps`;
+    assistantTurn.thoughtMeta = `${res.provider} · ${res.latency_ms}ms`;
+    assistantTurn.steps = steps;
+    assistantTurn.text = res.assistant_message;
+    assistantTurn.citations = res.citations || [];
+  } catch (error) {
+    assistantTurn.thoughtStatus = 'blocked';
+    assistantTurn.thoughtLabel = 'Stopped at gateway / scope boundary';
+    assistantTurn.thoughtMeta = `${liveTag} · error`;
+    assistantTurn.steps = [
+      { actor: 'Main Agent', detail: `Evaluated conversational request under "${state.role}"`, tag: 'ACL', state: 'done' },
+      { actor: 'ModelGateway', detail: error.message, tag: 'Error', state: 'blocked' },
+    ];
+    assistantTurn.text = error.message;
+    assistantTurn.isError = true;
+    toast(error.message, true);
+  } finally {
+    state.busy = false;
+    renderThread();
   }
 }
 
@@ -523,99 +857,110 @@ async function showAudit() {
   }
 }
 
-async function openArchitectureZoom(key) {
-  try {
-    if (!state.architecture) {
-      state.architecture = await api('/api/architecture');
-    }
-    const arch = state.architecture;
-    let html = '';
+const ARCH_DETAILS = {
+  main_agent: {
+    eyebrow: 'Zoom-In · 1 of 5',
+    title: 'Main Agent (Orchestrator)',
+    roles: [
+      'Single entry point for the team.',
+      'Receives the request.',
+      'Checks project scope and permissions.',
+      'Coordinates the specialized agents.',
+    ],
+    elements: [
+      { name: 'Intent & Deliverable Router', desc: 'Identifies the requested deliverable and selects the matching Skill.' },
+      { name: 'Project Scope & Permission Guard', desc: 'Limits retrieval strictly to authorized project documents.' },
+      { name: 'Workflow Coordinator', desc: 'Ensures drafting, comparison, and quality checks run in order.' },
+    ],
+  },
+  specialized_agents: {
+    eyebrow: 'Zoom-In · 2 of 5',
+    title: 'Specialized Agents',
+    roles: [
+      'Three focused agents with clear, bounded responsibilities.',
+      'Separates drafting from knowledge checks and quality review.',
+      'Avoids giant unmaintainable prompts or uncontrolled agent swarms.',
+    ],
+    elements: [
+      { name: 'Deliverable Agent', desc: 'Structures and drafts content using the selected Skill contract.' },
+      { name: 'Knowledge Steward', desc: 'Extracts candidate facts and compares them against approved decisions.' },
+      { name: 'Quality Reviewer', desc: 'Checks citations, completeness, and flags unresolved conflicts.' },
+    ],
+  },
+  skills: {
+    eyebrow: 'Zoom-In · 3 of 5',
+    title: 'Pluggable Skills',
+    roles: [
+      'Packages each deliverable type as a modular Skill.',
+      'Plugs new deliverables directly into the shared engine.',
+      'Enforces consistent structure across all consultants.',
+    ],
+    elements: [
+      { name: 'Workshop Report Skill', desc: 'Captures meeting outcomes and open questions with source links.' },
+      { name: 'Fit-Gap & Target Architecture Skills', desc: 'Assesses impact against approved rules and flags scope gaps.' },
+      { name: 'Steering Committee Skill', desc: 'Summarizes validated progress and escalates open decisions.' },
+    ],
+  },
+  knowledge_layers: {
+    eyebrow: 'Zoom-In · 4 of 5',
+    title: 'Project Knowledge (Layered Memory)',
+    roles: [
+      'Structured layered memory model for the engagement.',
+      'Separates raw workshop inputs from approved project decisions.',
+      'Links published deliverables to exact knowledge versions.',
+    ],
+    elements: [
+      { name: 'Workshop & Client Evidence', desc: 'Immutable raw notes and client docs ("what was said").' },
+      { name: 'Validated Project Knowledge', desc: 'Versioned, human-approved rules ("what was decided").' },
+      { name: 'Deliverable Versions', desc: 'Drafts and locked publications linked to exact knowledge versions.' },
+    ],
+  },
+  model_gateway: {
+    eyebrow: 'Zoom-In · 5 of 5',
+    title: 'Model Gateway',
+    roles: [
+      'Single provider-agnostic interface to enterprise LLMs.',
+      'Enforces data sensitivity and residency rules.',
+      'Validates structured outputs across AI vendors.',
+    ],
+    elements: [
+      { name: 'Data Sensitivity Router', desc: 'Routes requests only to models approved for the project’s confidentiality.' },
+      { name: 'Structured Output Enforcer', desc: 'Ensures every AI response matches the required deliverable structure.' },
+      { name: 'Multi-Provider Connectors', desc: 'Supports Mistral, Gemini, OpenAI, or self-hosted enterprise models.' },
+    ],
+  },
+};
 
-    if (key === 'main_agent') {
-      const m = arch.main_agent;
-      $('arch-eyebrow').textContent = 'ARCHITECTURE ZOOM-IN · 1 OF 5';
-      $('arch-title').textContent = m.title;
-      html = `
-        <div class="arch-modal-card">
-          <h3>${escapeHtml(m.subtitle)}</h3>
-          <p>${escapeHtml(m.summary)}</p>
-          <div class="arch-code-ref">Implementation: ${escapeHtml(m.code_ref)}</div>
-        </div>
-        <div class="arch-modal-card">
-          <h3>Inputs &amp; Outputs</h3>
-          <ul class="arch-list">
-            <li><strong>Receives:</strong> ${m.inputs.map(escapeHtml).join(' · ')}</li>
-            <li><strong>Produces:</strong> ${m.outputs.map(escapeHtml).join(' · ')}</li>
-            <li><strong>Safety guarantee:</strong> ${escapeHtml(m.guarantees)}</li>
-          </ul>
-        </div>`;
-    } else if (key === 'specialized_agents') {
-      $('arch-eyebrow').textContent = 'ARCHITECTURE ZOOM-IN · 2 OF 5';
-      $('arch-title').textContent = 'Specialized Agents (Shared Engine)';
-      html = arch.specialized_agents
-        .map(
-          (ag) => `<div class="arch-modal-card">
-            <h3>${escapeHtml(ag.title)}</h3>
-            <p><strong>Role:</strong> ${escapeHtml(ag.role)}</p>
-            <p>${escapeHtml(ag.detail)}</p>
-            <div class="arch-code-ref">Implementation: ${escapeHtml(ag.code_ref)}</div>
-          </div>`
-        )
-        .join('');
-    } else if (key === 'skills') {
-      $('arch-eyebrow').textContent = 'ARCHITECTURE ZOOM-IN · 3 OF 5';
-      $('arch-title').textContent = 'Pluggable Skill Packages (1 Skill = 1 Deliverable)';
-      const ext = arch.skill_extension;
-      html = `
-        <p class="explanation">We do not build a new application for each consulting deliverable. Every skill is a declarative folder (<code>manifest.json</code> + required sections + quality checks) executed by the exact same Deliverable Agent.</p>
-        <div class="skill-manifest-grid">
-          ${arch.skills
+function openArchitectureZoom(key) {
+  const detail = ARCH_DETAILS[key];
+  if (!detail) return;
+  const dialog = $('arch-dialog');
+  dialog.className = 'engine-dialog';
+  $('arch-eyebrow').textContent = detail.eyebrow.toUpperCase();
+  $('arch-title').textContent = detail.title;
+  $('arch-content').innerHTML = `
+    <div class="slide3-zoom-grid">
+      <div>
+        <div class="slide3-col-label">Role in Architecture</div>
+        <ul class="slide3-role-list">
+          ${detail.roles.map((r) => `<li>${escapeHtml(r)}</li>`).join('')}
+        </ul>
+      </div>
+      <div>
+        <div class="slide3-col-label">Key Elements Inside</div>
+        <div class="slide3-subcard-stack">
+          ${detail.elements
             .map(
-              (sk) => `<div class="manifest-card">
-                <h4>${escapeHtml(skillNames[sk.name] || sk.name)} <span class="draft-id">v${escapeHtml(sk.version)}</span></h4>
-                <p>${escapeHtml(sk.purpose)}</p>
-                <div class="manifest-tags">${sk.sections.map((s) => `<span class="manifest-tag">${escapeHtml(s)}</span>`).join('')}</div>
+              (el) => `<div class="slide3-subcard">
+                <strong>${escapeHtml(el.name)}</strong>
+                <span>${escapeHtml(el.desc)}</span>
               </div>`
             )
             .join('')}
-          <div class="manifest-card planned">
-            <h4>Target Architecture <span class="draft-id">(Extension Example)</span></h4>
-            <p>${escapeHtml(ext.purpose)}</p>
-            <div class="manifest-tags">${ext.sections.map((s) => `<span class="manifest-tag">${escapeHtml(s)}</span>`).join('')}</div>
-          </div>
-        </div>`;
-    } else if (key === 'knowledge_layers') {
-      $('arch-eyebrow').textContent = 'ARCHITECTURE ZOOM-IN · 4 OF 5';
-      $('arch-title').textContent = 'Layered Project Knowledge Base';
-      html = arch.knowledge_layers
-        .map(
-          (l) => `<div class="arch-modal-card">
-            <h3>${escapeHtml(l.layer)}: ${escapeHtml(l.title)} &middot; <em>${escapeHtml(l.subtitle)}</em></h3>
-            <p>${escapeHtml(l.detail)}</p>
-          </div>`
-        )
-        .join('') + `<div class="arch-code-ref">Implementation: app/knowledge.py :: KnowledgeStore (SQLite + FTS5 + triggers)</div>`;
-    } else if (key === 'model_gateway') {
-      const g = arch.model_gateway;
-      $('arch-eyebrow').textContent = 'ARCHITECTURE ZOOM-IN · 5 OF 5';
-      $('arch-title').textContent = g.title;
-      html = `
-        <div class="arch-modal-card">
-          <h3>${escapeHtml(g.subtitle)}</h3>
-          <p>${escapeHtml(g.summary)}</p>
-          <ul class="arch-list">
-            ${g.modes.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}
-            <li><strong>Governance:</strong> ${escapeHtml(g.governance)}</li>
-          </ul>
-          <div class="arch-code-ref" style="margin-top:8px">Implementation: ${escapeHtml(g.code_ref)}</div>
-        </div>`;
-    }
-
-    $('arch-content').innerHTML = html;
-    $('arch-dialog').showModal();
-  } catch (error) {
-    toast(error.message, true);
-  }
+        </div>
+      </div>
+    </div>`;
+  dialog.showModal();
 }
 
 function switchTab(tabName) {
@@ -630,43 +975,55 @@ function switchTab(tabName) {
   });
 }
 
-function bindDynamic() {
+function runPresetSkill(skill) {
+  if (state.busy) return;
+  const promptText = currentPresets()[skill] || `Run ${skillNames[skill] || skill}`;
+  if ($('agent-prompt-input')) {
+    $('agent-prompt-input').value = '';
+    syncRoutePill();
+  }
+  generate(skill, promptText);
+}
+
+function bindCitationAndDraftLinks() {
   document.querySelectorAll('[data-evidence]').forEach((el) => {
     el.onclick = () => inspectEvidence(el.dataset.evidence, el.dataset.chunk);
   });
   document.querySelectorAll('[data-publication]').forEach((el) => {
     el.onclick = () => inspectPublication(el.dataset.publication);
   });
+}
+
+function bindDynamic() {
+  bindCitationAndDraftLinks();
   document.querySelectorAll('[data-generate-report]').forEach((el) => {
-    el.onclick = () => generate('workshop_report');
+    el.onclick = () => runPresetSkill('workshop_report');
   });
   document.querySelectorAll('[data-quick-skill]').forEach((el) => {
-    el.onclick = () => generate(el.dataset.quickSkill);
+    el.onclick = () => runPresetSkill(el.dataset.quickSkill);
   });
 
   const bind = (id, fn) => {
     if ($(id)) $(id).onclick = fn;
   };
 
-  // Guided 1-click actions
   bind('guided-flag-conflict', () =>
-    action('/api/guided/flag-conflict', 'Report approved & €50k conflict flagged! Dependent teams alerted.', { draft_id: state.draft?.id })
+    action('/api/guided/flag-conflict', 'Report approved & EUR 50k conflict flagged! Dependent teams alerted.', { draft_id: state.draft?.id }, { targetTab: 'tasks' })
   );
   bind('guided-resolve', () =>
-    action('/api/guided/resolve-conflict', 'WS-05 clarification applied! Approved rule updated to v2 (€50,000 for FR01).', undefined, true)
+    action('/api/guided/resolve-conflict', 'WS-05 clarification applied! Approved rule updated to v2 (EUR 50,000 for FR01).', undefined, { clearDraft: true, targetTab: 'evidence' })
   );
   bind('guided-publish', () =>
-    action('/api/guided/publish', 'Deliverable approved and locked as an immutable publication.', { draft_id: state.draft?.id })
+    action('/api/guided/publish', 'Deliverable approved and locked as an immutable publication.', { draft_id: state.draft?.id }, { targetTab: 'publications' })
   );
 
-  // Granular controls (preserved for deep inspection / testability)
-  bind('flag-conflict', () => action('/api/conflict', 'Decision conflict recorded. Dependent review alerts created.'));
-  bind('flag-draft-conflict', () => action('/api/conflict', 'Decision conflict recorded. Baseline v1 remains unchanged.'));
+  bind('flag-conflict', () => action('/api/conflict', 'Decision conflict recorded. Dependent review alerts created.', undefined, { targetTab: 'tasks' }));
+  bind('flag-draft-conflict', () => action('/api/conflict', 'Decision conflict recorded. Baseline v1 remains unchanged.', undefined, { targetTab: 'tasks' }));
   bind('accept-clarification', () => action('/api/clarification/accept', 'WS-05 accepted. Now promote to update Project Knowledge.'));
-  bind('promote', () => action('/api/promote?clarification=true', 'Decision promoted to Project Knowledge v2.', undefined, true));
-  bind('approve-report', () => action(`/api/drafts/${state.draft.id}/approve-report`, 'Report accuracy approved. Knowledge baseline unchanged.'));
-  bind('approve-change', () => action(`/api/drafts/${state.draft.id}/approve-change`, 'Knowledge change approved for this draft.'));
-  bind('publish-draft', () => action('/api/publish', 'Locked publication created.', { draft_id: state.draft.id }));
+  bind('promote', () => action('/api/promote?clarification=true', 'Decision promoted to Project Knowledge v2.', undefined, { clearDraft: true, targetTab: 'evidence' }));
+  bind('approve-report', () => action(`/api/drafts/${state.draft?.id}/approve-report`, 'Report accuracy approved. Knowledge baseline unchanged.'));
+  bind('approve-change', () => action(`/api/drafts/${state.draft?.id}/approve-change`, 'Knowledge change approved for this draft.'));
+  bind('publish-draft', () => action('/api/publish', 'Locked publication created.', { draft_id: state.draft?.id }, { targetTab: 'publications' }));
 }
 
 // Static Event Listeners
@@ -677,8 +1034,16 @@ $('role-select').addEventListener('change', async (e) => {
 });
 
 $('provider').addEventListener('change', (e) => {
-  state.provider = e.target.value;
-  $('provider-note').textContent = state.provider === 'mock' ? 'Offline deterministic fixtures' : 'Live Mistral API · key required';
+  state.providerChosenByUser = true;
+  const val = e.target.value;
+  if (val.startsWith('live:')) {
+    state.provider = 'live';
+    state.liveBackend = val.split(':', 2)[1];
+  } else {
+    state.provider = 'mock';
+    state.liveBackend = null;
+  }
+  syncProviderUI();
 });
 
 $('reset-demo').addEventListener('click', async () => {
@@ -686,39 +1051,103 @@ $('reset-demo').addEventListener('click', async () => {
   state.busy = true;
   try {
     state.draft = null;
+    state.messages = [];
+    state.selectedSkill = null;
     state.workspace = await api('/api/reset', { method: 'POST' });
     switchTab('evidence');
     renderWorkspace();
     renderEmptyDraft();
-    toast('Demo reset to Step 1 (WS-04 ready).');
+    renderThread();
+    toast('Demo reset to Stage 01 (WS-04 evidence ready).');
   } catch (error) {
     toast(error.message, true);
   } finally {
     state.busy = false;
+    renderThread();
   }
 });
+
+if ($('clear-chat')) {
+  $('clear-chat').addEventListener('click', () => {
+    if (state.busy) return;
+    state.messages = [];
+    renderThread();
+  });
+}
+
+if ($('toggle-arch')) {
+  $('toggle-arch').addEventListener('click', () => {
+    const pipeline = $('arch-pipeline');
+    const wrap = $('arch-strip-wrap');
+    const collapsed = pipeline.classList.toggle('collapsed');
+    wrap.classList.toggle('strip-collapsed', collapsed);
+    $('toggle-arch').setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    $('toggle-arch-label').textContent = collapsed ? 'Show 5 Blocks' : 'Collapse';
+    $('toggle-arch-icon').textContent = collapsed ? '▾' : '▴';
+  });
+}
 
 document.querySelectorAll('[data-arch]').forEach((el) => {
   el.addEventListener('click', () => openArchitectureZoom(el.dataset.arch));
 });
 
-document.querySelectorAll('[data-skill]').forEach((el) => {
-  el.addEventListener('click', () => generate(el.dataset.skill));
+document.querySelectorAll('[data-prompt-skill]').forEach((el) => {
+  el.addEventListener('click', () => {
+    if (state.busy) return;
+    setSelectedSkill(el.dataset.promptSkill);
+    $('agent-prompt-input')?.focus();
+  });
+});
+
+document.querySelectorAll('[data-quick-question]').forEach((el) => {
+  el.addEventListener('click', () => {
+    if (state.busy) return;
+    state.selectedSkill = null;
+    syncSkillSelection();
+    syncRoutePill();
+    sendChat(el.dataset.quickQuestion);
+  });
+});
+
+if ($('agent-prompt-input')) {
+  $('agent-prompt-input').addEventListener('input', syncRoutePill);
+}
+
+if ($('agent-prompt-form')) {
+  $('agent-prompt-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (state.busy) return;
+    const input = $('agent-prompt-input');
+    const text = (input?.value || '').trim();
+    const skill = state.selectedSkill || matchSkillIntent(text);
+    if (!skill && !text) {
+      toast('Select a skill above or type a question for the Main Agent.', true);
+      return;
+    }
+    if (input) input.value = '';
+    if (skill) {
+      generate(skill, text);
+    } else {
+      sendChat(text);
+    }
+  });
+}
+
+document.querySelectorAll('.stage-pill').forEach((el) => {
+  el.addEventListener('click', () => {
+    const hints = {
+      '1': 'Stage 01: Click 01 · Workshop Report or ask Main Agent about WS-04.',
+      '2': 'Stage 02: Review the cited draft below and spot the unpromoted EUR 50,000 proposal.',
+      '3': 'Stage 03: Flag the EUR 50k vs 25k conflict — dependent teams are alerted automatically.',
+      '4': 'Stage 04: Accept & promote WS-05 owner clarification to upgrade Project Knowledge to v2.',
+      '5': 'Stage 05: Generate Fit-Gap or Steering outputs grounded in Knowledge v2 and lock publication.',
+    };
+    toast(hints[el.dataset.stage] || 'Follow the highlighted stage on the right.');
+  });
 });
 
 document.querySelectorAll('.tab-btn').forEach((btn) => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-});
-
-document.querySelectorAll('.step').forEach((el) => {
-  el.addEventListener('click', () => {
-    const hints = {
-      '1': 'Step 1: Generate the WS-04 Workshop Report and verify its citations.',
-      '2': 'Step 2: Flag the €50k vs €25k conflict, preview blocked drafts, then apply WS-05.',
-      '3': 'Step 3: After WS-05 updates Knowledge to v2, generate and publish final deliverables.',
-    };
-    toast(hints[el.dataset.step]);
-  });
 });
 
 $('audit-top').onclick = showAudit;

@@ -1,0 +1,55 @@
+%% Title: Consultant Perspective — Redesigned Live Demo Flow
+%% Target: /Users/serge/Documents/PROJECTS/AI-ML/AI-FRAMEWORK-FOR-CONSULTANTS
+%% Light output: diagrams/consultant-demo-flow.svg; dark output: diagrams/consultant-demo-flow-dark.svg
+%% Sibling views: diagrams/architecture.mmd, diagrams/workshop-to-fit-gap.mmd, diagrams/governance.mmd
+%% Render: bash ~/.gemini/config/skills/diagram-mmd/scripts/render_mmd.sh diagrams/consultant-demo-flow.mmd
+flowchart LR
+    subgraph VIEW1["1. Clean Main Agent Entry Point (Consultant Prompt View)"]
+        direction TB
+        PRESETS[["3 Ready-Made Skill Prompts<br/>1. Draft WS-04 Report · 2. Fit-Gap · 3. Steering"]]:::skill
+        PROMPT("Main Agent Prompt Box<br/>Type request or pick a ready-made prompt"):::ui
+        CTX[("Project Context Drawer (Quiet)<br/>Workshop Notes WS-01..05 &amp; Published History")]:::store
+        PRESETS -- "populate prompt" --> PROMPT
+        CTX -. "available sources" .-> PROMPT
+    end
+
+    subgraph VIEW2["2. Under-the-Hood Agent & Tool Trace (Subtle Live Stream)"]
+        direction TB
+        T_MA["Main Agent Reasoning<br/>Check role ACL &amp; freeze snapshot_id"]:::core
+        T_DB["Tool Calls &amp; DB Retrieval<br/>Load Skill manifest + query SQLite chunks &amp; KB v1"]:::core
+        T_LLM["DeliverableAgent + ModelGateway<br/>Generate schema-locked JSON with span citations"]:::gateway
+        T_QR["KnowledgeSteward &amp; QualityReviewer<br/>Diff EUR 50k vs EUR 25k + verify citations"]:::core
+        T_MA -- "load Skill + query" --> T_DB
+        T_DB -- "authorized context" --> T_LLM
+        T_LLM -- "check citations &amp; KB diff" --> T_QR
+    end
+
+    subgraph VIEW3["3. Generated Deliverable Canvas (Document Review)"]
+        direction TB
+        DOC["Cited Deliverable View<br/>Structured sections + clickable source passages"]:::ui
+        DOC_GATE{"Deliverable Gate<br/>Approve faithful report or publish locked v2"}:::gateway
+        DOC -- "review citations" --> DOC_GATE
+    end
+
+    subgraph VIEW4["4. Dedicated Decisions & Conflict Section (Check, Dive Deep, Approve)"]
+        direction TB
+        DEC_DIFF["Decision Delta Card (DEC-P2P-004)<br/>Approved v1 (EUR 25k) vs Candidate (EUR 50k)"]:::warn
+        DEEP["Deep-Dive Inspector<br/>Compare WS-01 / WS-04 / WS-05 + 2 Impact Alerts"]:::store
+        KB_GATE{"Governance Gates<br/>1. Flag Conflict · 2. Accept WS-05 · 3. Promote KB v2"}:::gateway
+        DEC_DIFF -- "inspect notes &amp; alerts" --> DEEP
+        DEEP -- "explicit human decision" --> KB_GATE
+    end
+
+    VIEW1 -- "1. Send request" --> VIEW2
+    VIEW2 -- "2. Render draft" --> DOC
+    VIEW2 -- "3. Surface rule delta" --> DEC_DIFF
+    KB_GATE -. "4. KB v2 ready: next deliverable" .-> VIEW1
+
+    classDef ui fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:2px
+    classDef core fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    classDef skill fill:#FFF8E1,stroke:#F57F17,color:#E65100,stroke-width:2px
+    classDef store fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:2px
+    classDef gateway fill:#E0F2F1,stroke:#00695C,color:#004D40,stroke-width:2px
+    classDef warn fill:#FFEBEE,stroke:#C62828,color:#B71C1C,stroke-width:2px
+
+    linkStyle default stroke:#607D8B,stroke-width:1.5px
