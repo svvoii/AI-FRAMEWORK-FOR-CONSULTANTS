@@ -477,93 +477,338 @@
     padding: 16px 18px;
   }
 
-  /* Slide 4: Principles in Action */
-  .two-col-panels {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5%;
-    flex: 1;
-    margin-top: .4%;
+  /* Slide 4: Architecture Diagram (True SVG Rebuild of architecture.mmd) */
+  .slide4-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.2%;
   }
-  .principle-panel {
+  .slide4-head-row h2 {
+    margin-bottom: 0;
+  }
+  .seq-trigger-btn {
+    background: #eef5fc;
+    color: #0d47a1;
+    border: 1px solid #90bce8;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: clamp(11px, .88vw, 13.5px);
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .seq-trigger-btn:hover {
+    background: #dbeafe;
+    border-color: #1565c0;
+  }
+  .arch-svg-wrap {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--canvas);
     border: 1px solid var(--line);
-    border-top: 4px solid var(--green);
-    border-radius: 4px;
-    padding: 3.5% 4.2%;
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .arch-svg-wrap svg {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  .engine-interactive {
+    cursor: pointer;
+    transition: opacity .15s ease, filter .15s ease;
+  }
+  .engine-interactive:hover {
+    filter: brightness(0.97);
+  }
+  .engine-interactive:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+  }
+  .engine-dialog {
+    max-width: 1020px;
+    width: 95%;
+    margin: auto;
+    border: 0;
+    border-top: 5px solid var(--green);
+    border-radius: 8px;
+    padding: 24px 28px;
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, .38);
+  }
+  .engine-dialog::backdrop {
+    background: rgba(17, 17, 17, .58);
+  }
+  .engine-dialog-head {
     display: flex;
-    flex-direction: column;
-    gap: 11px;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
   }
-  .principle-panel.dark-top { border-top-color: var(--ink); }
-  .panel-kicker {
-    font-size: clamp(8.5px, .72vw, 12px);
-    text-transform: uppercase;
-    letter-spacing: .1em;
+  .engine-dialog-head h3 {
+    font-size: 22px;
+    margin-top: 2px;
+  }
+  .engine-dialog-close {
+    background: #f3f4f6;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 5px 11px;
+    font-size: 13px;
     font-weight: 700;
+  }
+  .engine-dialog-close:hover {
+    background: #e5e7eb;
+  }
+  .engine-flow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .engine-flow-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .engine-step-card {
+    background: #f7fbf0;
+    border: 1px solid #cce3b0;
+    border-top: 3px solid #2e7d32;
+    border-radius: 6px;
+    padding: 12px 11px;
+  }
+  .engine-step-tag {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     color: var(--green-dark);
+    margin-bottom: 4px;
   }
-  .principle-panel h3 {
-    font-size: clamp(14.5px, 1.35vw, 23px);
+  .engine-step-card strong {
+    display: block;
+    font-size: 13px;
+    white-space: nowrap;
+    color: var(--ink);
+    margin-bottom: 6px;
   }
-  .skill-layer-list {
+  .engine-step-list {
+    margin: 0;
+    padding-left: 16px;
+    display: grid;
+    gap: 3px;
+    font-size: 12px;
+    color: var(--graphite);
+    line-height: 1.35;
+  }
+  .engine-step-list code {
+    font-size: 11px;
+    color: #1b5e20;
+    background: #e8f5e9;
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+  .engine-infra-box {
+    background: var(--ink);
+    color: #fff;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+  .engine-infra-box h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .engine-infra-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 5px;
+    font-size: 13px;
+    color: #e5e7eb;
+    line-height: 1.45;
+  }
+  .engine-infra-list strong {
+    color: #fff;
+  }
+  .engine-infra-list code {
+    background: rgba(255, 255, 255, .12);
+    color: #d9f99d;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  /* Subsystem dialog themes (amber=Skills, teal=Gateway, purple=Knowledge) */
+  .engine-dialog.theme-amber { border-top-color: #d97706; }
+  .theme-amber .engine-step-card { background: #fffdf5; border-color: #fcd34d; border-top-color: #d97706; }
+  .theme-amber .engine-step-tag { color: #b45309; font-size: 12px; margin-bottom: 6px; }
+  .theme-amber .engine-step-list code { color: #92400e; background: #fef3c7; }
+  .theme-amber .engine-infra-box { border-left-color: #f59e0b; }
+  .theme-amber .engine-infra-box h4 { color: #fbbf24; }
+
+  .engine-dialog.theme-teal { border-top-color: #00695c; }
+  .theme-teal .engine-step-card { background: #f2faf9; border-color: #99f6e4; border-top-color: #00695c; }
+  .theme-teal .engine-step-tag { color: #0f766e; font-size: 12px; margin-bottom: 6px; }
+  .theme-teal .engine-step-list code { color: #115e59; background: #ccfbf1; }
+  .theme-teal .engine-infra-box { border-left-color: #14b8a6; }
+  .theme-teal .engine-infra-box h4 { color: #5eead4; }
+
+  .engine-dialog.theme-purple { border-top-color: #6a1b9a; }
+  .theme-purple .engine-step-card { background: #faf6fe; border-color: #d8b4fe; border-top-color: #6a1b9a; }
+  .theme-purple .engine-step-tag { color: #6a1b9a; font-size: 12px; margin-bottom: 6px; }
+  .theme-purple .engine-step-list code { color: #581c87; background: #f3e8ff; }
+  .theme-purple .engine-infra-box { border-left-color: #9333ea; }
+  .theme-purple .engine-infra-box h4 { color: #c084fc; }
+
+  .engine-dialog.theme-blue { border-top-color: #1565c0; }
+  .theme-blue .engine-step-card { position: relative; background: #fafafa; border-color: #e5e7eb; border-top-width: 3px; }
+  .theme-blue .engine-step-card:not(:nth-child(6))::after,
+  .theme-blue .engine-step-card:nth-child(4)::before {
+    content: "\2192";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e3f2fd;
+    border: 1px solid #90bce8;
+    color: #0d47a1;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .theme-blue .engine-step-card:not(:nth-child(6))::after { right: -14px; }
+  .theme-blue .engine-step-card:nth-child(3)::after { right: -19px; }
+  .theme-blue .engine-step-card:nth-child(4)::before { left: -19px; }
+  .theme-blue .engine-step-tag { color: #4b5563; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .theme-blue .engine-infra-box { border-left-color: #3b82f6; }
+  .theme-blue .engine-infra-box h4 { color: #93c5fd; }
+  .seq-legend {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 7px 11px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 11.5px;
+    color: #475569;
+    font-weight: 600;
+  }
+  .arch-tok,
+  .theme-blue .engine-step-list code.arch-tok {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 10.5px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+  .tok-blue, .theme-blue .engine-step-list code.tok-blue { color: #0d47a1; background: #e3f2fd; border-color: #90bce8; }
+  .tok-green, .theme-blue .engine-step-list code.tok-green { color: #1b5e20; background: #e8f5e9; border-color: #a5d6a7; }
+  .tok-amber, .theme-blue .engine-step-list code.tok-amber { color: #92400e; background: #fef3c7; border-color: #fcd34d; }
+  .tok-teal, .theme-blue .engine-step-list code.tok-teal { color: #115e59; background: #ccfbf1; border-color: #5eead4; }
+  .tok-purple, .theme-blue .engine-step-list code.tok-purple { color: #581c87; background: #f3e8ff; border-color: #d8b4fe; }
+
+  /* Slide 5: Project Knowledge · Data Types & Storage */
+  .data-clarity-strip {
+    background: var(--ink);
+    color: #fff;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 11px 16px;
+    margin-bottom: 1.5%;
+    font-size: clamp(11.5px, 1vw, 15.5px);
+    line-height: 1.4;
+  }
+  .data-clarity-strip strong {
+    color: var(--green);
+  }
+  .data-types-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.8%;
+    flex: 1;
+    min-height: 0;
+  }
+  .data-type-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--ink);
+    border-radius: 6px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
     gap: 9px;
   }
-  .skill-layer {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--green);
-    border-radius: 4px;
-    padding: 11px 14px;
+  .data-type-card.non-vector {
+    border-top-color: var(--green);
+    background: #fcfdf9;
   }
-  .skill-layer strong {
-    display: block;
-    font-size: clamp(11.5px, .98vw, 16.5px);
-    margin-bottom: 3px;
-  }
-  .skill-layer span {
-    display: block;
-    font-size: clamp(10px, .86vw, 14.5px);
-    color: var(--muted);
-    line-height: 1.4;
-  }
-  .flow-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .flow-box {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 10px 13px;
-    font-size: clamp(10.5px, .9vw, 15.5px);
-    line-height: 1.38;
-  }
-  .flow-box.human-gate {
-    background: var(--green-soft);
-    border-color: var(--green);
-    font-weight: 600;
-  }
-  .flow-down {
-    text-align: center;
+  .data-type-kicker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    font-weight: 700;
     color: var(--green-dark);
-    font-size: clamp(11px, .95vw, 16px);
-    line-height: 1;
   }
-  .takeaway-strip {
-    margin-top: auto;
-    padding-top: 10px;
-    border-top: 1px solid var(--line);
-    font-size: clamp(10px, .86vw, 14.5px);
+  .data-type-card h3 {
+    font-size: clamp(15px, 1.28vw, 20px);
+    color: var(--ink);
+  }
+  .data-row {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 8px 10px;
+  }
+  .data-type-card.non-vector .data-row.storage {
+    background: var(--green-soft);
+    border-color: #cde0ad;
+  }
+  .data-row-label {
+    display: block;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .data-row p {
+    font-size: clamp(11px, .92vw, 14px);
     color: var(--graphite);
+    line-height: 1.36;
   }
 
-  /* Slide 5: Transition to Live Demo */
+  /* Slide 6: Transition to Live Demo */
   .demo-lead {
-    font-size: clamp(12px, 1.15vw, 19.5px);
+    font-size: clamp(13px, 1.18vw, 20px);
     color: var(--graphite);
     max-width: 88%;
     margin-bottom: 2.2%;
@@ -589,26 +834,26 @@
   }
   .demo-card h3 {
     margin-bottom: 4%;
-    font-size: clamp(13px, 1.18vw, 20px);
+    font-size: clamp(14px, 1.22vw, 20px);
   }
   .demo-card p {
-    font-size: clamp(10.5px, .92vw, 15.5px);
+    font-size: clamp(11.5px, .96vw, 16px);
     color: var(--muted);
     line-height: 1.48;
   }
   .demo-action-row {
-    margin-top: 3%;
+    margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
     background: var(--green-soft);
     border: 1px solid #cde0ad;
-    border-radius: 5px;
+    border-radius: 6px;
     padding: 2.2% 3%;
   }
   .demo-action-row p {
-    font-size: clamp(11px, .98vw, 16.5px);
+    font-size: clamp(12px, 1.02vw, 17px);
     color: var(--graphite);
   }
   .demo-cta {
@@ -619,9 +864,9 @@
     color: var(--ink);
     font-weight: 700;
     text-decoration: none;
-    padding: 1.4% 2.6%;
-    border-radius: 4px;
-    font-size: clamp(10px, .95vw, 16px);
+    padding: 12px 22px;
+    border-radius: 5px;
+    font-size: clamp(12px, 1vw, 17px);
     white-space: nowrap;
   }
   .demo-cta:hover { filter: brightness(.93); }
@@ -733,7 +978,7 @@
 
   #print-list { display: none; }
   @media (max-width: 820px) {
-    .slide1-title-row, .mapping-row, .solution-grid, .arch-pipeline, .arch-zoom-area, .two-col-panels, .demo-cards {
+    .slide1-title-row, .mapping-row, .solution-grid, .arch-pipeline, .arch-zoom-area, .data-types-grid, .demo-cards, .engine-flow-grid, .engine-flow-grid.cols-3 {
       grid-template-columns: 1fr;
     }
     .map-arrow, .arch-arrow, .controls .hide-sm { display: none; }
@@ -932,80 +1177,444 @@
     <div class="slide-footer"><span>High-Level Architecture · Same 5 blocks as the live platform</span><span>Slide 3 · Architecture Overview</span></div>
   </section>
 
-  <!-- SLIDE 4: ARCHITECTURAL PRINCIPLES IN ACTION -->
-  <section class="slide" data-title="Principles in Action" data-notes="Reinforce the two architectural guarantees from the case brief: first, adding a deliverable only means adding a Skill package; second, AI proposes and checks, while only the consultant validates changes into Project Knowledge.">
+  <!-- SLIDE 4: ARCHITECTURE DIAGRAM (SVG REBUILD OF ARCHITECTURE.MMD) -->
+  <section class="slide" data-title="Architecture Diagram" data-notes="Visual map of how all components interact: the Consultant asks the Main Agent, which dispatches to Deliverable Agent, Knowledge Steward, and Quality Reviewer. Deliverable Agent loads a Skill + authorized context, calls the Model Gateway, and returns a cited draft for explicit consultant approval.">
     <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">04 / 05</div></div>
-    <h2>AI proposes and structures. <span class="green">The consultant decides.</span></h2>
-    <div class="two-col-panels">
-      <div class="principle-panel">
-        <span class="panel-kicker">Extensibility · Skill Anatomy</span>
-        <h3>How a new deliverable is added</h3>
-        <div class="skill-layer-list">
-          <div class="skill-layer">
-            <strong>1. Input Contract</strong>
-            <span>Defines which workshop notes and approved project decisions the skill reads.</span>
-          </div>
-          <div class="skill-layer">
-            <strong>2. Deliverable Structure</strong>
-            <span>Enforces Deloitte's standard consulting sections and output format.</span>
-          </div>
-          <div class="skill-layer">
-            <strong>3. Quality &amp; Consistency Rules</strong>
-            <span>Requires source links and flags missing scope or contradictions before review.</span>
-          </div>
-        </div>
-        <div class="takeaway-strip">
-          <strong>Result:</strong> Same shared engine, predictable deliverable quality across every consultant.
-        </div>
-      </div>
-
-      <div class="principle-panel dark-top">
-        <span class="panel-kicker">Governance · Human-in-the-Loop</span>
-        <h3>How knowledge stays reliable over 30 workshops</h3>
-        <div class="flow-stack">
-          <div class="flow-box"><strong>Workshop Notes:</strong> Raw client statements captured without altering baselines</div>
-          <div class="flow-down" aria-hidden="true">↓</div>
-          <div class="flow-box"><strong>AI Drafts &amp; Flags Contradictions:</strong> Surfaces conflicts (e.g., €50k vs €25k) instead of guessing</div>
-          <div class="flow-down" aria-hidden="true">↓</div>
-          <div class="flow-box human-gate">Consultant Validates: Approves report accuracy separately from decision changes</div>
-          <div class="flow-down" aria-hidden="true">↓</div>
-          <div class="flow-box"><strong>Project Knowledge &amp; Deliverables Updated:</strong> Full version history preserved</div>
-        </div>
-        <div class="takeaway-strip">
-          <strong>Result:</strong> Zero silent overwrites; every published claim traces back to its workshop source.
-        </div>
-      </div>
+    <div class="slide4-head-row">
+      <h2>End-to-end architecture. <span class="green">How components connect.</span></h2>
+      <button type="button" class="seq-trigger-btn" data-open-dialog="sequence-dialog">Event Sequence (1 to 6)</button>
     </div>
-    <div class="slide-footer"><span>Extend via Skills · Govern via Human Validation</span><span>Slide 4 · Design Principles</span></div>
+
+    <div class="arch-svg-wrap">
+      <svg viewBox="0 0 1220 542" role="img" aria-label="Reusable AI Framework Architecture Diagram" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif">
+        <defs>
+          <marker id="arr-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#1565c0"/>
+          </marker>
+          <marker id="arr-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#b45309"/>
+          </marker>
+          <marker id="arr-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#2e7d32"/>
+          </marker>
+          <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#00695c"/>
+          </marker>
+          <marker id="arr-purple" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#6a1b9a"/>
+          </marker>
+          <marker id="arr-deloitte" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.8" markerHeight="6.8" orient="auto-start-reverse">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#4f7311"/>
+          </marker>
+          <filter id="box-shadow" x="-4%" y="-6%" width="108%" height="116%">
+            <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#111111" flood-opacity="0.06"/>
+          </filter>
+        </defs>
+
+        <!-- 1. SUBSYSTEM CONTAINERS -->
+        <!-- Consultant Workspace -->
+        <g class="engine-interactive" data-open-dialog="sequence-dialog" role="button" tabindex="0" aria-label="Inspect End-to-End Event Sequence">
+          <rect x="355" y="6" width="525" height="60" rx="10" fill="#f5f9ff" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="369" y="20" font-size="10.5" font-weight="700" fill="#1565c0" letter-spacing="0.6">CONSULTANT WORKSPACE</text>
+        </g>
+
+        <!-- Pluggable Skill Registry -->
+        <g class="engine-interactive" data-open-dialog="skills-dialog" role="button" tabindex="0" aria-label="Inspect Pluggable Skill Registry">
+          <rect x="12" y="106" width="220" height="258" rx="10" fill="#fffdf5" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="24" y="124" font-size="10.5" font-weight="700" fill="#b45309" letter-spacing="0.5">PLUGGABLE SKILL REGISTRY</text>
+          <text x="24" y="138" font-size="10" fill="#78350f">1 Skill = 1 Deliverable</text>
+        </g>
+
+        <!-- Controlled Multi-Agent Engine -->
+        <g class="engine-interactive" data-open-dialog="engine-dialog" role="button" tabindex="0" aria-label="Inspect Controlled Multi-Agent Engine flow">
+          <rect x="316" y="106" width="584" height="258" rx="10" fill="#f7fbf0" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="330" y="124" font-size="10.5" font-weight="700" fill="#2e7d32" letter-spacing="0.5">CONTROLLED MULTI-AGENT ENGINE</text>
+        </g>
+
+        <!-- Model Gateway -->
+        <g class="engine-interactive" data-open-dialog="gateway-dialog" role="button" tabindex="0" aria-label="Inspect Model Gateway">
+          <rect x="988" y="106" width="220" height="258" rx="10" fill="#f2faf9" stroke="#00695c" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="1000" y="124" font-size="10.5" font-weight="700" fill="#00695c" letter-spacing="0.5">MODEL GATEWAY</text>
+          <text x="1000" y="138" font-size="10" fill="#115e59">Provider-Agnostic Abstraction</text>
+        </g>
+
+        <!-- Layered Project Knowledge Store -->
+        <g class="engine-interactive" data-open-dialog="knowledge-dialog" role="button" tabindex="0" aria-label="Inspect Layered Project Knowledge Store">
+          <rect x="130" y="408" width="960" height="128" rx="10" fill="#faf6fe" stroke="#6a1b9a" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="146" y="528" font-size="10.5" font-weight="700" fill="#6a1b9a" letter-spacing="0.5">LAYERED PROJECT KNOWLEDGE STORE</text>
+          <text x="1074" y="528" text-anchor="end" font-size="10" font-weight="600" fill="#6b21a8">Evidence  ·  Canonical Rules  ·  Deliverables</text>
+        </g>
+
+        <!-- 2. ROUTED CONNECTION ARROWS (DRAWN UNDER NODES WHERE APPROPRIATE) -->
+        <!-- Edge 6: CW -> Canonical Knowledge & Deliverable Store (Human approval gate) -->
+        <path d="M 865 42 L 945 42 L 945 431" fill="none" stroke="#4f7311" stroke-width="2.3" marker-end="url(#arr-deloitte)"/>
+        <path d="M 945 386 L 695 386 L 695 431" fill="none" stroke="#4f7311" stroke-width="2.3" marker-end="url(#arr-deloitte)"/>
+
+        <!-- Edge 1: CW -> Main Agent -->
+        <path d="M 617 59 L 617 130" fill="none" stroke="#1565c0" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+
+        <!-- Edge 5: Quality Reviewer -> CW -->
+        <path d="M 835 246 L 835 61" fill="none" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#arr-green)"/>
+
+        <!-- Edge 2: Deliverable Agent <-> Skill Registry -->
+        <path d="M 234 298 L 326 298" fill="none" stroke="#b45309" stroke-width="1.8" marker-start="url(#arr-amber)" marker-end="url(#arr-amber)"/>
+
+        <!-- Edge: Engine -> Unified Model Connector (Structured LLM call) -->
+        <path d="M 900 177 L 996 177" fill="none" stroke="#00695c" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#arr-teal)"/>
+
+        <!-- Edge 3: Deliverable Agent -> Evidence Store & Canonical Knowledge -->
+        <path d="M 385 350 L 385 386 L 290 386 L 290 431" fill="none" stroke="#6a1b9a" stroke-width="1.8" marker-end="url(#arr-purple)"/>
+        <path d="M 385 386 L 525 386 L 525 431" fill="none" stroke="#6a1b9a" stroke-width="1.8" marker-end="url(#arr-purple)"/>
+
+        <!-- Edge 4: Knowledge Steward -> Canonical Knowledge -->
+        <path d="M 606 350 L 606 431" fill="none" stroke="#6a1b9a" stroke-width="1.8" marker-end="url(#arr-purple)"/>
+
+        <!-- Internal Engine Arrows: Main Agent -> Workers -->
+        <path d="M 480 180 L 480 198 L 413 198 L 413 244" fill="none" stroke="#2e7d32" stroke-width="1.6" marker-end="url(#arr-green)"/>
+        <path d="M 606 180 L 606 244" fill="none" stroke="#2e7d32" stroke-width="1.6" marker-end="url(#arr-green)"/>
+        <path d="M 730 180 L 730 198 L 766 198 L 766 244" fill="none" stroke="#2e7d32" stroke-width="1.6" marker-end="url(#arr-green)"/>
+
+        <!-- Internal Gateway Arrows: Unified Connector -> Providers -->
+        <path d="M 1062 206 L 1044 244" fill="none" stroke="#00695c" stroke-width="1.5" marker-end="url(#arr-teal)"/>
+        <path d="M 1134 206 L 1150 244" fill="none" stroke="#00695c" stroke-width="1.5" marker-end="url(#arr-teal)"/>
+
+        <!-- 3. NODES -->
+        <!-- Consultant Workspace Pill -->
+        <g filter="url(#box-shadow)" class="engine-interactive" data-open-dialog="sequence-dialog">
+          <rect x="369" y="25" width="496" height="34" rx="17" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.7"/>
+          <text x="617" y="47" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0d47a1">Consultant / Domain Lead  ·  Request, Review &amp; Approve</text>
+        </g>
+
+        <!-- Skill Subroutine Boxes (double side rails like Mermaid [[...]]) -->
+        <g filter="url(#box-shadow)" class="engine-interactive" data-open-dialog="skills-dialog">
+          <rect x="22" y="148" width="200" height="44" rx="5" fill="#fff8e1" stroke="#d97706" stroke-width="1.4"/>
+          <line x1="29" y1="148" x2="29" y2="192" stroke="#d97706" stroke-width="1.3"/>
+          <line x1="215" y1="148" x2="215" y2="192" stroke="#d97706" stroke-width="1.3"/>
+          <text x="122" y="167" text-anchor="middle" font-size="12" font-weight="700" fill="#111111">workshop-report</text>
+          <text x="122" y="182" text-anchor="middle" font-size="10" fill="#6b7280">Manifest + Schema + Rules</text>
+
+          <rect x="22" y="202" width="200" height="44" rx="5" fill="#fff8e1" stroke="#d97706" stroke-width="1.4"/>
+          <line x1="29" y1="202" x2="29" y2="246" stroke="#d97706" stroke-width="1.3"/>
+          <line x1="215" y1="202" x2="215" y2="246" stroke="#d97706" stroke-width="1.3"/>
+          <text x="122" y="221" text-anchor="middle" font-size="12" font-weight="700" fill="#111111">fit-gap</text>
+          <text x="122" y="236" text-anchor="middle" font-size="10" fill="#6b7280">Manifest + Schema + Rules</text>
+
+          <rect x="22" y="256" width="200" height="44" rx="5" fill="#fff8e1" stroke="#d97706" stroke-width="1.4"/>
+          <line x1="29" y1="256" x2="29" y2="300" stroke="#d97706" stroke-width="1.3"/>
+          <line x1="215" y1="256" x2="215" y2="300" stroke="#d97706" stroke-width="1.3"/>
+          <text x="122" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#111111">target-architecture</text>
+          <text x="122" y="290" text-anchor="middle" font-size="10" fill="#6b7280">Manifest + Schema + Rules</text>
+
+          <rect x="22" y="310" width="200" height="44" rx="5" fill="#fff8e1" stroke="#d97706" stroke-width="1.4"/>
+          <line x1="29" y1="310" x2="29" y2="354" stroke="#d97706" stroke-width="1.3"/>
+          <line x1="215" y1="310" x2="215" y2="354" stroke="#d97706" stroke-width="1.3"/>
+          <text x="122" y="329" text-anchor="middle" font-size="12" font-weight="700" fill="#111111">steering-committee</text>
+          <text x="122" y="344" text-anchor="middle" font-size="10" fill="#6b7280">Manifest + Schema + Rules</text>
+        </g>
+
+        <!-- Multi-Agent Engine Nodes -->
+        <g filter="url(#box-shadow)" class="engine-interactive" data-open-dialog="engine-dialog">
+          <rect x="436" y="132" width="340" height="48" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+          <text x="606" y="153" text-anchor="middle" font-size="14" font-weight="700" fill="#111111">Main Agent (Orchestrator)</text>
+          <text x="606" y="170" text-anchor="middle" font-size="10.5" fill="#1b5e20">ACL Check  ·  Snapshot Freeze  ·  Task Routing</text>
+
+          <rect x="328" y="246" width="170" height="104" rx="7" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+          <text x="413" y="271" text-anchor="middle" font-size="13" font-weight="700" fill="#111111">Deliverable Agent</text>
+          <text x="413" y="292" text-anchor="middle" font-size="10.5" fill="#4b5563">Context Assembly &amp;</text>
+          <text x="413" y="307" text-anchor="middle" font-size="10.5" fill="#4b5563">Cited Drafting</text>
+          <text x="413" y="332" text-anchor="middle" font-size="10" font-weight="700" fill="#2e7d32">Reads Skill + Context</text>
+
+          <rect x="521" y="246" width="170" height="104" rx="7" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+          <text x="606" y="271" text-anchor="middle" font-size="13" font-weight="700" fill="#111111">Knowledge Steward</text>
+          <text x="606" y="292" text-anchor="middle" font-size="10.5" fill="#4b5563">Fact Extraction &amp;</text>
+          <text x="606" y="307" text-anchor="middle" font-size="10.5" fill="#4b5563">Conflict Detection</text>
+          <text x="606" y="332" text-anchor="middle" font-size="10" font-weight="700" fill="#2e7d32">Stages Candidates</text>
+
+          <rect x="714" y="246" width="170" height="104" rx="7" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+          <text x="799" y="271" text-anchor="middle" font-size="13" font-weight="700" fill="#111111">Quality Reviewer</text>
+          <text x="799" y="292" text-anchor="middle" font-size="10.5" fill="#4b5563">Citation, Schema &amp;</text>
+          <text x="799" y="307" text-anchor="middle" font-size="10.5" fill="#4b5563">Integrity Gate</text>
+          <text x="799" y="332" text-anchor="middle" font-size="10" font-weight="700" fill="#2e7d32">Validates Drafts</text>
+        </g>
+
+        <!-- Model Gateway Nodes -->
+        <g filter="url(#box-shadow)" class="engine-interactive" data-open-dialog="gateway-dialog">
+          <rect x="998" y="148" width="200" height="58" rx="7" fill="#e0f2f1" stroke="#00695c" stroke-width="1.6"/>
+          <text x="1098" y="170" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111111">Unified Model Connector</text>
+          <text x="1098" y="185" text-anchor="middle" font-size="10" fill="#115e59">Policy routing · JSON schema</text>
+          <text x="1098" y="198" text-anchor="middle" font-size="10" fill="#115e59">Audit logging</text>
+
+          <rect x="996" y="246" width="96" height="104" rx="7" fill="#ffffff" stroke="#00695c" stroke-width="1.4"/>
+          <text x="1044" y="276" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Claude /</text>
+          <text x="1044" y="291" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">OpenAI</text>
+          <text x="1044" y="314" text-anchor="middle" font-size="10" fill="#4b5563">Enterprise API</text>
+          <text x="1044" y="331" text-anchor="middle" font-size="9.5" font-weight="600" fill="#00695c">Cloud Policy</text>
+
+          <rect x="1102" y="246" width="98" height="104" rx="7" fill="#ffffff" stroke="#00695c" stroke-width="1.4"/>
+          <text x="1151" y="276" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Mistral /</text>
+          <text x="1151" y="291" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Local LLM</text>
+          <text x="1151" y="314" text-anchor="middle" font-size="10" fill="#4b5563">Restricted Data</text>
+          <text x="1151" y="331" text-anchor="middle" font-size="9.5" font-weight="600" fill="#00695c">On-Prem Option</text>
+        </g>
+
+        <!-- Database Cylinder Nodes -->
+        <g filter="url(#box-shadow)" class="engine-interactive" data-open-dialog="knowledge-dialog">
+          <!-- L1: Evidence Store -->
+          <path d="M 152 443 L 152 503 A 138 8.5 0 0 0 428 503 L 428 443 Z" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+          <ellipse cx="290" cy="443" rx="138" ry="8.5" fill="#e9d5ff" stroke="#6a1b9a" stroke-width="1.5"/>
+          <text x="290" y="468" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111111">Evidence Store</text>
+          <text x="290" y="484" text-anchor="middle" font-size="10" fill="#4b5563">Immutable raw docs &amp; notes</text>
+          <text x="290" y="497" text-anchor="middle" font-size="10" fill="#4b5563">Indexed chunks &amp; ACL tags</text>
+
+          <!-- L2: Canonical Knowledge -->
+          <path d="M 472 443 L 472 503 A 138 8.5 0 0 0 748 503 L 748 443 Z" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+          <ellipse cx="610" cy="443" rx="138" ry="8.5" fill="#e9d5ff" stroke="#6a1b9a" stroke-width="1.5"/>
+          <text x="610" y="468" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111111">Canonical Knowledge</text>
+          <text x="610" y="484" text-anchor="middle" font-size="10" fill="#4b5563">Validated rules, decisions &amp; scope</text>
+          <text x="610" y="497" text-anchor="middle" font-size="10" fill="#4b5563">Stable IDs &amp; version history</text>
+
+          <!-- L3: Deliverable Store -->
+          <path d="M 792 443 L 792 503 A 138 8.5 0 0 0 1068 503 L 1068 443 Z" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+          <ellipse cx="930" cy="443" rx="138" ry="8.5" fill="#e9d5ff" stroke="#6a1b9a" stroke-width="1.5"/>
+          <text x="930" y="468" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111111">Deliverable Store</text>
+          <text x="930" y="484" text-anchor="middle" font-size="10" fill="#4b5563">Versioned drafts &amp; citations</text>
+          <text x="930" y="497" text-anchor="middle" font-size="10" fill="#4b5563">Approvals &amp; audit snapshots</text>
+        </g>
+
+        <!-- 4. EDGE LABELS (PILL BADGES ON CONNECTORS) -->
+        <!-- 1. Request deliverable -->
+        <g class="engine-interactive" data-open-dialog="sequence-dialog">
+          <rect x="542" y="75" width="150" height="20" rx="10" fill="#ffffff" stroke="#90bce8" stroke-width="1.2"/>
+          <text x="617" y="88.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d47a1">1. Request deliverable</text>
+
+          <!-- 5. Cited draft + findings -->
+          <rect x="752" y="75" width="166" height="20" rx="10" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+          <text x="835" y="88.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2e7d32">5. Cited draft + findings</text>
+        </g>
+
+        <!-- Internal labels inside Engine -->
+        <g class="engine-interactive" data-open-dialog="engine-dialog">
+          <rect x="370" y="206" width="86" height="18" rx="9" fill="#ffffff" stroke="#c8e6c9" stroke-width="1"/>
+          <text x="413" y="218.5" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1b5e20">dispatch task</text>
+
+          <rect x="563" y="206" width="86" height="18" rx="9" fill="#ffffff" stroke="#c8e6c9" stroke-width="1"/>
+          <text x="606" y="218.5" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1b5e20">extract delta</text>
+
+          <rect x="720" y="206" width="92" height="18" rx="9" fill="#ffffff" stroke="#c8e6c9" stroke-width="1"/>
+          <text x="766" y="218.5" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1b5e20">validate draft</text>
+        </g>
+
+        <!-- 2. Load skill + Structured LLM call + Bottom corridor pills: 3, 4, 6 -->
+        <g class="engine-interactive" data-open-dialog="sequence-dialog">
+          <rect x="236" y="282" width="76" height="30" rx="7" fill="#ffffff" stroke="#f59e0b" stroke-width="1.2"/>
+          <text x="274" y="295" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309">2. Load</text>
+          <text x="274" y="307" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309">skill</text>
+
+          <rect x="906" y="161" width="78" height="30" rx="7" fill="#ffffff" stroke="#26a69a" stroke-width="1.2"/>
+          <text x="945" y="174" text-anchor="middle" font-size="10" font-weight="700" fill="#00695c">Structured</text>
+          <text x="945" y="186" text-anchor="middle" font-size="10" font-weight="700" fill="#00695c">LLM call</text>
+
+          <rect x="313" y="376" width="144" height="20" rx="10" fill="#ffffff" stroke="#ce93d8" stroke-width="1.2"/>
+          <text x="385" y="389.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6a1b9a">3. Retrieve context</text>
+
+          <rect x="537" y="376" width="138" height="20" rx="10" fill="#ffffff" stroke="#ce93d8" stroke-width="1.2"/>
+          <text x="606" y="389.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6a1b9a">4. Propose update</text>
+
+          <rect x="740" y="376" width="150" height="20" rx="10" fill="#f0f6e4" stroke="#4f7311" stroke-width="1.4"/>
+          <text x="815" y="389.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4f7311">6. Explicit approval</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="slide-footer"><span>Architecture Diagram · End-to-End Request, Retrieval, Validation &amp; Storage</span><span>Slide 4 · Architecture Diagram</span></div>
   </section>
 
-  <!-- SLIDE 5: TRANSITION TO LIVE PROTOTYPE DEMO -->
-  <section class="slide" data-title="Live Platform Demo" data-notes="Transition cleanly into the live prototype. Remind the audience of the concrete scenario we are about to run: Workshop 1 approved EUR 25,000 for FR01, Workshop 4 mentions EUR 50,000 without company code, and we watch the engine catch and resolve it in 3 steps.">
+  <!-- SLIDE 5: DEMO STAGES & GOVERNANCE WORKFLOW (STANDALONE FLOWCHART) -->
+  <section class="slide" data-title="Demo Stages & Workflow" data-notes="Walk through all 5 governed phases demonstrated in the live prototype (evidence -> report -> conflict -> accepted_clarification -> clarified). Show how 4 explicit human gates control progression and keep KB v1 (EUR 25,000) protected until WS-05 clarifies FR01 scope and Domain Lead promotes v2 (EUR 50,000). Click Launch Live Platform Demo to run it live.">
     <div class="slide-top"><div class="brand">Deloitte</div><div class="slide-number">05 / 05</div></div>
-    <h2>Seeing the architecture in action: <span class="green">Workshop to Fit-Gap.</span></h2>
-    <p class="demo-lead">We will walk through an S/4HANA Procure-to-Pay scenario where <strong>Workshop 4</strong> introduces a <strong>€50,000</strong> approval threshold that contradicts <strong>Workshop 1 (€25,000)</strong>.</p>
-    <div class="demo-cards">
-      <div class="demo-card">
-        <span class="demo-num">01</span>
-        <h3>Draft Workshop Report</h3>
-        <p>Run the Workshop Report skill on Workshop 4 notes and inspect the linked source quotes without altering the €25k rule.</p>
-      </div>
-      <div class="demo-card">
-        <span class="demo-num">02</span>
-        <h3>Catch the Contradiction</h3>
-        <p>Watch the Knowledge Steward and Quality Reviewer flag €50k vs €25k and block premature Fit-Gap &amp; Steering publication.</p>
-      </div>
-      <div class="demo-card">
-        <span class="demo-num">03</span>
-        <h3>Clarify &amp; Update Deliverables</h3>
-        <p>Apply the process owner's clarification (WS-05) and generate updated Fit-Gap and Steering deliverables from the same engine.</p>
-      </div>
+    <div class="slide4-head-row">
+      <h2>Live demo workflow. <span class="green">Five governed stages from notes to v2.</span></h2>
+      <a class="demo-cta" id="demo-link" href="http://127.0.0.1:8000/" target="_blank" rel="noopener" style="padding:7px 16px;font-size:clamp(11.5px,.92vw,14.5px)">Launch Live Platform Demo ↗</a>
     </div>
-    <div class="demo-action-row">
-      <p><strong>Live Prototype Ready:</strong> Includes all 5 architectural blocks, 3 pluggable skills, source passage verification, and 1-click reset.</p>
-      <a class="demo-cta" id="demo-link" href="http://127.0.0.1:8000/" target="_blank" rel="noopener">Launch Live Platform Demo ↗</a>
+
+    <div class="arch-svg-wrap">
+      <svg viewBox="0 0 1220 536" role="img" aria-label="Live Demo Five-Stage Governance Flowchart" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif">
+        <defs>
+          <marker id="flow-arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#374151"/>
+          </marker>
+          <marker id="flow-arr-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+            <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#4f7311"/>
+          </marker>
+          <marker id="gate-arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#6b7280"/>
+          </marker>
+          <filter id="stage-shadow" x="-3%" y="-4%" width="106%" height="110%">
+            <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#111111" flood-opacity="0.06"/>
+          </filter>
+        </defs>
+
+        <!-- 1. TOP SCENARIO CONTEXT BAR -->
+        <rect x="17" y="10" width="386" height="46" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.3"/>
+        <text x="31" y="28" font-size="10" font-weight="700" fill="#1b5e20" letter-spacing="0.5">BASELINE KB (v1)</text>
+        <text x="31" y="45" font-size="11.5" font-weight="600" fill="#111111">WS-01 · PO Threshold = EUR 25,000 (Scope: FR01)</text>
+
+        <rect x="417" y="10" width="386" height="46" rx="6" fill="#fff8e1" stroke="#d97706" stroke-width="1.3"/>
+        <text x="431" y="28" font-size="10" font-weight="700" fill="#b45309" letter-spacing="0.5">NEW WORKSHOP INPUT</text>
+        <text x="431" y="45" font-size="11.5" font-weight="600" fill="#111111">WS-04 · Mentions EUR 50,000 (Scope: Missing)</text>
+
+        <rect x="817" y="10" width="386" height="46" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.3"/>
+        <text x="831" y="28" font-size="10" font-weight="700" fill="#0d47a1" letter-spacing="0.5">OWNER CLARIFICATION</text>
+        <text x="831" y="45" font-size="11.5" font-weight="600" fill="#111111">WS-05 · Confirms EUR 50,000 for FR01</text>
+
+        <!-- 2. GUIDED DEMO STEP GROUP HEADERS -->
+        <rect x="17" y="66" width="454" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.1"/>
+        <text x="244" y="84" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" letter-spacing="0.5">DEMO STEP 01 · Draft &amp; Review Workshop Report</text>
+
+        <rect x="505" y="66" width="454" height="28" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1.1"/>
+        <text x="732" y="84" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b" letter-spacing="0.5">DEMO STEP 02 · Catch Conflict &amp; Verify Scope</text>
+
+        <rect x="993" y="66" width="210" height="28" rx="5" fill="#f0f6e4" stroke="#86bc25" stroke-width="1.3"/>
+        <text x="1098" y="84" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3f6212" letter-spacing="0.4">DEMO STEP 03 · Publish v2</text>
+
+        <!-- 3. STAGE-TO-STAGE HORIZONTAL ARROWS + STEM LINES TO GATES -->
+        <!-- Arrow 1->2 -->
+        <path d="M 227 218 L 259 218" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#flow-arr)"/>
+        <circle cx="244" cy="218" r="3" fill="#6b7280"/>
+        <path d="M 244 221 L 244 350" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#gate-arr)"/>
+
+        <!-- Arrow 2->3 -->
+        <path d="M 471 218 L 503 218" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#flow-arr)"/>
+        <circle cx="488" cy="218" r="3" fill="#6b7280"/>
+        <path d="M 488 221 L 488 350" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#gate-arr)"/>
+
+        <!-- Arrow 3->4 -->
+        <path d="M 715 218 L 747 218" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#flow-arr)"/>
+        <circle cx="732" cy="218" r="3" fill="#6b7280"/>
+        <path d="M 732 221 L 732 350" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#gate-arr)"/>
+
+        <!-- Arrow 4->5 -->
+        <path d="M 959 218 L 991 218" fill="none" stroke="#4f7311" stroke-width="2.2" marker-end="url(#flow-arr-green)"/>
+        <circle cx="976" cy="218" r="3.2" fill="#4f7311"/>
+        <path d="M 976 221 L 976 350" fill="none" stroke="#4f7311" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#gate-arr)"/>
+
+        <!-- 4. FIVE GOVERNED STAGE CARDS (width=210, height=228, y=104..332) -->
+        <!-- Stage 01: phase: evidence -->
+        <g filter="url(#stage-shadow)">
+          <rect x="17" y="104" width="210" height="228" rx="8" fill="#ffffff" stroke="#1565c0" stroke-width="1.6"/>
+          <text x="122" y="122" text-anchor="middle" font-size="10" font-weight="700" fill="#1565c0" letter-spacing="0.6">STAGE 01</text>
+          <rect x="27" y="129" width="190" height="21" rx="10.5" fill="#e3f2fd" stroke="#90bce8" stroke-width="1"/>
+          <text x="122" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#0d47a1">phase: evidence</text>
+          <text x="122" y="172" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111111">Evidence Ready</text>
+          <line x1="29" y1="184" x2="215" y2="184" stroke="#e5e7eb" stroke-width="1"/>
+          <text x="30" y="206" font-size="10.8" fill="#374151">• WS-01 &amp; WS-04 indexed</text>
+          <text x="30" y="232" font-size="10.8" fill="#374151">• Run workshop_report Skill</text>
+          <text x="30" y="258" font-size="10.8" fill="#374151">• Freezes snapshot_id</text>
+          <text x="30" y="284" font-size="10.8" fill="#374151">• Stages EUR 50k (Proposed)</text>
+          <rect x="27" y="302" width="190" height="20" rx="4" fill="#eff6ff"/>
+          <text x="122" y="315.5" text-anchor="middle" font-size="9.8" font-weight="700" fill="#1d4ed8">Candidate: Proposed</text>
+        </g>
+
+        <!-- Stage 02: phase: report -->
+        <g filter="url(#stage-shadow)">
+          <rect x="261" y="104" width="210" height="228" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="1.6"/>
+          <text x="366" y="122" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309" letter-spacing="0.6">STAGE 02</text>
+          <rect x="271" y="129" width="190" height="21" rx="10.5" fill="#fff8e1" stroke="#fcd34d" stroke-width="1"/>
+          <text x="366" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">phase: report</text>
+          <text x="366" y="172" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111111">Report Reviewed</text>
+          <line x1="273" y1="184" x2="459" y2="184" stroke="#e5e7eb" stroke-width="1"/>
+          <text x="274" y="206" font-size="10.8" fill="#374151">• WS-04 report marked Approved</text>
+          <text x="274" y="232" font-size="10.8" fill="#374151">• Confirms exact source quotes</text>
+          <text x="274" y="258" font-size="10.8" fill="#374151">• Proposal not yet promoted</text>
+          <text x="274" y="284" font-size="10.8" fill="#374151">• KB v1 (EUR 25k) stays active</text>
+          <rect x="271" y="302" width="190" height="20" rx="4" fill="#fffbeb"/>
+          <text x="366" y="315.5" text-anchor="middle" font-size="9.8" font-weight="700" fill="#b45309">Report Approved · KB Still v1</text>
+        </g>
+
+        <!-- Stage 03: phase: conflict -->
+        <g filter="url(#stage-shadow)">
+          <rect x="505" y="104" width="210" height="228" rx="8" fill="#ffffff" stroke="#dc2626" stroke-width="1.6"/>
+          <text x="610" y="122" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626" letter-spacing="0.6">STAGE 03</text>
+          <rect x="515" y="129" width="190" height="21" rx="10.5" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+          <text x="610" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#b91c1c">phase: conflict</text>
+          <text x="610" y="172" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111111">Decision Conflict</text>
+          <line x1="517" y1="184" x2="703" y2="184" stroke="#e5e7eb" stroke-width="1"/>
+          <text x="518" y="206" font-size="10.8" fill="#374151">• EUR 50k vs EUR 25k flagged</text>
+          <text x="518" y="232" font-size="10.8" fill="#374151">• Candidate status = Conflicted</text>
+          <text x="518" y="258" font-size="10.8" fill="#374151">• Opens 2 escalation tasks</text>
+          <text x="518" y="284" font-size="10.8" fill="#374151">• Blocks final fit_gap publish</text>
+          <rect x="515" y="302" width="190" height="20" rx="4" fill="#fef2f2"/>
+          <text x="610" y="315.5" text-anchor="middle" font-size="9.8" font-weight="700" fill="#b91c1c">Publish Blocked Until Clarified</text>
+        </g>
+
+        <!-- Stage 04: phase: accepted_clarification -->
+        <g filter="url(#stage-shadow)">
+          <rect x="749" y="104" width="210" height="228" rx="8" fill="#ffffff" stroke="#6a1b9a" stroke-width="1.6"/>
+          <text x="854" y="122" text-anchor="middle" font-size="10" font-weight="700" fill="#6a1b9a" letter-spacing="0.6">STAGE 04</text>
+          <rect x="757" y="129" width="194" height="21" rx="10.5" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1"/>
+          <text x="854" y="143" text-anchor="middle" font-size="9.6" font-weight="700" fill="#581c87">phase: accepted_clarification</text>
+          <text x="854" y="172" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111111">Clarification Accepted</text>
+          <line x1="761" y1="184" x2="947" y2="184" stroke="#e5e7eb" stroke-width="1"/>
+          <text x="762" y="206" font-size="10.8" fill="#374151">• Unlocks WS-05 owner reply</text>
+          <text x="762" y="232" font-size="10.8" fill="#374151">• Confirms Company = FR01</text>
+          <text x="762" y="258" font-size="10.8" fill="#374151">• Candidate status = Accepted</text>
+          <text x="762" y="284" font-size="10.8" fill="#374151">• Ready for KB promotion</text>
+          <rect x="759" y="302" width="190" height="20" rx="4" fill="#f3e8ff"/>
+          <text x="854" y="315.5" text-anchor="middle" font-size="9.8" font-weight="700" fill="#6b21a8">FR01 Verified · Ready for v2</text>
+        </g>
+
+        <!-- Stage 05: phase: clarified -->
+        <g filter="url(#stage-shadow)">
+          <rect x="993" y="104" width="210" height="228" rx="8" fill="#fcfdf9" stroke="#4f7311" stroke-width="1.9"/>
+          <text x="1098" y="122" text-anchor="middle" font-size="10" font-weight="700" fill="#4f7311" letter-spacing="0.6">STAGE 05</text>
+          <rect x="1003" y="129" width="190" height="21" rx="10.5" fill="#e8f5e9" stroke="#86bc25" stroke-width="1.1"/>
+          <text x="1098" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#3f6212">phase: clarified</text>
+          <text x="1098" y="172" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111111">Decision Clarified (v2)</text>
+          <line x1="1005" y1="184" x2="1191" y2="184" stroke="#d9ead3" stroke-width="1"/>
+          <text x="1006" y="206" font-size="10.8" fill="#374151">• Promotes rule to KB v2 (50k)</text>
+          <text x="1006" y="232" font-size="10.8" fill="#374151">• Keeps v1 (25k) in history</text>
+          <text x="1006" y="258" font-size="10.8" fill="#374151">• Resolves open review tasks</text>
+          <text x="1006" y="284" font-size="10.8" fill="#374151">• Unlocks fit_gap &amp; steering</text>
+          <rect x="1003" y="302" width="190" height="20" rx="4" fill="#f0f6e4"/>
+          <text x="1098" y="315.5" text-anchor="middle" font-size="9.8" font-weight="700" fill="#3f6212">KB v2 Active · Publish Ready</text>
+        </g>
+
+        <!-- 5. FOUR EXPLICIT HUMAN GATE CALLOUTS -->
+        <rect x="132" y="352" width="224" height="56" rx="6" fill="#ffffff" stroke="#90bce8" stroke-width="1.3"/>
+        <text x="244" y="369" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0d47a1" letter-spacing="0.4">GATE 1 · CONSULTANT / LEAD</text>
+        <text x="244" y="386" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Approve Faithful Report</text>
+        <text x="244" y="400" text-anchor="middle" font-size="9.5" fill="#6b7280">POST /approve-report</text>
+
+        <rect x="376" y="352" width="224" height="56" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.3"/>
+        <text x="488" y="369" text-anchor="middle" font-size="9.5" font-weight="700" fill="#b91c1c" letter-spacing="0.4">GATE 2 · CONSULTANT / LEAD</text>
+        <text x="488" y="386" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Flag EUR 50k vs 25k Conflict</text>
+        <text x="488" y="400" text-anchor="middle" font-size="9.5" fill="#6b7280">POST /api/conflict</text>
+
+        <rect x="620" y="352" width="224" height="56" rx="6" fill="#ffffff" stroke="#d8b4fe" stroke-width="1.3"/>
+        <text x="732" y="369" text-anchor="middle" font-size="9.5" font-weight="700" fill="#6a1b9a" letter-spacing="0.4">GATE 3 · DOMAIN LEAD ONLY</text>
+        <text x="732" y="386" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Accept WS-05 Scope (FR01)</text>
+        <text x="732" y="400" text-anchor="middle" font-size="9.5" fill="#6b7280">POST /clarification/accept</text>
+
+        <rect x="864" y="352" width="224" height="56" rx="6" fill="#f0f6e4" stroke="#86bc25" stroke-width="1.5"/>
+        <text x="976" y="369" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3f6212" letter-spacing="0.4">GATE 4 · DOMAIN LEAD ONLY</text>
+        <text x="976" y="386" text-anchor="middle" font-size="11.5" font-weight="700" fill="#111111">Promote Rule to KB v2</text>
+        <text x="976" y="400" text-anchor="middle" font-size="9.5" fill="#4f7311">POST /api/promote</text>
+
+        <!-- 6. BOTTOM GOVERNANCE & KB LOCK BAR -->
+        <rect x="17" y="424" width="942" height="98" rx="8" fill="#111111"/>
+        <rect x="17" y="424" width="6" height="98" rx="3" fill="#f59e0b"/>
+        <text x="38" y="462" font-size="14.8" font-weight="600" fill="#f3f4f6">AI proposals stay isolated in candidate staging; final fit_gap &amp; steering publication is blocked while conflict is open.</text>
+        <text x="38" y="492" font-size="14" fill="#9ca3af">Every run saves an immutable snapshot_id freezing exact document hashes, active KB version, user role, and current phase.</text>
+
+        <rect x="993" y="424" width="210" height="98" rx="8" fill="#111111" stroke="#86bc25" stroke-width="2"/>
+        <text x="1098" y="449" text-anchor="middle" font-size="11.5" font-weight="700" fill="#86bc25" letter-spacing="0.4">ACTIVE KB: v2 (EUR 50k)</text>
+        <text x="1098" y="471" text-anchor="middle" font-size="11.5" fill="#ffffff">All 3 Skills unlocked for</text>
+        <text x="1098" y="488" text-anchor="middle" font-size="11.5" fill="#ffffff">final v2 publication.</text>
+        <text x="1098" y="508" text-anchor="middle" font-size="10.2" font-weight="600" fill="#a3e635">Audit log + v1 preserved</text>
+      </svg>
     </div>
-    <div class="slide-footer"><span>Project: S/4HANA Scoping · Procure-to-Pay</span><span>Slide 5 · Live Demo</span></div>
+
+    <div class="slide-footer"><span>Project: S/4HANA Scoping · Procure-to-Pay · Governed Phase Progression</span><span>Slide 5 · Live Demo Workflow</span></div>
   </section>
 
   <div class="progress" aria-hidden="true"><span id="progress"></span></div>
@@ -1027,6 +1636,296 @@
 <dialog id="notes-dialog" style="max-width:640px;width:90%;border:0;border-top:4px solid #86bc25;padding:28px;font:15px/1.6 Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.35)">
   <div id="notes-content"></div>
   <button id="close-notes" type="button" style="margin-top:18px;background:#111;color:#fff;border:0;padding:8px 16px;border-radius:3px">Close notes</button>
+</dialog>
+
+<dialog id="engine-dialog" class="engine-dialog" aria-labelledby="engine-dialog-title">
+  <div class="engine-dialog-head">
+    <div>
+      <div class="section-label">Controlled Multi-Agent Engine · Execution Flow</div>
+      <h3 id="engine-dialog-title">How They Actually Flow Together</h3>
+    </div>
+    <button id="close-engine" class="engine-dialog-close" type="button" data-close-dialog="engine-dialog" aria-label="Close dialog">Close ×</button>
+  </div>
+
+  <div class="engine-flow-grid">
+    <div class="engine-step-card">
+      <span class="engine-step-tag">01 · orchestrator.py</span>
+      <strong>Main Agent (Orchestrator)</strong>
+      <ul class="engine-step-list">
+        <li>Checks data access permissions</li>
+        <li>Freezes point-in-time <code>snapshot_id</code></li>
+        <li>Dispatches agent tasks</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">02 · agents.py</span>
+      <strong>DeliverableAgent</strong>
+      <ul class="engine-step-list">
+        <li>Single reusable writer</li>
+        <li>Loads Skill + context</li>
+        <li>Calls <code>ModelGateway</code></li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">03 · agents.py</span>
+      <strong>QualityReviewer (checks, verifies)</strong>
+      <ul class="engine-step-list">
+        <li>Required template sections are present</li>
+        <li>Section text is present</li>
+        <li>Citations match (<code>snapshot_id</code>)</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">04 · agents.py</span>
+      <strong>KnowledgeSteward</strong>
+      <ul class="engine-step-list">
+        <li>Extracts new workshop facts</li>
+        <li>Diffs against KB</li>
+        <li>Flags conflicts for review</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="engine-infra-box">
+    <h4>Architecture Design · Shared Infrastructure, Separate Classes</h4>
+    <ul class="engine-infra-list">
+      <li><strong>Same underlying infrastructure:</strong>
+        <ul style="margin:4px 0 0 18px;display:grid;gap:3px">
+          <li>All agents share <code>KnowledgeStore</code> database access, LLM connector, Pydantic validation schemas, and frozen <code>snapshot_id</code>.</li>
+        </ul>
+      </li>
+      <li><strong>Three separate classes in <code>agents.py</code> (restricted roles):</strong>
+        <ul style="margin:4px 0 0 18px;display:grid;gap:3px">
+          <li><code>DeliverableAgent</code> (1 reusable writer instance) loads the matching Skill and drafts content.</li>
+          <li><code>QualityReviewer</code> independently checks required sections and citations.</li>
+          <li><code>KnowledgeSteward</code> isolates rule conflicts so nothing auto-overwrites approved decisions.</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</dialog>
+
+<dialog id="skills-dialog" class="engine-dialog theme-amber" aria-labelledby="skills-dialog-title">
+  <div class="engine-dialog-head">
+    <div>
+      <div class="section-label">Pluggable Skill Registry · 1 Skill = 1 Deliverable</div>
+      <h3 id="skills-dialog-title">Skill Structure</h3>
+    </div>
+    <button class="engine-dialog-close" type="button" data-close-dialog="skills-dialog" aria-label="Close dialog">Close ×</button>
+  </div>
+
+  <div class="engine-flow-grid cols-3" style="margin-bottom:0">
+    <div class="engine-step-card">
+      <span class="engine-step-tag">01 · Manifest</span>
+      <ul class="engine-step-list">
+        <li>Skill name, version &amp; purpose</li>
+        <li>Required document sections</li>
+        <li>Selected deterministically by user</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">02 · Schema</span>
+      <ul class="engine-step-list">
+        <li>Strict JSON output structure</li>
+        <li>Section-by-section layout</li>
+        <li>Required source citation fields</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">03 · Rules</span>
+      <ul class="engine-step-list">
+        <li>Checks previous steps are done</li>
+        <li>Citations must match <code>snapshot_id</code></li>
+        <li>Separates workshop notes from KB</li>
+      </ul>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="gateway-dialog" class="engine-dialog theme-teal" aria-labelledby="gateway-dialog-title">
+  <div class="engine-dialog-head">
+    <div>
+      <div class="section-label">Model Gateway · Controlled LLM Abstraction</div>
+      <h3 id="gateway-dialog-title">Model Gateway Structure</h3>
+    </div>
+    <button class="engine-dialog-close" type="button" data-close-dialog="gateway-dialog" aria-label="Close dialog">Close ×</button>
+  </div>
+
+  <div class="engine-flow-grid cols-3" style="margin-bottom:0">
+    <div class="engine-step-card">
+      <span class="engine-step-tag">01 · Unified Connector</span>
+      <ul class="engine-step-list">
+        <li>Single entry point for all LLM calls</li>
+        <li>Switch AI vendors without changing agents</li>
+        <li>Logs model used, latency &amp; token count</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">02 · Output &amp; Citation Lock</span>
+      <ul class="engine-step-list">
+        <li>Enforces the Skill JSON schema</li>
+        <li>Allows citations only from <code>snapshot_id</code></li>
+        <li>Blocks invented source references</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">03 · Client Data Policy Routing</span>
+      <ul class="engine-step-list">
+        <li>Enterprise Cloud APIs (Claude / OpenAI)</li>
+        <li>On-prem or EU models (Mistral / Local LLM)</li>
+        <li>Routes by project confidentiality level</li>
+      </ul>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="knowledge-dialog" class="engine-dialog theme-purple" aria-labelledby="knowledge-dialog-title">
+  <div class="engine-dialog-head">
+    <div>
+      <div class="section-label">Layered Project Knowledge Store · Memory &amp; Governance</div>
+      <h3 id="knowledge-dialog-title">Knowledge Store Structure</h3>
+    </div>
+    <button class="engine-dialog-close" type="button" data-close-dialog="knowledge-dialog" aria-label="Close dialog">Close ×</button>
+  </div>
+
+  <div class="engine-flow-grid cols-3" style="margin-bottom:10px">
+    <div class="engine-step-card">
+      <span class="engine-step-tag">01 · Evidence Store</span>
+      <ul class="engine-step-list">
+        <li>Raw workshop notes &amp; client docs</li>
+        <li>Split into searchable text passages</li>
+        <li>Tagged with role access permissions</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">02 · Canonical Knowledge</span>
+      <ul class="engine-step-list">
+        <li>Validated rules, decisions &amp; scope</li>
+        <li>Versioned history (<code>v1</code> to <code>v2</code>)</li>
+        <li>AI updates wait for human approval</li>
+      </ul>
+    </div>
+    <div class="engine-step-card">
+      <span class="engine-step-tag">03 · Deliverable Store</span>
+      <ul class="engine-step-list">
+        <li>Generated drafts tied to <code>snapshot_id</code></li>
+        <li>Audit log of reviews &amp; sign-offs</li>
+        <li>Locked client-ready publications</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="engine-flow-grid cols-3" style="margin-bottom:0">
+    <div class="engine-infra-box" style="padding:11px 12px;font-size:12px;line-height:1.45">
+      <div style="font-weight:700;color:#fff"><span style="color:#c084fc">DB:</span> Blob Storage + Vector / Keyword DB</div>
+      <div style="font-size:11.5px;color:#d1d5db;margin-top:3px">e.g. File storage (<code>S3</code>) + <code>pgvector</code> / <code>Full-Text Search (FTS5)</code></div>
+    </div>
+    <div class="engine-infra-box" style="padding:11px 12px;font-size:12px;line-height:1.45">
+      <div style="font-weight:700;color:#fff"><span style="color:#c084fc">DB:</span> Relational SQL Tables (ACID)</div>
+      <div style="font-size:11.5px;color:#d1d5db;margin-top:3px">e.g. <code>PostgreSQL</code> / <code>SQLite</code> (Atomicity, Consistency, Isolation, Durability)</div>
+    </div>
+    <div class="engine-infra-box" style="padding:11px 12px;font-size:12px;line-height:1.45">
+      <div style="font-weight:700;color:#fff"><span style="color:#c084fc">DB:</span> JSON Store + Append-Only SQL</div>
+      <div style="font-size:11.5px;color:#d1d5db;margin-top:3px">e.g. <code>JSONB</code> + immutable audit log</div>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="sequence-dialog" class="engine-dialog theme-blue" aria-labelledby="sequence-dialog-title">
+  <div class="engine-dialog-head">
+    <div>
+      <div class="section-label">End-to-End Request, Execution &amp; Approval</div>
+      <h3 id="sequence-dialog-title">Event &amp; Logic Sequence (Steps 1 to 6)</h3>
+    </div>
+    <button class="engine-dialog-close" type="button" data-close-dialog="sequence-dialog" aria-label="Close dialog">Close ×</button>
+  </div>
+
+  <div class="seq-legend" aria-label="Architecture block color key">
+    <span>Architecture Blocks:</span>
+    <span class="arch-tok tok-blue">Consultant Workspace</span>
+    <span class="arch-tok tok-green">Multi-Agent Engine</span>
+    <span class="arch-tok tok-amber">Skill Registry</span>
+    <span class="arch-tok tok-teal">Model Gateway</span>
+    <span class="arch-tok tok-purple">Knowledge Store</span>
+  </div>
+
+  <div class="engine-flow-grid cols-3">
+    <div class="engine-step-card" style="border-top-color:#1565c0">
+      <span class="engine-step-tag">Step 01 · <span class="arch-tok tok-blue">Consultant</span> &rarr; <span class="arch-tok tok-green">Main Agent</span></span>
+      <strong>Request &amp; Snapshot</strong>
+      <ul class="engine-step-list">
+        <li><span class="arch-tok tok-blue">UI</span> sends <code class="arch-tok tok-blue">POST /api/generate</code> with <code class="arch-tok tok-amber">skill</code> ID</li>
+        <li>Checks data access permissions</li>
+        <li>Freezes point-in-time <code class="arch-tok tok-green">snapshot_id</code></li>
+      </ul>
+    </div>
+    <div class="engine-step-card" style="border-top-color:#d97706">
+      <span class="engine-step-tag">Step 02 · <span class="arch-tok tok-green">DeliverableAgent</span> &rarr; <span class="arch-tok tok-amber">Skills</span></span>
+      <strong>Skill Lookup &amp; Gates</strong>
+      <ul class="engine-step-list">
+        <li>Matches requested <code class="arch-tok tok-amber">skill</code> in <code class="arch-tok tok-amber">registry.py</code></li>
+        <li>Checks workflow phase allows <span class="arch-tok tok-amber">Skill</span></li>
+        <li>Loads <code class="arch-tok tok-amber">manifest.json</code> (sections, rules)</li>
+      </ul>
+    </div>
+    <div class="engine-step-card" style="border-top-color:#6a1b9a">
+      <span class="engine-step-tag">Step 03 · <span class="arch-tok tok-green">DeliverableAgent</span> &rarr; <span class="arch-tok tok-purple">Knowledge</span></span>
+      <strong>Authorized Context</strong>
+      <ul class="engine-step-list">
+        <li>Selects scenario refs (<code class="arch-tok tok-purple">ws01</code>, <code class="arch-tok tok-purple">ws04</code>, <code class="arch-tok tok-purple">ws05</code>)</li>
+        <li>Verifies role ACL on each chunk</li>
+        <li>Reads active <span class="arch-tok tok-purple">Canonical KB</span> (<code class="arch-tok tok-purple">v1</code>)</li>
+      </ul>
+    </div>
+    <div class="engine-step-card" style="border-top-color:#00695c">
+      <span class="engine-step-tag">Step 04 · <span class="arch-tok tok-teal">Gateway</span> + <span class="arch-tok tok-green">Steward</span></span>
+      <strong>LLM Call &amp; Diff</strong>
+      <ul class="engine-step-list">
+        <li>Locks <code class="arch-tok tok-teal">DraftPayload</code> schema &amp; <code class="arch-tok tok-purple">ref</code> enum</li>
+        <li>Calls <span class="arch-tok tok-teal">LLM</span> (or deterministic fixture)</li>
+        <li><code class="arch-tok tok-green">KnowledgeSteward</code> diffs facts vs <span class="arch-tok tok-purple">KB</span></li>
+      </ul>
+    </div>
+    <div class="engine-step-card" style="border-top-color:#2e7d32">
+      <span class="engine-step-tag">Step 05 · <span class="arch-tok tok-green">QualityReviewer</span> &rarr; <span class="arch-tok tok-blue">UI</span></span>
+      <strong>Validate &amp; Audit</strong>
+      <ul class="engine-step-list">
+        <li>Checks required sections &amp; text present</li>
+        <li>Verifies citations match <code class="arch-tok tok-green">snapshot_id</code></li>
+        <li>Saves draft, logs <code class="arch-tok tok-purple">events</code>, returns to <span class="arch-tok tok-blue">UI</span></li>
+      </ul>
+    </div>
+    <div class="engine-step-card" style="border-top-color:#4f7311">
+      <span class="engine-step-tag">Step 06 · <span class="arch-tok tok-blue">Consultant / Lead</span> &rarr; <span class="arch-tok tok-purple">KB</span></span>
+      <strong>Explicit Approval</strong>
+      <ul class="engine-step-list">
+        <li>Approves report or flags rule conflict</li>
+        <li><span class="arch-tok tok-blue">Domain Lead</span> promotes rule (<code class="arch-tok tok-purple">v1</code> to <code class="arch-tok tok-purple">v2</code>)</li>
+        <li>Locks release in <code class="arch-tok tok-purple">publications</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="engine-infra-box" style="padding:12px 16px">
+    <div style="display:grid;grid-template-columns:1.08fr 1fr;gap:16px;align-items:center">
+      <div>
+        <div style="font-size:13.5px;font-weight:700;color:#fff;margin-bottom:5px"><code>snapshot_id</code> <span style="font-size:11.5px;font-weight:500;color:#9ca3af">(e.g. <code>SNAP-8F3A19C4B201</code>)</span> :</div>
+        <ul class="engine-infra-list">
+          <li><strong>What?:</strong> Like &ldquo;git commit&rdquo; ID of the exact documents and KB rules used for a single AI run.</li>
+          <li><strong>Why?:</strong> Prevents citing unapproved data and proves which inputs produced every draft.</li>
+        </ul>
+      </div>
+      <div style="border-left:1px solid rgba(255,255,255,.16);padding-left:16px;font-size:12px;line-height:1.45;color:#e5e7eb">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#93c5fd;margin-bottom:4px">How It Is Made (Frozen JSON in <code>snapshots</code>)</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:5px;padding:7px 10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.45;color:#d1d5db">
+          <div><span style="color:#93c5fd">"id"</span>: <span style="color:#fde68a">"SNAP-8F3A19C4B201"</span>,</div>
+          <div><span style="color:#93c5fd">"docs"</span>: [<span style="color:#d8b4fe">"ws01#sha256:9b4e.."</span>, <span style="color:#d8b4fe">"ws04#sha256:3c1a.."</span>],</div>
+          <div><span style="color:#93c5fd">"kb_version"</span>: <span style="color:#d8b4fe">"DEC-P2P-004-v1"</span>,</div>
+          <div><span style="color:#93c5fd">"context"</span>: <span style="color:#86efac">"role:consultant · phase:evidence"</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </dialog>
 
 <div class="overview" id="overview" role="dialog" aria-label="Slide overview">
@@ -1186,6 +2085,29 @@ function toggleNotes(open = true) {
 $('notes').onclick = () => toggleNotes(true);
 $('close-notes').onclick = () => toggleNotes(false);
 
+function openSubsystemDialog(id) {
+  const dlg = $(id);
+  if (dlg && !dlg.open) dlg.showModal();
+}
+document.querySelectorAll('[data-open-dialog]').forEach(el => {
+  el.addEventListener('click', () => openSubsystemDialog(el.dataset.openDialog));
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
+      openSubsystemDialog(el.dataset.openDialog);
+    }
+  });
+});
+document.querySelectorAll('[data-close-dialog]').forEach(btn => {
+  btn.addEventListener('click', () => $(btn.dataset.closeDialog)?.close());
+});
+document.querySelectorAll('.engine-dialog').forEach(dlg => {
+  dlg.addEventListener('click', e => {
+    if (e.target === dlg) dlg.close();
+  });
+});
+
 document.querySelectorAll('[data-arch-id]').forEach(el => el.addEventListener('click', () => renderArchZoom(el.dataset.archId)));
 
 const mappingRows = [...document.querySelectorAll('.mapping-row')];
@@ -1228,7 +2150,7 @@ $('reveal-all-btn')?.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT' || $('notes-dialog').open) return;
+  if (e.target.tagName === 'INPUT' || document.querySelector('dialog[open]')) return;
   if (e.key === 'Escape') { $('overview').classList.remove('open'); return; }
   if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); next(); }
   if (e.key === ' ' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') { e.preventDefault(); next(); }
