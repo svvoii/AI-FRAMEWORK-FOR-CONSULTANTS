@@ -34,9 +34,11 @@ Source documents load on first start. Click **Reset Demo** in the top header (`P
 
 ## Guided 3-step demo flow
 
-1. **Step 1 — Draft Workshop Report (`WS-04`):** Generate the Workshop Report, click any source passage pill to verify exact quotes, and click **Approve Report & Catch €50k Conflict**. Notice that the approved `€25,000` baseline stays untouched.
-2. **Step 2 — Expose Conflict & Impact:** Optionally preview the Fit-Gap Analysis or Steering Summary (both surface the unresolved conflict and block final publication), and check **Impact Alerts** for Target Architecture. Then click **Apply WS-05 Clarification & Approve €50k (v2)**.
+1. **Step 1 — Draft Workshop Report (`WS-04`):** Generate the Workshop Report, click any source passage pill to verify exact quotes, and click **Confirm Report & Flag €50k Conflict**. Notice that the approved `€25,000` baseline stays untouched.
+2. **Step 2 — Expose Conflict & Impact:** Optionally preview the Fit-Gap Analysis or Steering Summary (both surface the unresolved conflict and block final publication), and check **Impact Alerts** for Target Architecture. Then click **Gates 3 & 4 · Apply WS-05 & Promote to KB v2**.
 3. **Step 3 — Update & Publish (`v2`):** Generate any deliverable (Workshop Report, Fit-Gap, Steering) against approved Knowledge v2 (`€50,000` for `FR01`) and publish a locked version while keeping `v1` in history.
+
+The collapsible strip above the console carries two views of the same framework: **Architecture · 5 Blocks** (the five building blocks, click any block to inspect it) and **Process · 5 Stages** (the slide-5 process rail, where the current stage is highlighted and the four human gates sit between stages). **Open full process view ↗** expands the same process into a dialog with the three context bars, all five stage cards and the four gate endpoints. The strip stays collapsed by default; the toggle label follows the selected tab.
 
 Expand **Show step-by-step governance gates** inside the draft footer or Knowledge panel if you want to walk through the individual lower-level approval gates.
 

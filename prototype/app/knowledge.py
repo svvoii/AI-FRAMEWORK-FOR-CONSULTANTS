@@ -338,7 +338,7 @@ class KnowledgeStore:
         self.validate_payload(DraftPayload.model_validate_json(draft['payload']), role)
         with self.db:
             self.db.execute('UPDATE drafts SET report_approved=1 WHERE id=?', (draft_id,))
-        self.audit('report_approval', f'{draft_id}: faithful report approved; no candidate facts promoted.', role)
+        self.audit('report_approval', f'{draft_id}: faithful report confirmed; no candidate facts promoted.', role)
         return self.state()
 
     def change_approved(self, draft_id):

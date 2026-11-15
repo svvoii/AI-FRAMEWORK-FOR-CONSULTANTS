@@ -7,8 +7,8 @@
   <meta name="description" content="Reusable AI framework prototype for consultants: Main Agent, Specialized Agents, Pluggable Skills, and Project Knowledge.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3Ccircle cx='24' cy='8' r='4' fill='%2386BC25'/%3E%3C/svg%3E">
   <title>Deloitte | Reusable AI Framework for Consultants</title>
-  <link rel="stylesheet" href="/static/style.css?v=7">
-  <script src="/static/app.js?v=7" defer></script>
+  <link rel="stylesheet" href="/static/style.css?v=9">
+  <script src="/static/app.js?v=9" defer></script>
 </head>
 <body>
   <header class="masthead">
@@ -47,16 +47,22 @@
       <div class="page-width">
         <div class="arch-strip-header">
           <div class="arch-strip-title-group">
-            <span class="eyebrow" style="margin:0">Architecture · Five Building Blocks</span>
+            <div class="arch-tabs" role="tablist" aria-label="Framework views">
+              <button class="arch-tab active" type="button" role="tab" aria-selected="true" data-arch-tab="architecture">Architecture · 5 Blocks</button>
+              <button class="arch-tab" type="button" role="tab" aria-selected="false" data-arch-tab="process">Process · 5 Stages</button>
+            </div>
             <span class="arch-hint" id="arch-hint">Click any block to inspect</span>
           </div>
-          <button class="arch-toggle-btn" id="toggle-arch" type="button" aria-expanded="false" aria-controls="arch-pipeline">
-            <span class="arch-toggle-dot" aria-hidden="true"></span>
-            <span id="toggle-arch-label">Show 5 Blocks</span>
-            <span class="arch-toggle-chevron" id="toggle-arch-icon" aria-hidden="true">▾</span>
-          </button>
+          <div class="arch-strip-actions">
+            <button class="arch-full-btn" id="open-process-view" type="button">Open full process view ↗</button>
+            <button class="arch-toggle-btn" id="toggle-arch" type="button" aria-expanded="false" aria-controls="arch-pipeline">
+              <span class="arch-toggle-dot" aria-hidden="true"></span>
+              <span id="toggle-arch-label">Show 5 Blocks</span>
+              <span class="arch-toggle-chevron" id="toggle-arch-icon" aria-hidden="true">▾</span>
+            </button>
+          </div>
         </div>
-        <div class="arch-pipeline collapsed" id="arch-pipeline" role="region" aria-label="Interactive system architecture">
+        <div class="arch-pipeline" id="arch-pipeline" role="region" aria-label="Interactive system architecture">
           <button class="arch-node" type="button" data-arch="main_agent">
             <span class="arch-tag">1. Entry Point</span>
             <strong>Main Agent</strong>
@@ -87,6 +93,7 @@
             <small>Schema-checked &amp; swappable</small>
           </button>
         </div>
+        <div class="process-pipeline panel-hidden" id="process-pipeline" role="region" aria-label="Governed process stages"></div>
       </div>
     </section>
 
@@ -105,60 +112,33 @@
                 <span class="chip-sep" aria-hidden="true">·</span>
                 <span id="provider-note">Mock Mode</span>
               </span>
-              <button class="dark-ghost-btn" type="button" data-arch="skills">+ Skills (3)</button>
+              <div class="skills-menu-wrap">
+                <button class="dark-ghost-btn" type="button" id="skills-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="skills-menu">+ Skills (3)</button>
+                <div class="skills-menu" id="skills-menu" role="menu" aria-labelledby="skills-menu-btn">
+                  <div class="skills-menu-hint">Pick a skill to load its prompt</div>
+                  <button class="skills-menu-item" type="button" role="menuitemradio" aria-checked="false" data-skill-option="workshop_report" data-testid="generate-workshop">
+                    <span class="skills-menu-name">01 · Workshop Report</span>
+                    <span class="skills-menu-desc">Cited WS-04 report with staged baseline proposals</span>
+                  </button>
+                  <button class="skills-menu-item" type="button" role="menuitemradio" aria-checked="false" data-skill-option="fit_gap" data-testid="generate-fitgap">
+                    <span class="skills-menu-name">02 · Fit-Gap Analysis</span>
+                    <span class="skills-menu-desc">Workshop proposals vs. the approved DEC-P2P-004 rule</span>
+                  </button>
+                  <button class="skills-menu-item" type="button" role="menuitemradio" aria-checked="false" data-skill-option="steering_deck" data-testid="generate-steering">
+                    <span class="skills-menu-name">03 · Steering Summary</span>
+                    <span class="skills-menu-desc">Escalation brief for unresolved threshold conflicts</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="agent-thread" id="agent-thread" aria-live="polite"></div>
 
           <div class="agent-composer-wrap">
-            <div class="quick-prompts-row" role="group" aria-label="Quick prompts">
-              <span class="quick-row-label">Skills</span>
-              <button
-                class="quick-pill suggested"
-                type="button"
-                data-prompt-skill="workshop_report"
-                aria-pressed="false"
-                data-testid="generate-workshop"
-                id="chip-workshop_report"
-                title="Draft the WS-04 Workshop Report and stage any proposed baseline changes"
-              >
-                <span>01 · Workshop Report</span>
-                <span class="pill-arrow" aria-hidden="true">↗</span>
-              </button>
-              <button
-                class="quick-pill"
-                type="button"
-                data-prompt-skill="fit_gap"
-                aria-pressed="false"
-                data-testid="generate-fitgap"
-                id="chip-fit_gap"
-                title="Generate Fit-Gap Analysis comparing WS-04 proposals against the DEC-P2P-004 baseline"
-              >
-                <span>02 · Fit-Gap Analysis</span>
-                <span class="pill-arrow" aria-hidden="true">↗</span>
-              </button>
-              <button
-                class="quick-pill"
-                type="button"
-                data-prompt-skill="steering_deck"
-                aria-pressed="false"
-                data-testid="generate-steering"
-                id="chip-steering_deck"
-                title="Prepare a Steering Summary escalation brief for open P2P threshold conflicts"
-              >
-                <span>03 · Steering Summary</span>
-                <span class="pill-arrow" aria-hidden="true">↗</span>
-              </button>
-              <span class="quick-row-divider" aria-hidden="true"></span>
-              <button
-                class="quick-pill chat-pill"
-                type="button"
-                data-quick-question="What is the approved FR01 rule and why is EUR 50,000 not active yet?"
-                title="Ask a grounded conversational question"
-              >
-                <span>Ask · Why EUR 50k conflict?</span>
-              </button>
+            <div class="quick-prompts-row" role="group" aria-label="Suggested prompts">
+              <span class="quick-row-label">Prompts</span>
+              <div class="prompt-suggestions" id="prompt-suggestions"></div>
               <button class="clear-thread-btn" id="clear-chat" type="button" title="Clear conversation thread">Clear</button>
             </div>
 
@@ -259,6 +239,17 @@
       <button class="close-button" type="button" data-close-arch aria-label="Close architecture details">×</button>
     </div>
     <div id="arch-content"></div>
+  </dialog>
+
+  <dialog id="process-dialog" class="engine-dialog process-dialog" aria-label="Full governed process view">
+    <div class="dialog-heading">
+      <div>
+        <div class="eyebrow" id="process-eyebrow">END-TO-END PROCESS · USER PERSPECTIVE</div>
+        <h2 id="process-title">Five governed stages · four human gates</h2>
+      </div>
+      <button class="close-button" type="button" data-close-process aria-label="Close process view">×</button>
+    </div>
+    <div id="process-content"></div>
   </dialog>
 
   <dialog id="evidence-dialog" aria-label="Evidence and snapshot inspector">

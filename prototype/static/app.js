@@ -6,6 +6,7 @@ const state = {
   liveBackend: null,
   providerChosenByUser: false,
   activeTab: 'evidence',
+  archTab: 'architecture',
   busy: false,
   messages: [],
   selectedSkill: null,
@@ -26,6 +27,30 @@ const PROMPT_PRESETS = {
 
 function currentPresets() {
   return state.workspace?.state === 'clarified' ? PROMPT_PRESETS.clarified : PROMPT_PRESETS.initial;
+}
+
+const PROMPT_SUGGESTIONS = {
+  evidence: [
+    { label: 'Draft WS-04 report', text: 'Draft the WS-04 Workshop Report and stage any proposed baseline changes', skill: 'workshop_report' },
+    { label: 'Why is EUR 50k blocked?', text: 'What is the approved FR01 rule and why is EUR 50,000 not active yet?', skill: null },
+    { label: 'What did WS-04 discuss?', text: 'What did the WS-04 workshop discuss about the EUR 50,000 threshold?', skill: null },
+  ],
+  review: [
+    { label: 'Preview Fit-Gap', text: 'Generate Fit-Gap Analysis comparing WS-04 proposals against the DEC-P2P-004 baseline', skill: 'fit_gap' },
+    { label: 'Preview Steering Summary', text: 'Prepare a Steering Summary escalation brief for open P2P threshold conflicts', skill: 'steering_deck' },
+    { label: 'Which outputs are blocked?', text: 'Which deliverables are blocked by the unresolved EUR 50,000 conflict?', skill: null },
+  ],
+  clarified: [
+    { label: 'Updated WS-05 report', text: 'Draft the WS-05 Workshop Report confirming EUR 50,000 for FR01', skill: 'workshop_report' },
+    { label: 'Fit-Gap on KB v2', text: 'Generate updated Fit-Gap Analysis using approved Knowledge v2 (EUR 50,000 for FR01)', skill: 'fit_gap' },
+    { label: 'What changed in v2?', text: 'What changed between Knowledge v1 and v2 for FR01?', skill: null },
+  ],
+};
+
+function suggestionsFor(wsState) {
+  if (wsState === 'clarified') return PROMPT_SUGGESTIONS.clarified;
+  if (wsState === 'evidence') return PROMPT_SUGGESTIONS.evidence;
+  return PROMPT_SUGGESTIONS.review;
 }
 
 function matchSkillIntent(text) {
@@ -119,17 +144,61 @@ function defaultGreeting() {
 }
 
 function syncSkillSelection() {
-  document.querySelectorAll('.quick-pill[data-prompt-skill]').forEach((btn) => {
-    const selected = btn.dataset.promptSkill === state.selectedSkill;
+  document.querySelectorAll('[data-skill-option]').forEach((btn) => {
+    const selected = btn.dataset.skillOption === state.selectedSkill;
     btn.classList.toggle('selected', selected);
-    btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    btn.setAttribute('aria-checked', selected ? 'true' : 'false');
   });
+  const trigger = $('skills-menu-btn');
+  if (trigger) trigger.classList.toggle('has-selection', Boolean(state.selectedSkill));
 }
 
-function setSelectedSkill(skill) {
-  state.selectedSkill = state.selectedSkill === skill ? null : skill;
+function closeSkillsMenu() {
+  const menu = $('skills-menu');
+  const trigger = $('skills-menu-btn');
+  if (menu) menu.classList.remove('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+
+function toggleSkillsMenu() {
+  const menu = $('skills-menu');
+  const trigger = $('skills-menu-btn');
+  if (!menu || !trigger) return;
+  const open = menu.classList.toggle('open');
+  trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function fillPrompt(text, skill = null) {
+  state.selectedSkill = skill || null;
   syncSkillSelection();
+  const input = $('agent-prompt-input');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
   syncRoutePill();
+  closeSkillsMenu();
+}
+
+function renderPromptSuggestions() {
+  const container = $('prompt-suggestions');
+  if (!container) return;
+  const items = suggestionsFor(state.workspace?.state || 'evidence');
+  container.innerHTML = items
+    .map(
+      (item, index) => `<button class="quick-pill${index === 0 ? ' suggested' : ''}" type="button" data-suggestion="${index}" title="${escapeHtml(item.text)}">
+        <span>${escapeHtml(item.label)}</span>
+        <span class="pill-arrow" aria-hidden="true">↗</span>
+      </button>`
+    )
+    .join('');
+  container.querySelectorAll('[data-suggestion]').forEach((btn) => {
+    btn.onclick = () => {
+      if (state.busy) return;
+      const item = items[Number(btn.dataset.suggestion)];
+      if (item) fillPrompt(item.text, item.skill);
+    };
+  });
 }
 
 function syncRoutePill() {
@@ -361,7 +430,7 @@ function renderKnowledgePanel() {
     proposalBox = `
       <div class="no-proposal-box">
         <strong>No candidate decision deltas staged yet.</strong><br>
-        Run <em>01 · Workshop Report</em> above to let KnowledgeSteward extract proposals from WS-04 without modifying the approved EUR 25,000 rule.
+        Pick <em>01 · Workshop Report</em> from <strong>+ Skills</strong> to let KnowledgeSteward extract proposals from WS-04 without modifying the approved EUR 25,000 rule.
       </div>`;
   } else if (isClarified) {
     proposalBox = `
@@ -427,7 +496,7 @@ function renderWorkspace() {
 
   const phaseText = {
     evidence: 'Stage 1 · Evidence Ready',
-    report: 'Stage 2 · Report Approved',
+    report: 'Stage 2 · Report Confirmed',
     conflict: 'Stage 3 · EUR 50k vs 25k Conflict',
     accepted_clarification: 'Stage 4 · WS-05 Scope Accepted',
     clarified: 'Stage 5 · KB v2 Active (EUR 50k)',
@@ -452,28 +521,16 @@ function renderWorkspace() {
     el.classList.toggle('done', isDone);
   });
 
-  const presets = currentPresets();
-  document.querySelectorAll('.quick-pill[data-prompt-skill]').forEach((btn) => {
-    const sk = btn.dataset.promptSkill;
-    if (presets[sk]) btn.title = presets[sk];
-    btn.classList.remove('suggested', 'muted-skill');
-    if (s === 'evidence' || s === 'report') {
-      if (sk === 'workshop_report') btn.classList.add('suggested');
-      else btn.classList.add('muted-skill');
-    } else if (s === 'conflict') {
-      if (sk === 'fit_gap' || sk === 'steering_deck') btn.classList.add('suggested');
-    } else if (s === 'clarified') {
-      btn.classList.add('suggested');
-    }
-  });
+  renderPromptSuggestions();
   syncSkillSelection();
+  renderProcessRail();
 
   const guidance = {
-    evidence: '<strong>Next:</strong> Run <strong>01 · Workshop Report</strong> above to extract WS-04 evidence. Baseline v1 stays untouched.',
-    report: '<strong>Report approved:</strong> Extracted proposal lacks company code. Click <strong>Gate 2 · Flag Scope Conflict</strong> below.',
+    evidence: '<strong>Next:</strong> Pick <strong>01 · Workshop Report</strong> from <strong>+ Skills</strong> to extract WS-04 evidence. Baseline v1 stays untouched.',
+    report: '<strong>Report confirmed:</strong> Extracted proposal lacks company code. Click <strong>Gate 2 · Flag Scope Conflict</strong> below.',
     conflict: '<strong>Conflict caught:</strong> Preview Fit-Gap/Steering or click <strong>Gates 3 &amp; 4 · Apply WS-05</strong> below.',
     accepted_clarification: '<strong>WS-05 accepted:</strong> Click <strong>Gate 4 · Promote to KB v2</strong> below to activate EUR 50,000 for FR01.',
-    clarified: '<strong>Resolved (KB v2):</strong> Run updated <strong>Fit-Gap</strong> or <strong>Steering</strong> skills above and publish locked v2.',
+    clarified: '<strong>Resolved (KB v2):</strong> Pick updated <strong>Fit-Gap</strong> or <strong>Steering</strong> from <strong>+ Skills</strong> and publish locked v2.',
   }[s];
   $('banner').innerHTML = `<div class="note ${isConflictState(s) ? 'conflict' : ''}"><span>${guidance}</span>${state.role === 'viewer' ? '<span class="state-badge conflicted">Read-Only Mode</span>' : ''}</div>`;
 
@@ -523,7 +580,7 @@ function draftActions(d) {
       ${pub ? `<button class="button secondary small" type="button" data-publication="${pub.id}">Inspect Snapshot ↗</button>` : ''}
     </div>`;
   } else if (d.phase === 'initial' && d.skill === 'workshop_report' && (wsState === 'evidence' || wsState === 'report')) {
-    primaryHtml = `<button class="button" type="button" id="guided-flag-conflict" ${state.role === 'viewer' ? 'disabled' : ''}>2 · Approve Report &amp; Catch EUR 50k Conflict →</button>`;
+    primaryHtml = `<button class="button" type="button" id="guided-flag-conflict" ${state.role === 'viewer' ? 'disabled' : ''}>2 · Confirm Report &amp; Flag EUR 50k Conflict →</button>`;
   } else if (d.phase === 'initial' && d.skill !== 'workshop_report') {
     primaryHtml = `<span class="state-badge conflicted">Review Draft Only · Final Publication Blocked Until Conflict Resolved</span>`;
   } else if (d.phase === 'resolved') {
@@ -536,7 +593,7 @@ function draftActions(d) {
   if (!published) {
     const buttons = [];
     if (d.skill === 'workshop_report' && !reportApproved) {
-      buttons.push(`<button class="button secondary small" type="button" id="approve-report" data-testid="approve-report">Approve Report Accuracy</button>`);
+      buttons.push(`<button class="button secondary small" type="button" id="approve-report" data-testid="approve-report">Confirm Report Fidelity</button>`);
     }
     if (d.skill === 'workshop_report' && reportApproved && wsState === 'report') {
       buttons.push(`<button class="button secondary small" type="button" id="flag-draft-conflict" data-testid="conflict-primary">Flag Conflict</button>`);
@@ -963,6 +1020,162 @@ function openArchitectureZoom(key) {
   dialog.showModal();
 }
 
+const PROCESS_STAGES = [
+  {
+    name: 'Evidence',
+    phase: 'evidence',
+    short: 'WS-01 & WS-04 indexed',
+    bullets: ['WS-01 & WS-04 indexed', 'Run workshop_report Skill', 'Freezes snapshot_id', 'Stages EUR 50k as Proposed'],
+    status: 'Candidate: Proposed',
+  },
+  {
+    name: 'Report',
+    phase: 'report',
+    short: 'Report confirmed · KB stays v1',
+    bullets: ['WS-04 report confirmed', 'Exact source quotes verified', 'Proposal not yet promoted', 'KB v1 (EUR 25k) stays active'],
+    status: 'Report Confirmed · KB Still v1',
+  },
+  {
+    name: 'Conflict',
+    phase: 'conflict',
+    short: 'EUR 50k vs 25k flagged',
+    bullets: ['EUR 50k vs EUR 25k flagged', 'Candidate status = Conflicted', 'Opens 2 escalation tasks', 'Blocks final fit_gap publish'],
+    status: 'Publish Blocked Until Clarified',
+  },
+  {
+    name: 'WS-05',
+    phase: 'accepted_clarification',
+    short: 'FR01 scope accepted',
+    bullets: ['Unlocks WS-05 owner reply', 'Confirms company code FR01', 'Candidate status = Accepted', 'Ready for KB promotion'],
+    status: 'FR01 Verified · Ready for v2',
+  },
+  {
+    name: 'KB v2',
+    phase: 'clarified',
+    short: 'EUR 50k active · publish ready',
+    bullets: ['Promotes rule to KB v2 (50k)', 'Keeps v1 (25k) in history', 'Resolves open review tasks', 'Unlocks fit_gap & steering'],
+    status: 'KB v2 Active · Publish Ready',
+  },
+];
+
+const PROCESS_GATES = [
+  { num: 'Gate 1', label: 'Confirm faithful report', role: 'Consultant / Lead', endpoint: 'POST /approve-report' },
+  { num: 'Gate 2', label: 'Flag EUR 50k vs 25k conflict', role: 'Consultant / Lead', endpoint: 'POST /api/conflict' },
+  { num: 'Gate 3', label: 'Accept WS-05 scope (FR01)', role: 'Domain Lead', endpoint: 'POST /clarification/accept' },
+  { num: 'Gate 4', label: 'Promote rule to KB v2', role: 'Domain Lead', endpoint: 'POST /api/promote' },
+];
+
+const STAGE_ORDER = { evidence: 1, report: 2, conflict: 3, accepted_clarification: 4, clarified: 5 };
+
+function stageClasses(index, wsState, publications) {
+  const current = STAGE_ORDER[wsState] || 1;
+  const position = index + 1;
+  const classes = [];
+  if (position === current) classes.push(wsState === 'conflict' ? 'conflict-active' : 'active');
+  if (position < current || (wsState === 'clarified' && position === 5 && publications > 1)) classes.push('done');
+  return classes;
+}
+
+function renderProcessRail() {
+  const container = $('process-pipeline');
+  if (!container) return;
+  const wsState = state.workspace?.state || 'evidence';
+  const publications = state.workspace?.publications?.length || 0;
+  const parts = [];
+  PROCESS_STAGES.forEach((stage, index) => {
+    if (index > 0) {
+      const gate = PROCESS_GATES[index - 1];
+      parts.push(`<div class="process-gate" title="${escapeHtml(`${gate.role} · ${gate.endpoint}`)}">
+        <span class="process-gate-num">${escapeHtml(gate.num)}</span>
+        <span class="process-gate-label">${escapeHtml(gate.label)}</span>
+      </div>`);
+    }
+    parts.push(`<button class="process-stage ${stageClasses(index, wsState, publications).join(' ')}" type="button" data-process-stage="${index}" title="Open the full process view">
+      <span class="process-stage-num">${String(index + 1).padStart(2, '0')}</span>
+      <span class="process-stage-name">${escapeHtml(stage.name)}</span>
+      <span class="process-stage-short">${escapeHtml(stage.short)}</span>
+    </button>`);
+  });
+  container.innerHTML = parts.join('');
+  container.querySelectorAll('[data-process-stage]').forEach((btn) => {
+    btn.onclick = () => openProcessView(Number(btn.dataset.processStage));
+  });
+}
+
+function openProcessView(focusIndex = null) {
+  const dialog = $('process-dialog');
+  if (!dialog) return;
+  const wsState = state.workspace?.state || 'evidence';
+  const publications = state.workspace?.publications?.length || 0;
+  const currentIndex = (STAGE_ORDER[wsState] || 1) - 1;
+  const focus = focusIndex == null ? currentIndex : focusIndex;
+  const cells = [];
+  PROCESS_STAGES.forEach((stage, index) => {
+    if (index > 0) {
+      const gate = PROCESS_GATES[index - 1];
+      cells.push(`<div class="process-dialog-gate">
+        <div class="process-dialog-gate-num">${escapeHtml(gate.num)}</div>
+        <div class="process-dialog-gate-label">${escapeHtml(gate.label)}</div>
+        <div class="process-dialog-gate-role">${escapeHtml(gate.role)}</div>
+        <code>${escapeHtml(gate.endpoint)}</code>
+      </div>`);
+    }
+    cells.push(`<div class="process-dialog-stage ${stageClasses(index, wsState, publications).join(' ')} ${index === focus ? 'focused' : ''}">
+      <div class="process-dialog-stage-head">
+        <span class="process-dialog-stage-num">${String(index + 1).padStart(2, '0')}</span>
+        <span class="process-dialog-stage-name">${escapeHtml(stage.name)}</span>
+      </div>
+      <div class="process-dialog-phase">phase: ${escapeHtml(stage.phase)}</div>
+      <ul>${stage.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}</ul>
+      <div class="process-dialog-status">${escapeHtml(stage.status)}</div>
+    </div>`);
+  });
+  $('process-eyebrow').textContent = 'END-TO-END PROCESS · USER PERSPECTIVE';
+  $('process-title').textContent = `Five governed stages · four human gates · now at ${PROCESS_STAGES[currentIndex].name}`;
+  $('process-content').innerHTML = `
+    <div class="process-dialog-context">
+      <div class="process-context-bar baseline"><span>Baseline KB (v1)</span><strong>WS-01 · PO threshold EUR 25,000 (scope FR01)</strong></div>
+      <div class="process-context-bar input"><span>New workshop input</span><strong>WS-04 · Mentions EUR 50,000 (scope missing)</strong></div>
+      <div class="process-context-bar owner"><span>Owner clarification</span><strong>WS-05 · Confirms EUR 50,000 for FR01</strong></div>
+    </div>
+    <div class="process-dialog-flow">${cells.join('')}</div>
+    <div class="process-dialog-note">
+      <strong>AI proposals stay isolated in candidate staging.</strong> Final fit_gap and steering publication is blocked while the conflict is open. Every run saves an immutable snapshot_id freezing document hashes, active KB version, role and phase.
+    </div>`;
+  dialog.showModal();
+}
+
+function updateArchToggleLabel() {
+  const wrap = $('arch-strip-wrap');
+  const label = $('toggle-arch-label');
+  const icon = $('toggle-arch-icon');
+  if (!wrap || !label) return;
+  const collapsed = wrap.classList.contains('strip-collapsed');
+  const stages = state.archTab === 'process';
+  label.textContent = collapsed ? (stages ? 'Show 5 Stages' : 'Show 5 Blocks') : 'Collapse';
+  if (icon) icon.textContent = collapsed ? '▾' : '▴';
+}
+
+function setArchTab(tab) {
+  state.archTab = tab;
+  document.querySelectorAll('[data-arch-tab]').forEach((btn) => {
+    const active = btn.dataset.archTab === tab;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  const archPanel = $('arch-pipeline');
+  const processPanel = $('process-pipeline');
+  if (archPanel) archPanel.classList.toggle('panel-hidden', tab !== 'architecture');
+  if (processPanel) processPanel.classList.toggle('panel-hidden', tab !== 'process');
+  const hint = $('arch-hint');
+  if (hint) hint.textContent = tab === 'process' ? 'Click any stage to open the full process view' : 'Click any block to inspect';
+  const wrap = $('arch-strip-wrap');
+  if (wrap) wrap.classList.remove('strip-collapsed');
+  const toggle = $('toggle-arch');
+  if (toggle) toggle.setAttribute('aria-expanded', 'true');
+  updateArchToggleLabel();
+}
+
 function switchTab(tabName) {
   state.activeTab = tabName;
   document.querySelectorAll('.tab-btn').forEach((btn) => {
@@ -1077,13 +1290,28 @@ if ($('clear-chat')) {
 
 if ($('toggle-arch')) {
   $('toggle-arch').addEventListener('click', () => {
-    const pipeline = $('arch-pipeline');
     const wrap = $('arch-strip-wrap');
-    const collapsed = pipeline.classList.toggle('collapsed');
-    wrap.classList.toggle('strip-collapsed', collapsed);
+    const collapsed = wrap.classList.toggle('strip-collapsed');
     $('toggle-arch').setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-    $('toggle-arch-label').textContent = collapsed ? 'Show 5 Blocks' : 'Collapse';
-    $('toggle-arch-icon').textContent = collapsed ? '▾' : '▴';
+    updateArchToggleLabel();
+  });
+}
+
+document.querySelectorAll('[data-arch-tab]').forEach((el) => {
+  el.addEventListener('click', () => setArchTab(el.dataset.archTab));
+});
+
+if ($('open-process-view')) {
+  $('open-process-view').addEventListener('click', () => openProcessView());
+}
+
+document.querySelectorAll('[data-close-process]').forEach((el) => {
+  el.addEventListener('click', () => $('process-dialog').close());
+});
+
+if ($('process-dialog')) {
+  $('process-dialog').addEventListener('click', (e) => {
+    if (e.target === $('process-dialog')) $('process-dialog').close();
   });
 }
 
@@ -1091,22 +1319,28 @@ document.querySelectorAll('[data-arch]').forEach((el) => {
   el.addEventListener('click', () => openArchitectureZoom(el.dataset.arch));
 });
 
-document.querySelectorAll('[data-prompt-skill]').forEach((el) => {
+if ($('skills-menu-btn')) {
+  $('skills-menu-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleSkillsMenu();
+  });
+}
+
+document.querySelectorAll('[data-skill-option]').forEach((el) => {
   el.addEventListener('click', () => {
     if (state.busy) return;
-    setSelectedSkill(el.dataset.promptSkill);
-    $('agent-prompt-input')?.focus();
+    const skill = el.dataset.skillOption;
+    fillPrompt(currentPresets()[skill] || `Run ${skillNames[skill] || skill}`, skill);
   });
 });
 
-document.querySelectorAll('[data-quick-question]').forEach((el) => {
-  el.addEventListener('click', () => {
-    if (state.busy) return;
-    state.selectedSkill = null;
-    syncSkillSelection();
-    syncRoutePill();
-    sendChat(el.dataset.quickQuestion);
-  });
+document.addEventListener('click', (e) => {
+  const wrap = document.querySelector('.skills-menu-wrap');
+  if (wrap && !wrap.contains(e.target)) closeSkillsMenu();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSkillsMenu();
 });
 
 if ($('agent-prompt-input')) {
@@ -1121,7 +1355,7 @@ if ($('agent-prompt-form')) {
     const text = (input?.value || '').trim();
     const skill = state.selectedSkill || matchSkillIntent(text);
     if (!skill && !text) {
-      toast('Select a skill above or type a question for the Main Agent.', true);
+      toast('Pick a skill or a suggested prompt above, or type a question.', true);
       return;
     }
     if (input) input.value = '';
@@ -1136,7 +1370,7 @@ if ($('agent-prompt-form')) {
 document.querySelectorAll('.stage-pill').forEach((el) => {
   el.addEventListener('click', () => {
     const hints = {
-      '1': 'Stage 01: Click 01 · Workshop Report or ask Main Agent about WS-04.',
+      '1': 'Stage 01: Open + Skills and pick 01 · Workshop Report, or ask Main Agent about WS-04.',
       '2': 'Stage 02: Review the cited draft below and spot the unpromoted EUR 50,000 proposal.',
       '3': 'Stage 03: Flag the EUR 50k vs 25k conflict — dependent teams are alerted automatically.',
       '4': 'Stage 04: Accept & promote WS-05 owner clarification to upgrade Project Knowledge to v2.',
