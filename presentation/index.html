@@ -178,7 +178,7 @@
   .mapping-rows {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 4px;
     flex: 1;
     min-height: 0;
     justify-content: space-between;
@@ -243,7 +243,7 @@
   }
   .problem-card strong {
     display: block;
-    font-size: 22px;
+    font-size: clamp(13px, 1.31vw, 22px);
     color: var(--ink);
     line-height: 1.22;
     margin-bottom: 2px;
@@ -254,6 +254,20 @@
     color: var(--muted);
     line-height: 1.3;
     margin-left: 0;
+  }
+  .problem-card div > span.problem-fr,
+  .resolve-card p > span.solution-fr {
+    font-size: clamp(10px, .93vw, 15.5px);
+    color: var(--green-dark);
+    font-style: italic;
+    line-height: 1.16;
+  }
+  .problem-card div > span.problem-fr {
+    margin-top: 2px;
+  }
+  .resolve-card p > span.solution-fr {
+    display: block;
+    margin-top: 2px;
   }
   .map-arrow {
     display: flex;
@@ -1006,6 +1020,12 @@
       opacity: 1 !important;
       transform: none !important;
     }
+    /* The print shell is 1280x720 while vw units resolve against the wider screen,
+       so slide 1 needs fixed sizes to fit the printed page. */
+    .print-slide .problem-card strong { font-size: 18px; }
+    .print-slide .problem-card div > span { font-size: 11px; }
+    .print-slide .problem-card div > span.problem-fr { font-size: 11px; line-height: 1.2; }
+    .print-slide .resolve-card p > span.solution-fr { font-size: 11px; line-height: 1.2; }
     .step-controls { display: none; }
   }
 </style>
@@ -1036,11 +1056,12 @@
           <div>
             <strong>High volume of information</strong>
             <span>(client docs, workshop notes, process lists, technical analyses)</span>
+            <span class="problem-fr">Beaucoup d'information. Documents client, notes, listes de processus.</span>
           </div>
         </div>
         <div class="map-arrow" aria-hidden="true">→</div>
         <div class="resolve-card">
-          <p><b>Indexed Evidence DB &amp; Main Agent:</b> indexes workshop passages and client documents so agents retrieve exact context.</p>
+          <p><b>Indexed Evidence DB &amp; Main Agent:</b> indexes workshop passages and client documents so agents retrieve exact context.<span class="solution-fr">La réponse : une base de données indexée. L'agent retrouve le bon passage, au bon endroit.</span></p>
         </div>
       </div>
 
@@ -1050,11 +1071,12 @@
           <div>
             <strong>Repetitive drafting consumes time</strong>
             <span>(writing, structuring, and formatting instead of advisory)</span>
+            <span class="problem-fr">La rédaction est répétitive. Cela prend du temps au détriment du conseil.</span>
           </div>
         </div>
         <div class="map-arrow" aria-hidden="true">→</div>
         <div class="resolve-card">
-          <p><b>Shared Deliverable Agent &amp; Model Gateway:</b> turns raw notes into cited drafts in seconds while consultants keep validation.</p>
+          <p><b>Shared Deliverable Agent:</b> turns raw notes into cited drafts in seconds while consultants keep validation.<span class="solution-fr">La réponse : un agent customisé qui aide à rédiger.</span></p>
         </div>
       </div>
 
@@ -1064,11 +1086,12 @@
           <div>
             <strong>Variable deliverable quality</strong>
             <span>(inconsistent format, rigor, and completeness across teams)</span>
+            <span class="problem-fr">La qualité varie d'un consultant à l'autre.</span>
           </div>
         </div>
         <div class="map-arrow" aria-hidden="true">→</div>
         <div class="resolve-card">
-          <p><b>Pluggable Skills (1 Skill = 1 Deliverable):</b> enforces standard Deloitte sections, schemas, and rules for every consultant.</p>
+          <p><b>Pluggable Skills (1 Skill = 1 Deliverable):</b> enforces standard Deloitte sections, schemas, and rules for every consultant.<span class="solution-fr">La réponse : des skills. Un skill par livrable. Donc la même structure pour tout le monde.</span></p>
         </div>
       </div>
 
@@ -1078,11 +1101,12 @@
           <div>
             <strong>Scattered knowledge across teams</strong>
             <span>(dispersed across chats, folders, and individual memory)</span>
+            <span class="problem-fr">La connaissance est dispersée. Elle se perd d'un projet à l'autre.</span>
           </div>
         </div>
         <div class="map-arrow" aria-hidden="true">→</div>
         <div class="resolve-card">
-          <p><b>Layered Project Knowledge Base (DB):</b> centralizes raw workshop notes, validated decisions, and published versions.</p>
+          <p><b>Layered Project Knowledge Base (DB):</b> centralizes raw workshop notes, validated decisions, and published versions.<span class="solution-fr">La réponse : une base de connaissance à trois couches. Les notes, les décisions validées.</span></p>
         </div>
       </div>
 
@@ -1092,11 +1116,12 @@
           <div>
             <strong>Risk of omissions &amp; inconsistencies</strong>
             <span>(contradictions between deliverables over 26 weeks)</span>
+            <span class="problem-fr">Les oublis et les contradictions, sur longue durée.</span>
           </div>
         </div>
         <div class="map-arrow" aria-hidden="true">→</div>
         <div class="resolve-card">
-          <p><b>Knowledge Steward &amp; Quality Reviewer:</b> compares new notes against approved rules (e.g., &euro;50k vs &euro;25k) before publish.</p>
+          <p><b>Knowledge Steward &amp; Quality Reviewer:</b> compares new notes against approved rules (e.g., &euro;50k vs &euro;25k) before publish.<span class="solution-fr">La réponse : un agent de contrôle et de qualité.</span></p>
         </div>
       </div>
     </div>
